@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Forum Home</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar {
+            background-color: #222;
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .navbar a {
+            color: white;
+            margin-left: 1rem;
+            text-decoration: none;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 2rem auto;
+        }
+
+        .category {
+            background: #fff;
+            border: 1px solid #ccc;
+            margin-bottom: 2rem;
+            border-radius: 5px;
+            padding: 1rem;
+        }
+
+        .category h2 {
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 0.5rem;
+        }
+
+        .subforums {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .subforum {
+            background: #f7f7f7;
+            border: 1px solid #ddd;
+            flex: 1 1 30%;
+            padding: 1rem;
+            text-align: center;
+            border-radius: 4px;
+        }
+
+        .subforum:hover {
+            background-color: #eaeaea;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div><strong>Assignment 15 Forum</strong></div>
+        <div>
+            <a href="/login">Login</a>
+            <a href="/register">Register</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="category">
+            <h2>Investments</h2>
+            <div class="subforums">
+                <div class="subforum">Art</div>
+                <div class="subforum">Wine</div>
+                <div class="subforum">Whiskey</div>
+                <div class="subforum">Antiques</div>
+                <div class="subforum">Classic Cars</div>
+                <div class="subforum">Luxury Watches</div>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>
