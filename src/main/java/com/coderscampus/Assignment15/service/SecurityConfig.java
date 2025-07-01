@@ -32,20 +32,17 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-        	.authorizeHttpRequests(auth -> auth
-        			.requestMatchers("/","/forum-home","/stocks","/options","/calls","/puts","/cryptos","/nfts","/commodities","/bonds", "/real-estate","/collectables", "/register", "/login", "/css/**", "/js/**").permitAll()
-        	    .anyRequest().authenticated()
-        	)
-
-            .formLogin(form -> form
-                .loginPage("/login") // tells Spring to use your custom login controller
-                .permitAll()
+            .authorizeHttpRequests(auth -> auth
+                .anyRequest().permitAll()
             )
-            .logout(logout -> logout.logoutSuccessUrl("/login"))
-            .oauth2Login(oauth -> oauth.loginPage("/oauth-login")); // optional
+            .csrf(csrf -> csrf.disable()) // optional: disable CSRF if you're not using forms that modify state
+            .formLogin(form -> form.disable()) // disables form login
+            .logout(logout -> logout.disable()) // disables logout handling
+            .oauth2Login(oauth -> oauth.disable()); // disables OAuth login
 
         return http.build();
     }
+
 
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {

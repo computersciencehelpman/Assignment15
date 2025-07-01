@@ -41,7 +41,7 @@ public class HomeController {
         return "cryptos"; 
     }
     
-    @GetMapping("/stocks")
+    @GetMapping("/stocks-overview")
     public String Stocks() {
         return "stocks"; 
     }

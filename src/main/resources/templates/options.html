@@ -65,12 +65,18 @@
 </head>
 <body>
     <div class="navbar">
-        <div><strong>Assignment 15 Forum</strong></div>
-        <div>
-            <a href="/login">Login</a>
-            <a href="/register">Register</a>
-        </div>
-    </div>
+  <div><strong><a href="/" style="color: white; text-decoration: none;">Assignment 15 Forum</a></strong></div>
+  <div>
+    <span th:if="${#authorization.expression('isAuthenticated()')}">
+      <a href="/profile" style="color: white; text-decoration: none;" th:text="${#authentication.name}">Username</a>
+    </span>
+    <span th:if="${#authorization.expression('!isAuthenticated()')}">
+      <a href="/login">Login</a>
+      <a href="/register">Register</a>
+    </span>
+  </div>
+</div>
+    
 
     <div class="container">
         <div class="category">

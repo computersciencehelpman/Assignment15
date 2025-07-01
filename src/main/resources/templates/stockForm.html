@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Stock Recommendation Form</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f6f9;
+      padding: 20px;
+    }
+    form {
+      max-width: 800px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    label {
+      font-weight: bold;
+      display: block;
+      margin-bottom: 5px;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 8px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    textarea {
+      resize: vertical;
+    }
+    .section-title {
+      font-size: 18px;
+      margin-top: 30px;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 5px;
+    }
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: #0066cc;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0052a3;
+    }
+  </style>
+</head>
+<body>
+
+<form th:action="@{/stocks}" th:object="${stockRecommendation}" method="post">
+  <h2>Stock Recommendation Form</h2>
+
+  <div class="section-title">Basic Stock Information</div>
+  <div class="form-group"><label>Ticker</label><input type="text" th:field="*{ticker}" required></div>
+  <div class="form-group"><label>Company Name</label><input type="text" th:field="*{companyName}" required></div>
+  <div class="form-group"><label>Exchange</label><input type="text" th:field="*{exchange}"></div>
+  <div class="form-group"><label>Sector</label><input type="text" th:field="*{sector}"></div>
+  <div class="form-group"><label>Industry</label><input type="text" th:field="*{industry}"></div>
+  <div class="form-group"><label>Current Price</label><input type="number" step="0.01" th:field="*{currentPrice}"></div>
+  <div class="form-group"><label>Date</label><input type="date" th:field="*{dateOfRecommendation}"></div>
+
+  <div class="section-title">Valuation Metrics</div>
+  <div class="form-group"><label>P/E Ratio</label><input type="number" step="0.01" th:field="*{peRatio}"></div>
+  <div class="form-group"><label>PEG Ratio</label><input type="number" step="0.01" th:field="*{pegRatio}"></div>
+  <div class="form-group"><label>P/B Ratio</label><input type="number" step="0.01" th:field="*{pbRatio}"></div>
+  <div class="form-group"><label>EV/EBITDA</label><input type="number" step="0.01" th:field="*{evEbitda}"></div>
+  <div class="form-group"><label>Dividend Yield (%)</label><input type="number" step="0.01" th:field="*{dividendYield}"></div>
+  <div class="form-group"><label>Market Cap (billions)</label><input type="number" step="0.01" th:field="*{marketCap}"></div>
+
+  <div class="section-title">Financial Health</div>
+  <div class="form-group"><label>Revenue Growth (%)</label><input type="number" step="0.01" th:field="*{revenueGrowth}"></div>
+  <div class="form-group"><label>EPS Growth (%)</label><input type="number" step="0.01" th:field="*{epsGrowth}"></div>
+  <div class="form-group"><label>Debt-to-Equity</label><input type="number" step="0.01" th:field="*{debtToEquity}"></div>
+  <div class="form-group"><label>ROE</label><input type="number" step="0.01" th:field="*{roe}"></div>
+  <div class="form-group"><label>Free Cash Flow</label><input type="number" step="0.01" th:field="*{freeCashFlow}"></div>
+
+  <div class="section-title">Recommendation</div>
+  <div class="form-group"><label>Recommended Price</label><input type="number" step="0.01" th:field="*{recommendedPrice} required"></div>
+  <div class="form-group"><label>Time Horizon</label><input type="text" th:field="*{timeHorizon}"></div>
+  <div class="form-group">
+    <label>Recommendation</label>
+    <select th:field="*{recommendation}" required>
+      <option value="">-- Select --</option>
+      <option value="buy">Buy</option>
+      <option value="hold">Hold</option>
+      <option value="sell">Sell</option>
+    </select>
+  </div>
+  <div class="form-group"><label>Investment Thesis / Reason</label><textarea th:field="*{reason}" rows="4" required></textarea></div>
+  <div class="form-group"><label>Catalysts</label><textarea th:field="*{catalysts}" rows="2"></textarea></div>
+  <div class="form-group"><label>Risks</label><textarea th:field="*{risks}" rows="2"></textarea></div>
+
+  <div class="section-title">Ownership / Sentiment</div>
+  <div class="form-group"><label>Insider Activity</label><textarea th:field="*{insiderActivity}" rows="2"></textarea></div>
+  <div class="form-group"><label>Institutional Ownership (%)</label><input type="number" step="0.01" th:field="*{institutionalOwnership}"></div>
+  <div class="form-group"><label>Retail Sentiment</label><textarea th:field="*{retailSentiment}" rows="2"></textarea></div>
+
+  <div class="section-title">Optional / Extra</div>
+  <div class="form-group"><label>Technical Indicators</label><textarea th:field="*{technicalIndicators}" rows="2"></textarea></div>
+  <div class="form-group"><label>Comparable Companies</label><textarea th:field="*{peers}" rows="2"></textarea></div>
+  <div class="form-group"><label>Links to Sources</label><textarea th:field="*{sources}" rows="2"></textarea></div>
+
+  <button type="submit">Submit Recommendation</button>
+</form>
+
+</body>
+</html>

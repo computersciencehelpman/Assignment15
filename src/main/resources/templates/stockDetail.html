@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="'Recommendation: ' + ${recommendation.ticker}">Stock Detail</title>
+    <style>
+        body { font-family: Arial; padding: 2rem; background-color: #f0f0f0; }
+        .card {
+            background: white; padding: 20px;
+            border-radius: 8px; max-width: 700px;
+            margin: auto; box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h2 { margin-bottom: 1rem; }
+        .field { margin-bottom: 0.5rem; }
+        .label { font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2 th:text="${recommendation.companyName} + ' (' + ${recommendation.ticker} + ')'"></h2>
+        <div class="field"><span class="label">Recommendation:</span> <span th:text="${recommendation.recommendation}"></span></div>
+        <div class="field"><span class="label">Target Price:</span> <span th:text="${recommendation.targetPrice}"></span></div>
+        <div class="field"><span class="label">Time Horizon:</span> <span th:text="${recommendation.timeHorizon}"></span></div>
+        <div class="field"><span class="label">Investment Thesis:</span><br> <p th:text="${recommendation.reason}"></p></div>
+        <div class="field"><span class="label">Catalysts:</span> <p th:text="${recommendation.catalysts}"></p></div>
+        <div class="field"><span class="label">Risks:</span> <p th:text="${recommendation.risks}"></p></div>
+        <a href="/stocks">← Back to all stocks</a>
+    </div>
+</body>
+</html>
