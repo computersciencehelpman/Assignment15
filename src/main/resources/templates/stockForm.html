@@ -61,7 +61,7 @@
 </head>
 <body>
 
-<form th:action="@{/stocks}" th:object="${stockRecommendation}" method="post">
+<form th:action="@{/stocks/new}" th:object="${stockRecommendation}" method="post">
   <h2>Stock Recommendation Form</h2>
 
   <div class="section-title">Basic Stock Information</div>
@@ -89,7 +89,7 @@
   <div class="form-group"><label>Free Cash Flow</label><input type="number" step="0.01" th:field="*{freeCashFlow}"></div>
 
   <div class="section-title">Recommendation</div>
-  <div class="form-group"><label>Recommended Price</label><input type="number" step="0.01" th:field="*{recommendedPrice} required"></div>
+  <div class="form-group"><label>Recommended Price</label><input type="number" step="0.01" th:field="*{recommendedPrice}" required></div>
   <div class="form-group"><label>Time Horizon</label><input type="text" th:field="*{timeHorizon}"></div>
   <div class="form-group">
     <label>Recommendation</label>

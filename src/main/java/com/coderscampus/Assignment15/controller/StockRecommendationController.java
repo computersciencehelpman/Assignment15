@@ -20,14 +20,14 @@ public class StockRecommendationController {
     }
 
     @GetMapping("/stocks/new")
-    public String showForm(Model model) {
+    public String showStockForm(Model model) {
         model.addAttribute("stockRecommendation", new StockRecommendation());
-        return "stockForm"; // Thymeleaf template
+        return "stockForm";
     }
     
     @GetMapping("/stocks")
     public String listAll(Model model) {
-        model.addAttribute("recommendations", repository.findAll());
+        model.addAttribute("recommendations", repository.findAllByOrderByCreatedAtDesc());
         return "stocks";
     }
 

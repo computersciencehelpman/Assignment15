@@ -110,6 +110,10 @@
       <a th:href="@{'/stocks/' + ${rec.id}}" th:text="${rec.companyName} + ' (' + ${rec.ticker} + ')'"></a>
       <p><strong>Recommendation:</strong> <span th:text="${rec.recommendation}"></span></p>
       <p th:text="${#strings.abbreviate(rec.reason, 120)}"></p>
+      <p><strong>Posted:</strong> 
+    	<span th:text="${#temporals.format(rec.createdAt, 'MMM dd, yyyy hh:mm a')}"></span>
+  	  </p>
+  	  <p><strong>Submitted by:</strong> <span th:text="${rec.submittedBy}"></span></p>
     </div>
   </div>
 </body>

@@ -1,6 +1,9 @@
 package com.coderscampus.Assignment15.domain;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+import org.hibernate.annotations.CreationTimestamp;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -36,8 +39,14 @@ public class StockRecommendation {
     private Double freeCashFlow;
 
     private Double targetPrice;
+    private Double recommendedPrice;
     private String timeHorizon;
     private String recommendation;
+    
+    private String submittedBy;
+    
+    @CreationTimestamp 
+    private LocalDateTime createdAt;
     
     @Column(columnDefinition = "TEXT")
     private String reason;
@@ -191,6 +200,13 @@ public class StockRecommendation {
 	public void setRecommendation(String recommendation) {
 		this.recommendation = recommendation;
 	}
+	
+	public Double getRecommendedPrice() {
+		return recommendedPrice;
+	}
+	public void setRecommendedPrice(Double recommendedPrice) {
+		this.recommendedPrice = recommendedPrice;
+	}
 	public String getReason() {
 		return reason;
 	}
@@ -245,5 +261,13 @@ public class StockRecommendation {
 	public void setSources(String sources) {
 		this.sources = sources;
 	}
-    
+	public String getSubmittedBy() {
+		return submittedBy;
+	}
+	public void setSubmittedBy(String submittedBy) {
+		this.submittedBy = submittedBy;
+	}
+	public LocalDateTime getCreatedAt() {
+	    return createdAt;
+	}
 }
