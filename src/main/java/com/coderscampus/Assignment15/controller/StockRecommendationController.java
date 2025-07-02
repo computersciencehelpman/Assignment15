@@ -37,15 +37,15 @@ public class StockRecommendationController {
         return "redirect:/stocks/" + savedRecommendation.getId(); // Auto-redirect
     }
     
-    @GetMapping("/stocks/{id}")
-    public String showRecommendation(@PathVariable Long id, Model model) {
-        StockRecommendation recommendation = repository.findById(id).orElse(null);
-        if (recommendation == null) {
-            return "error/404"; // or handle gracefully
-        }
-        model.addAttribute("recommendation", recommendation);
-        return "stockDetail";
-    }
+//    @GetMapping("/stocks/{id}")
+//    public String showRecommendation(@PathVariable Long id, Model model) {
+//        StockRecommendation recommendation = repository.findById(id).orElse(null);
+//        if (recommendation == null) {
+//            return "error/404"; // or handle gracefully
+//        }
+//        model.addAttribute("recommendation", recommendation);
+//        return "stockDetail";
+//    }
 
 
 }
