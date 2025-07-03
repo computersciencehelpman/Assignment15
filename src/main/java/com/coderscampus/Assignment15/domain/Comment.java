@@ -29,6 +29,10 @@ public class Comment {
 
     @ManyToOne
     private StockRecommendation recommendation;
+    
+    private Long callOptionId;
+    
+    private Long putOptionId;
 
 	public Long getId() {
 		return id;
@@ -49,7 +53,11 @@ public class Comment {
 	public LocalDateTime getCreatedAt() {
 		return createdAt;
 	}
+	
 
+	public void setCreatedAt(LocalDateTime createdAt) {
+		this.createdAt = createdAt;
+	}
 
 	public String getAuthor() {
 		return author;
@@ -67,5 +75,20 @@ public class Comment {
 		this.recommendation = recommendation;
 	}
 
+	public Long getCallOptionId() {
+		return callOptionId;
+	}
+
+	public void setCallOptionId(Long callOptionId) {
+		this.callOptionId = callOptionId;
+	}
+
+	public Long getPutOptionId() {
+		return putOptionId;
+	}
+
+	public void setPutOptionId(Long putOptionId) {
+		this.putOptionId = putOptionId;
+	}
     
 }

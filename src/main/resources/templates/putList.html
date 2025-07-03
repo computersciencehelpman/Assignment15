@@ -97,10 +97,19 @@
         <div class="category">
             <h2 class="heading-flex">
   				<span>Put Options</span>
-  				<button class="add-button" onclick="openModal()">+</button>
+  				<a th:href="${#authorization.expression('isAuthenticated()')} ? '/puts/new' : '/login'" 
+     class="add-button" 
+     style="text-decoration: none;">+</a>
 			</h2> 
         </div>
 
     </div>
+    <div th:each="put : ${puts}" class="recommendation">
+    <a th:href="@{'/puts/' + ${put.id}}" th:text="${put.companyName} + ' (' + ${put.ticker} + ')'"></a>
+    <p><strong>Strike:</strong> <span th:text="${put.strikePrice}"></span></p>
+    <p><strong>Expires:</strong> <span th:text="${put.expirationDate}"></span></p>
+    <p><strong>Submitted by:</strong> <span th:text="${put.submittedBy}"></span></p>
+</div>
+    
 </body>
 </html>

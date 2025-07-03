@@ -98,7 +98,10 @@
         <div class="category">
             <h2 class="heading-flex">
   				<span>Put Options</span>
-  				<button class="add-button" onclick="openModal()">+</button>
+  				<a th:href="${#authorization.expression('isAuthenticated()')} ? '/puts/new' : '/login'" 
+   					class="add-button"
+   					style="text-decoration: none;">+</a>
+  				
 			</h2> 
         </div>
 

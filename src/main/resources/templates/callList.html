@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Call Recommendations</title>
+  <link rel="stylesheet" href="/css/callList.css" />
+</head>
+<body>
+  <div class="navbar">
+    <div><a href="/" style="color:white; text-decoration:none;">Assignment 15 Forum</a></div>
+    <div>
+      <span th:if="${#authorization.expression('isAuthenticated()')}">
+        <a href="/profile" th:text="${#authentication.name}"></a>
+      </span>
+      <span th:if="${#authorization.expression('!isAuthenticated()')}">
+        <a href="/login">Login</a>
+        <a href="/register">Register</a>
+      </span>
+    </div>
+  </div>
+
+  <div class="container">
+    <h2 class="heading-flex">
+      <span>Call Option Recommendations</span>
+      <a th:href="${#authorization.expression('isAuthenticated()')} ? '/calls/new' : '/login'" class="add-button">+</a>
+    </h2>
+
+    <div th:if="${#lists.isEmpty(calls)}">
+      <p>No call options posted yet.</p>
+    </div>
+
+    <div th:each="call : ${calls}" class="recommendation-card">
+      <a th:href="@{'/calls/' + ${call.id}}" th:text="${call.companyName} + ' (' + ${call.ticker} + ')'"></a>
+      <p><strong>Strike:</strong> <span th:text="${call.strikePrice}"></span></p>
+      <p><strong>Expires:</strong> <span th:text="${#temporals.format(call.expirationDate, 'MMM dd, yyyy')}"></span></p>
+      <p><strong>Submitted by:</strong> <span th:text="${call.submittedBy}"></span></p>
+    </div>
+  </div>
+</body>
+</html>

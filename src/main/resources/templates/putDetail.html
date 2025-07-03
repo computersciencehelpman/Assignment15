@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${put.companyName} + ' (' + ${put.ticker} + ')'">Put Detail</title>
+    <link rel="stylesheet" href="/css/comments.css">
+</head>
+<body>
+<div class="navbar">
+    <div><a href="/" style="color:white; text-decoration:none;">Assignment 15 Forum</a></div>
+    <div>
+        <span th:if="${#authorization.expression('isAuthenticated()')}">
+            <a href="/profile" th:text="${#authentication.name}"></a>
+        </span>
+        <span th:if="${#authorization.expression('!isAuthenticated()')}">
+            <a href="/login">Login</a>
+            <a href="/register">Register</a>
+        </span>
+    </div>
+</div>
+
+<div class="container">
+    <div class="recommendation-card">
+        <h1 th:text="|${put.companyName} (${put.ticker})|"></h1>
+        <p><strong>Strike Price:</strong> <span th:text="${put.strikePrice}"></span></p>
+        <p><strong>Expiration Date:</strong> <span th:text="${#temporals.format(put.expirationDate, 'MMM dd, yyyy')}"></span></p>
+        <p><strong>Premium:</strong> <span th:text="${put.premium}"></span></p>
+        <p><strong>Contracts:</strong> <span th:text="${put.contractCount}"></span></p>
+        <p><strong>Current Price:</strong> <span th:text="${put.currentPrice}"></span></p>
+        <p><strong>Target Price:</strong> <span th:text="${put.targetPrice}"></span></p>
+        <p><strong>Recommendation:</strong> <span th:text="${put.recommendation}"></span></p>
+        <p><strong>Risk:</strong> <span th:text="${put.riskLevel}"></span></p>
+        <p><strong>Confidence:</strong> <span th:text="${put.confidenceLevel}"></span></p>
+        <p><strong>Reason:</strong></p>
+        <p th:text="${put.reason}"></p>
+        <p><strong>Catalysts:</strong> <span th:text="${put.catalysts}"></span></p>
+        <p><strong>Risks:</strong> <span th:text="${put.risks}"></span></p>
+        <p><strong>Exit Strategy:</strong> <span th:text="${put.exitStrategy}"></span></p>
+        <p><strong>Link:</strong> <a th:href="${put.supportingLink}" th:text="${put.supportingLink}"></a></p>
+        <p><strong>Tags:</strong> <span th:text="${put.tags}"></span></p>
+        <p><strong>Submitted by:</strong> <span th:text="${put.submittedBy}"></span></p>
+        <p><strong>Submitted at:</strong> 
+            <span th:text="${#temporals.format(put.submittedAt, 'MMM dd, yyyy hh:mm a')}"></span>
+        </p>
+    </div>
+
+    <!-- Comment Section -->
+    <div class="comments-section">
+        <h2>Comments</h2>
+
+        <div th:if="${#lists.isEmpty(comments)}">
+            <p>No comments yet.</p>
+        </div>
+
+        <div th:each="comment : ${comments}" class="comment-box">
+            <div class="comment-header">
+                <span th:text="${comment.author}"></span>
+                <span th:text="${#temporals.format(comment.createdAt, 'MMM dd, yyyy hh:mm a')}"></span>
+            </div>
+            <div class="comment-content" th:text="${comment.content}"></div>
+        </div>
+
+        <div th:if="${#authorization.expression('isAuthenticated()')}">
+            <form th:action="@{'/puts/' + ${put.id} + '/comments'}" method="post" th:object="${newComment}" class="comment-form">
+                <textarea th:field="*{content}" placeholder="Add your comment..." required></textarea>
+                <button type="submit">Post Comment</button>
+            </form>
+        </div>
+        <div th:unless="${#authorization.expression('isAuthenticated()')}">
+            <p><a href="/login">Login</a> to write a comment.</p>
+        </div>
+    </div>
+
+    <a href="/puts">← Back to all Put Options</a>
+</div>
+</body>
+</html>
