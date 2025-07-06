@@ -33,7 +33,20 @@ public class Comment {
     private Long callOptionId;
     
     private Long putOptionId;
+    
+    private Long bitcoinRecommendationId;
+    
+    private Long ethereumRecommendationId;
+    
+    private Long solanaRecommendationId;
+    
+    private Long cardanoRecommendationId;
+    
+    private Long polygonRecommendationId;
 
+    private Long otherBlockchainsRecommendationId;
+
+    
 	public Long getId() {
 		return id;
 	}
@@ -89,6 +102,54 @@ public class Comment {
 
 	public void setPutOptionId(Long putOptionId) {
 		this.putOptionId = putOptionId;
+	}
+
+	public Long getBitcoinRecommendationId() {
+		return bitcoinRecommendationId;
+	}
+
+	public void setBitcoinRecommendationId(Long bitcoinRecommendationId) {
+		this.bitcoinRecommendationId = bitcoinRecommendationId;
+	}
+
+	public Long getEthereumRecommendationId() {
+		return ethereumRecommendationId;
+	}
+
+	public void setEthereumRecommendationId(Long ethereumRecommendationId) {
+		this.ethereumRecommendationId = ethereumRecommendationId;
+	}
+
+	public Long getSolanaRecommendationId() {
+		return solanaRecommendationId;
+	}
+
+	public void setSolanaRecommendationId(Long solanaRecommendationId) {
+		this.solanaRecommendationId = solanaRecommendationId;
+	}
+
+	public Long getCardanoRecommendationId() {
+		return cardanoRecommendationId;
+	}
+
+	public void setCardanoRecommendationId(Long cardanoRecommendationId) {
+		this.cardanoRecommendationId = cardanoRecommendationId;
+	}
+
+	public Long getPolygonRecommendationId() {
+		return polygonRecommendationId;
+	}
+
+	public void setPolygonRecommendationId(Long polygonRecommendationId) {
+		this.polygonRecommendationId = polygonRecommendationId;
+	}
+
+	public Long getOtherBlockchainsRecommendationId() {
+	    return otherBlockchainsRecommendationId;
+	}
+
+	public void setOtherBlockchainsRecommendationId(Long otherBlockchainsRecommendationId) {
+	    this.otherBlockchainsRecommendationId = otherBlockchainsRecommendationId;
 	}
     
 }
