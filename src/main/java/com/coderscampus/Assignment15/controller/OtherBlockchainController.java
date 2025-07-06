@@ -47,7 +47,11 @@ public class OtherBlockchainController {
 
         model.addAttribute("otherBlockchain", otherBlockchain);
         model.addAttribute("comments", commentRepo.findByOtherBlockchainsRecommendationIdOrderByCreatedAtDesc(id));
-        model.addAttribute("newComment", new Comment());
+        Comment freshComment = new Comment();
+        freshComment.setId(null); // Ensure ID is null so Hibernate treats it as NEW
+        model.addAttribute("newComment", freshComment);
+
+
 
         return "otherBlockchainDetail"; // Matches otherBlockchainDetail.html
     }
@@ -57,6 +61,7 @@ public class OtherBlockchainController {
     public String postCommentOnOtherBlockchain(@PathVariable Long id,
                                                @ModelAttribute Comment comment,
                                                @AuthenticationPrincipal OAuth2User principal) {
+        comment.setId(null); // ✅ This is the fix
         comment.setOtherBlockchainsRecommendationId(id);
         comment.setCreatedAt(LocalDateTime.now());
 
@@ -67,6 +72,7 @@ public class OtherBlockchainController {
         commentRepo.save(comment);
         return "redirect:/other-chains/" + id;
     }
+
 
     // Handle form submission of new recommendation
     @PostMapping("/submit")
