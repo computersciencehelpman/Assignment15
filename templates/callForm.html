@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Recommend a Call Option</title>
+    <link rel="stylesheet" href="/css/form.css" />
+</head>
+<body>
+    <div class="container">
+        <h2>Recommend a Call Option</h2>
+
+        <form th:action="@{/calls/submit}" method="post" th:object="${callOption}">
+
+            <fieldset>
+                <legend>Stock Details</legend>
+                <label>Ticker Symbol:
+                    <input type="text" th:field="*{ticker}" required />
+                </label>
+                <label>Company Name:
+                    <input type="text" th:field="*{companyName}" />
+                </label>
+            </fieldset>
+
+            <fieldset>
+                <legend>Option Contract</legend>
+                <label>Strike Price:
+                    <input type="number" step="0.01" th:field="*{strikePrice}" required />
+                </label>
+                <label>Expiration Date:
+                    <input type="date" th:field="*{expirationDate}" required />
+                </label>
+                <label>Premium Paid:
+                    <input type="number" step="0.01" th:field="*{premium}" required />
+                </label>
+                <label>Number of Contracts:
+                    <input type="number" th:field="*{contractCount}" required />
+                </label>
+            </fieldset>
+
+            <fieldset>
+                <legend>Market Context</legend>
+                <label>Current Stock Price:
+                    <input type="number" step="0.01" th:field="*{currentPrice}" />
+                </label>
+                <label>Target Price at Expiration:
+                    <input type="number" step="0.01" th:field="*{targetPrice}" />
+                </label>
+            </fieldset>
+
+            <fieldset>
+                <legend>Recommendation</legend>
+                <label>Action:
+                    <select th:field="*{recommendation}">
+                        <option value="BUY">Buy</option>
+                        <option value="HOLD">Hold</option>
+                        <option value="SELL">Sell</option>
+                    </select>
+                </label>
+                <label>Risk Level:
+                    <select th:field="*{riskLevel}">
+                        <option value="LOW">Low</option>
+                        <option value="MEDIUM">Medium</option>
+                        <option value="HIGH">High</option>
+                    </select>
+                </label>
+                <label>Confidence Level (1–5):
+                    <input type="number" min="1" max="5" th:field="*{confidenceLevel}" />
+                </label>
+            </fieldset>
+
+            <fieldset>
+                <legend>Analysis</legend>
+                <label>Reason for Recommendation:
+                    <textarea th:field="*{reason}" required></textarea>
+                </label>
+                <label>Catalysts:
+                    <textarea th:field="*{catalysts}"></textarea>
+                </label>
+                <label>Risks:
+                    <textarea th:field="*{risks}"></textarea>
+                </label>
+                <label>Exit Strategy:
+                    <textarea th:field="*{exitStrategy}"></textarea>
+                </label>
+            </fieldset>
+
+            <fieldset>
+                <legend>Optional</legend>
+                <label>Supporting Links:
+                    <input type="url" th:field="*{supportingLink}" />
+                </label>
+                <label>Tags (comma separated):
+                    <input type="text" th:field="*{tags}" />
+                </label>
+            </fieldset>
+
+            <button type="submit">Submit Recommendation</button>
+        </form>
+    </div>
+</body>
+</html>

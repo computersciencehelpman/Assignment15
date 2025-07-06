@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Profile</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f8f8;
+            margin: 0;
+            padding: 0;
+        }
+        .navbar {
+            background-color: #222;
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .navbar a {
+            color: white;
+            margin-left: 1rem;
+            text-decoration: none;
+        }
+        .profile-card {
+            background-color: white;
+            display: inline-block;
+            padding: 2rem 3rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            margin-top: 4rem;
+        }
+        .profile-card h1 {
+            color: #333;
+        }
+        .profile-card p {
+            font-size: 1.2rem;
+            color: #666;
+        }
+        .centered {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+  <div><strong><a href="/" style="color: white; text-decoration: none;">Assignment 15 Forum</a></strong></div>
+  <div>
+    <span th:if="${#authorization.expression('isAuthenticated()')}">
+      <a href="/profile" style="color: white; text-decoration: none;" th:text="${#authentication.name}">Username</a>
+    </span>
+    <span th:if="${#authorization.expression('!isAuthenticated()')}">
+      <a href="/login">Login</a>
+      <a href="/register">Register</a>
+    </span>
+  </div>
+</div>
+    
+
+    <div class="centered">
+        <div class="profile-card">
+            <h1>Welcome, <span th:text="${name} ?: 'Guest'">Name</span>!</h1>
+            <p>Your email is: <span th:text="${email}">email@example.com ?: 'unknown@example.com'</span></p>
+        </div>
+    </div>
+</body>
+</html>
