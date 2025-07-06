@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><title>Crypto Recommendation</title></head>
+<body>
+<h2>Submit a different Blockchain Crypto Recommendation</h2>
+<form th:action="@{/other-chains/submit}" method="post" th:object="${cryptoRecommendation}">
+    <label>Token Name: <input type="text" th:field="*{tokenName}" required /></label><br/>
+    <label>Contact Address (CA): <input type="text" th:field="*{ca}" required /></label><br/>
+    <label>Blockchain: <input type="text" th:field="*{blockchain}" value="Other Blockchain" readonly /></label><br/>
+    <label>Recommendation:
+        <select th:field="*{recommendation}">
+            <option value="BUY">Buy</option>
+            <option value="HOLD">Hold</option>
+            <option value="SELL">Sell</option>
+        </select>
+    </label><br/>
+    <label>Current Price: <input type="number" step="0.01" th:field="*{currentPrice}" /></label><br/>
+    <label>Target Price: <input type="number" step="0.01" th:field="*{targetPrice}" /></label><br/>
+    <label>Reason:<br/><textarea th:field="*{reason}" required></textarea></label><br/>
+    <label>Risks:<br/><textarea th:field="*{risks}"></textarea></label><br/>
+    <button type="submit">Submit</button>
+</form>
+</body>
+</html>
