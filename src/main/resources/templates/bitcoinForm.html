@@ -2,6 +2,18 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head><title>Crypto Recommendation</title></head>
 <body>
+<div class="navbar">
+  <div><strong><a href="/" style="color: white; text-decoration: none;">Assignment 15 Forum</a></strong></div>
+  <div>
+    <span th:if="${#authorization.expression('isAuthenticated()')}">
+      <a href="/profile" style="color: white; text-decoration: none;" th:text="${#authentication.name}">Username</a>
+    </span>
+    <span th:if="${#authorization.expression('!isAuthenticated()')}">
+      <a href="/login">Login</a>
+      <a href="/register">Register</a>
+    </span>
+  </div>
+</div>
 <h2>Submit a Bitcoin Crypto Recommendation</h2>
 <form th:action="@{/bitcoin/submit}" method="post" th:object="${cryptoRecommendation}">
     <label>Token Name: <input type="text" th:field="*{tokenName}" required /></label><br/>
