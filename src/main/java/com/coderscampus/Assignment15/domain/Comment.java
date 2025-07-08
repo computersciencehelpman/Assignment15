@@ -46,6 +46,7 @@ public class Comment {
 
     private Long otherBlockchainsRecommendationId;
 
+    private Long bitcoinNftRecommendationId;
     
 	public Long getId() {
 		return id;
@@ -151,5 +152,14 @@ public class Comment {
 	public void setOtherBlockchainsRecommendationId(Long otherBlockchainsRecommendationId) {
 	    this.otherBlockchainsRecommendationId = otherBlockchainsRecommendationId;
 	}
+
+	public Long getBitcoinNftRecommendationId() {
+		return bitcoinNftRecommendationId;
+	}
+
+	public void setBitcoinNftRecommendationId(Long bitcoinNftRecommendationId) {
+		this.bitcoinNftRecommendationId = bitcoinNftRecommendationId;
+	}
     
+	
 }

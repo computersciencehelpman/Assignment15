@@ -18,6 +18,7 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
 	List<Comment> findByCardanoRecommendationIdOrderByCreatedAtDesc(Long id);
 	List<Comment> findByPolygonRecommendationIdOrderByCreatedAtDesc(Long id);
 	List<Comment> findByOtherBlockchainsRecommendationIdOrderByCreatedAtDesc(Long id);
+	List<Comment> findByBitcoinNftRecommendationIdOrderByCreatedAtDesc(Long id);
 
 }
 
