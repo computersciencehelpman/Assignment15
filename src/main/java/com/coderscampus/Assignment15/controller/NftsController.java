@@ -11,20 +11,20 @@ public class NftsController {
 //        return "bitcoinnft"; 
 //    }
 	
-	@GetMapping("/ethereumnft")
-    public String EthereumNft() {
-        return "ethereumnft"; 
-    }
+//	@GetMapping("/ethereumnft")
+//    public String EthereumNft() {
+//        return "ethereumnft"; 
+//    }
 	
-	@GetMapping("/solananft")
-    public String SolanaNft() {
-        return "solananft"; 
-    }
+//	@GetMapping("/solananft")
+//    public String SolanaNft() {
+//        return "solananft"; 
+//    }
 	
-	@GetMapping("/cardanonft")
-    public String CardanoNft() {
-        return "cardanonft"; 
-    }
+//	@GetMapping("/cardanonft")
+//    public String CardanoNft() {
+//        return "cardanonft"; 
+//    }
 	
 	@GetMapping("/polygonnft")
     public String PolygonNft() {
