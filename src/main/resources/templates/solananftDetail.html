@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <title>Ethereum NFT Detail</title>
+  <title>Solana NFT Detail</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -69,12 +69,12 @@
 </head>
 <body>
 <div class="container">
-  <!-- ✅ Fixed the expression -->
-  <h2 th:text="${nft.collectionName + ' (' + nft.contractAddress + ')'}">Collection Name (Contract)</h2>
+  <!-- ✅ FIXED THIS LINE -->
+  <h2 th:text="${nft.collectionName + ' (' + nft.mintAddress + ')'}">Collection Name (Mint Address)</h2>
 
   <p><strong>Creator:</strong> <span th:text="${nft.creator}">Creator Name</span></p>
-  <p><strong>Floor Price:</strong> <span th:text="${nft.floorPrice} + ' ETH'">0.0 ETH</span></p>
-  <p><strong>Target Price:</strong> <span th:text="${nft.targetPrice} + ' ETH'">0.0 ETH</span></p>
+  <p><strong>Floor Price:</strong> <span th:text="${nft.floorPrice + ' SOL'}">0.0 SOL</span></p>
+  <p><strong>Target Price:</strong> <span th:text="${nft.targetPrice + ' SOL'}">0.0 SOL</span></p>
   <p><strong>Recommendation:</strong> <span th:text="${nft.recommendation}">BUY</span></p>
 
   <p><strong>Reason:</strong></p>
@@ -89,10 +89,10 @@
 
   <p class="meta">
     <strong>Submitted by:</strong> <span th:text="${nft.submittedBy}">user@example.com</span><br/>
-    <strong>Submitted at:</strong> <span th:text="${#temporals.format(nft.createdAt, 'MMM dd, yyyy hh:mm a')}">Date</span>
+    <strong>Submitted at:</strong> <span th:text="${#temporals.format(nft.createdAt, 'MMM dd, yyyy hh:mm a')}">Jul 08, 2025</span>
   </p>
 
-  <a href="/ethereumnft">← Back to all Ethereum NFT recommendations</a>
+  <a href="/solananft">← Back to all Solana NFT recommendations</a>
 
   <!-- 💬 Comment Section -->
   <div class="comment-section">
@@ -111,7 +111,7 @@
     </div>
 
     <div th:if="${#authorization.expression('isAuthenticated()')}">
-      <form th:action="@{'/ethereumnft/' + ${nft.id} + '/comments'}" method="post" th:object="${newComment}">
+      <form th:action="@{'/solananft/' + ${nft.id} + '/comments'}" method="post" th:object="${newComment}">
         <textarea th:field="*{content}" placeholder="Add a comment..." required></textarea>
         <button type="submit">Post Comment</button>
       </form>

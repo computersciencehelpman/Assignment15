@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Forum Home</title>
+    <title>Solana NFT Recommendations</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -41,67 +41,83 @@
             border-bottom: 1px solid #ccc;
             padding-bottom: 0.5rem;
         }
-        
-        .heading-flex {
-  			display: flex;
-  			justify-content: space-between;
-  			align-items: center;
-		}
-		
-		.add-button {
-  			font-size: 1.2rem;
-  			padding: 0.2rem 0.5rem;
-  			border: none;
-  			background-color: #007bff;
-  			color: white;
-  			border-radius: 4px;
-  			cursor: pointer;
-		}
 
-        .subforums {
+        .heading-flex {
             display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            margin-top: 1rem;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .subforum {
+        .add-button {
+            font-size: 1.2rem;
+            padding: 0.2rem 0.5rem;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .nft-card {
             background: #f7f7f7;
             border: 1px solid #ddd;
-            flex: 1 1 30%;
-            padding: 1rem;
-            text-align: center;
             border-radius: 4px;
+            padding: 1rem;
+            margin-bottom: 1rem;
         }
 
-        .subforum:hover {
+        .nft-card:hover {
             background-color: #eaeaea;
+        }
+
+        .meta {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        h3 {
+            margin: 0;
         }
     </style>
 </head>
 <body>
-    <div class="navbar">
-  <div><strong><a href="/" style="color: white; text-decoration: none;">Assignment 15 Forum</a></strong></div>
-  <div>
-    <span th:if="${#authorization.expression('isAuthenticated()')}">
-      <a href="/profile" style="color: white; text-decoration: none;" th:text="${#authentication.name}">Username</a>
-    </span>
-    <span th:if="${#authorization.expression('!isAuthenticated()')}">
-      <a href="/login">Login</a>
-      <a href="/register">Register</a>
-    </span>
-  </div>
+<div class="navbar">
+    <div><strong><a href="/" style="color: white; text-decoration: none;">Assignment 15 Forum</a></strong></div>
+    <div>
+        <span th:if="${#authorization.expression('isAuthenticated()')}">
+            <a href="/profile" style="color: white; text-decoration: none;" th:text="${#authentication.name}">Username</a>
+        </span>
+        <span th:if="${#authorization.expression('!isAuthenticated()')}">
+            <a href="/login">Login</a>
+            <a href="/register">Register</a>
+        </span>
+    </div>
 </div>
-    
 
-    <div class="container">
-        <div class="category">
-            <h2 class="heading-flex">
-  				<span>Solana NFTs</span>
-  				<button class="add-button" onclick="openModal()">+</button>
-			</h2> 
+<div class="container">
+    <div class="category">
+        <h2 class="heading-flex">
+            <span>Solana NFTs</span>
+            <a href="/solananft/new" class="add-button">+ Add</a>
+        </h2>
+
+        <div th:if="${#lists.isEmpty(nftRecommendations)}">
+            <p>No Solana NFT recommendations yet. Be the first to add one!</p>
         </div>
 
+        <div th:each="nft : ${nftRecommendations}" class="nft-card">
+            <a th:href="@{'/solananft/' + ${nft.id}}">
+                <h3 th:text="${nft.collectionName}">NFT Collection</h3>
+            </a>
+            <p><strong>Recommendation:</strong> <span th:text="${nft.recommendation}">BUY</span></p>
+            <p><strong>Floor Price:</strong> <span th:text="${nft.floorPrice + ' SOL'}">0.00 SOL</span></p>
+            <p class="meta">
+                Submitted by <span th:text="${nft.submittedBy}">user@example.com</span> ·
+                <span th:text="${#temporals.format(nft.createdAt, 'MMM dd, yyyy hh:mm a')}">Date</span>
+            </p>
+        </div>
     </div>
+</div>
 </body>
 </html>

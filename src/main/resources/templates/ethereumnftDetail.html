@@ -69,12 +69,11 @@
 </head>
 <body>
 <div class="container">
-  <!-- ✅ Fixed the expression -->
   <h2 th:text="${nft.collectionName + ' (' + nft.contractAddress + ')'}">Collection Name (Contract)</h2>
 
   <p><strong>Creator:</strong> <span th:text="${nft.creator}">Creator Name</span></p>
-  <p><strong>Floor Price:</strong> <span th:text="${nft.floorPrice} + ' ETH'">0.0 ETH</span></p>
-  <p><strong>Target Price:</strong> <span th:text="${nft.targetPrice} + ' ETH'">0.0 ETH</span></p>
+  <p><strong>Floor Price:</strong> <span th:text="${nft.floorPrice + ' ETH'}">0.0 ETH</span></p>
+  <p><strong>Target Price:</strong> <span th:text="${nft.targetPrice + ' ETH'}">0.0 ETH</span></p>
   <p><strong>Recommendation:</strong> <span th:text="${nft.recommendation}">BUY</span></p>
 
   <p><strong>Reason:</strong></p>
@@ -87,9 +86,10 @@
     <a th:href="${nft.officialLink}" th:text="${nft.officialLink}" target="_blank">official</a>
   </p>
 
+  <!-- ✅ Submitted info -->
   <p class="meta">
     <strong>Submitted by:</strong> <span th:text="${nft.submittedBy}">user@example.com</span><br/>
-    <strong>Submitted at:</strong> <span th:text="${#temporals.format(nft.createdAt, 'MMM dd, yyyy hh:mm a')}">Date</span>
+    <strong>Submitted at:</strong> <span th:text="${#temporals.format(nft.createdAt, 'MMM dd, yyyy hh:mm a')}">Jul 08, 2025</span>
   </p>
 
   <a href="/ethereumnft">← Back to all Ethereum NFT recommendations</a>

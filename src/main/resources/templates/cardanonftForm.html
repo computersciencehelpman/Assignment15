@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <title>Submit Ethereum NFT Recommendation</title>
+  <title>Submit Cardano NFT Recommendation</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -56,21 +56,21 @@
 </head>
 <body>
   <div class="form-container">
-    <h2>Submit an Ethereum NFT Recommendation</h2>
-    <form th:action="@{/ethereumnft/submit}" method="post" th:object="${ethereumNftRecommendation}">
+    <h2>Submit a Cardano NFT Recommendation</h2>
+    <form th:action="@{/cardanonft/submit}" method="post" th:object="${cardanoNftRecommendation}">
       <label>Collection Name:</label>
       <input type="text" th:field="*{collectionName}" required />
 
-      <label>Contract Address:</label>
-      <input type="text" th:field="*{contractAddress}" required />
+      <label>Policy ID:</label>
+      <input type="text" th:field="*{policyId}" required />
 
       <label>Creator:</label>
       <input type="text" th:field="*{creator}" />
 
-      <label>Floor Price (ETH):</label>
+      <label>Floor Price (ADA):</label>
       <input type="number" step="0.0001" th:field="*{floorPrice}" required />
 
-      <label>Target Price (ETH):</label>
+      <label>Target Price (ADA):</label>
       <input type="number" step="0.0001" th:field="*{targetPrice}" />
 
       <label>Recommendation:</label>
@@ -81,7 +81,7 @@
       </select>
 
       <label>Reason for Recommendation:</label>
-      <textarea th:field="*{reason}" rows="4"></textarea>
+      <textarea th:field="*{reason}" rows="4" required></textarea>
 
       <label>Risks:</label>
       <textarea th:field="*{risks}" rows="3"></textarea>
