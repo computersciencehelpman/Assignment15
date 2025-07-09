@@ -25,7 +25,7 @@ public class Comment {
     @CreationTimestamp
     private LocalDateTime createdAt;
 
-    private String author; // email or username
+    private String author;
 
     @ManyToOne
     private StockRecommendation recommendation;
@@ -47,6 +47,13 @@ public class Comment {
     private Long otherBlockchainsRecommendationId;
 
     private Long bitcoinNftRecommendationId;
+    
+    private Long ethereumNftRecommendationId;
+    
+    private Long solanaNftRecommendationId;
+    
+    private Long cardanoNftRecommendationId;
+
     
 	public Long getId() {
 		return id;
@@ -160,6 +167,31 @@ public class Comment {
 	public void setBitcoinNftRecommendationId(Long bitcoinNftRecommendationId) {
 		this.bitcoinNftRecommendationId = bitcoinNftRecommendationId;
 	}
+
+	public Long getEthereumNftRecommendationId() {
+		return ethereumNftRecommendationId;
+	}
+
+	public void setEthereumNftRecommendationId(Long ethereumNftRecommendationId) {
+		this.ethereumNftRecommendationId = ethereumNftRecommendationId;
+	}
+
+	public Long getSolanaNftRecommendationId() {
+		return solanaNftRecommendationId;
+	}
+
+	public void setSolanaNftRecommendationId(Long solanaNftRecommendationId) {
+		this.solanaNftRecommendationId = solanaNftRecommendationId;
+	}
+
+	public Long getCardanoNftRecommendationId() {
+		return cardanoNftRecommendationId;
+	}
+
+	public void setCardanoNftRecommendationId(Long cardanoNftRecommendationId) {
+		this.cardanoNftRecommendationId = cardanoNftRecommendationId;
+	}
     
+	
 	
 }
