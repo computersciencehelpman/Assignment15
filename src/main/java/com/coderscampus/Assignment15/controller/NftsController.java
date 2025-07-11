@@ -26,13 +26,13 @@ public class NftsController {
 //        return "cardanonft"; 
 //    }
 	
-	@GetMapping("/polygonnft")
-    public String PolygonNft() {
-        return "polygonnft"; 
-    }
+//	@GetMapping("/polygonnft")
+//    public String PolygonNft() {
+//        return "polygonnft"; 
+//    }
 	
-	@GetMapping("/otherblockchains")
-    public String OtherBlockchains() {
-        return "otherblockchains"; 
-    }
+//	@GetMapping("/otherblockchains")
+//    public String OtherBlockchains() {
+//        return "otherblockchains"; 
+//    }
 }
