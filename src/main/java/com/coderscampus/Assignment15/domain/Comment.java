@@ -53,6 +53,10 @@ public class Comment {
     private Long solanaNftRecommendationId;
     
     private Long cardanoNftRecommendationId;
+    
+    private Long polygonNftRecommendationId;
+    
+    private Long otherNftBlockchainsRecommendationId;
 
     
 	public Long getId() {
@@ -191,7 +195,21 @@ public class Comment {
 	public void setCardanoNftRecommendationId(Long cardanoNftRecommendationId) {
 		this.cardanoNftRecommendationId = cardanoNftRecommendationId;
 	}
-    
-	
+
+	public Long getPolygonNftRecommendationId() {
+		return polygonNftRecommendationId;
+	}
+
+	public void setPolygonNftRecommendationId(Long polygonNftRecommendationId) {
+		this.polygonNftRecommendationId = polygonNftRecommendationId;
+	}
+
+	public Long getOtherNftBlockchainsRecommendationId() {
+		return otherNftBlockchainsRecommendationId;
+	}
+
+	public void setOtherNftBlockchainsRecommendationId(Long otherNftBlockchainsRecommendationId) {
+		this.otherNftBlockchainsRecommendationId = otherNftBlockchainsRecommendationId;
+	}	
 	
 }
