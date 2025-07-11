@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Polygon NFT Detail</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 2rem auto;
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+
+    p {
+      margin: 0.5rem 0;
+    }
+
+    .meta {
+      font-size: 0.9rem;
+      color: #666;
+    }
+
+    a {
+      display: inline-block;
+      margin-top: 1.5rem;
+      color: #007bff;
+      text-decoration: none;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 80px;
+      margin-top: 0.5rem;
+    }
+
+    button {
+      margin-top: 0.5rem;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+    }
+
+    .comment-section {
+      margin-top: 2rem;
+    }
+
+    .comment-card {
+      background: #f5f5f5;
+      padding: 1rem;
+      border-radius: 6px;
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h2 th:text="${nft.collectionName + ' (' + nft.contractAddress + ')'}">Collection Name (Contract)</h2>
+
+  <p><strong>Creator:</strong> <span th:text="${nft.creator}">Creator Name</span></p>
+  <p><strong>Floor Price:</strong> <span th:text="${nft.floorPrice + ' MATIC'}">0.0 MATIC</span></p>
+  <p><strong>Target Price:</strong> <span th:text="${nft.targetPrice + ' MATIC'}">0.0 MATIC</span></p>
+  <p><strong>Recommendation:</strong> <span th:text="${nft.recommendation}">BUY</span></p>
+
+  <p><strong>Reason:</strong></p>
+  <p th:text="${nft.reason}">Reasoning behind the recommendation...</p>
+
+  <p><strong>Risks:</strong></p>
+  <p th:text="${nft.risks}">Risk analysis here...</p>
+
+  <p><strong>Official Link:</strong>
+    <a th:href="${nft.officialLink}" th:text="${nft.officialLink}" target="_blank">official</a>
+  </p>
+
+  <p class="meta">
+    <strong>Submitted by:</strong> <span th:text="${nft.submittedBy}">user@example.com</span><br/>
+    <strong>Submitted at:</strong> <span th:text="${#temporals.format(nft.createdAt, 'MMM dd, yyyy hh:mm a')}">Date</span>
+  </p>
+
+  <a href="/polygonnft">← Back to all Polygon NFT recommendations</a>
+
+  <!-- 💬 Comment Section -->
+  <div class="comment-section">
+    <h2>Comments</h2>
+
+    <div th:if="${#lists.isEmpty(comments)}">
+      <p>No comments yet.</p>
+    </div>
+
+    <div th:each="comment : ${comments}" class="comment-card">
+      <p th:text="${comment.content}">Comment text</p>
+      <p class="meta">
+        <span th:text="${comment.author}">user@example.com</span> ·
+        <span th:text="${#temporals.format(comment.createdAt, 'MMM dd, yyyy hh:mm a')}">Timestamp</span>
+      </p>
+    </div>
+
+    <div th:if="${#authorization.expression('isAuthenticated()')}">
+      <form th:action="@{'/polygonnft/' + ${nft.id} + '/comments'}" method="post" th:object="${newComment}">
+        <textarea th:field="*{content}" placeholder="Add a comment..." required></textarea>
+        <button type="submit">Post Comment</button>
+      </form>
+    </div>
+
+    <div th:unless="${#authorization.expression('isAuthenticated()')}">
+      <p><a href="/login">Login</a> to write a comment.</p>
+    </div>
+  </div>
+</div>
+</body>
+</html>
