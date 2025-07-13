@@ -25,20 +25,17 @@ public class EthereumController {
     @Autowired
     private CommentRepository commentRepo;
     
-    
-
-    
     @GetMapping
     public String showCryptoRecommendations(Model model) {
         List<EthereumRecommendation> cryptos = ethereumRepo.findAllByOrderByCreatedAtDesc();
         model.addAttribute("recommendations", cryptos);
-        return "ethereum"; // src/main/resources/templates/cryptoList.html
+        return "ethereum";
     }
 
     @GetMapping("/new")
     public String newCryptoForm(Model model) {
         model.addAttribute("cryptoRecommendation", new EthereumRecommendation());
-        return "ethereumForm"; // matches ethereumForm.html
+        return "ethereumForm"; 
     }
     
     @GetMapping("/{id}")
@@ -46,12 +43,13 @@ public class EthereumController {
         EthereumRecommendation ethereum = ethereumRepo.findById(id).orElse(null);
         if (ethereum == null) return "redirect:/ethereum";
 
-        model.addAttribute("ethereum", ethereum);
+        model.addAttribute("nft", ethereum); 
         model.addAttribute("comments", commentRepo.findByEthereumRecommendationIdOrderByCreatedAtDesc(id));
         model.addAttribute("newComment", new Comment());
 
-        return "ethereumDetail"; 
+        return "ethereumDetail";
     }
+
 
 
     @PostMapping("/{id}/comments")
