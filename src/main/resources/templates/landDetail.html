@@ -9,6 +9,21 @@
       margin: 0;
       padding: 0;
     }
+
+    .navbar {
+      background-color: #222;
+      color: white;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .navbar a {
+      color: white;
+      margin-left: 1rem;
+      text-decoration: none;
+    }
+
     .container {
       max-width: 800px;
       margin: 2rem auto;
@@ -17,26 +32,32 @@
       border-radius: 8px;
       box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
     }
+
     h2 {
       text-align: center;
       margin-bottom: 1rem;
     }
+
     p {
       margin: 0.5rem 0;
     }
+
     .meta {
       font-size: 0.9rem;
       color: #666;
     }
+
     a {
       color: #007bff;
       text-decoration: none;
     }
+
     textarea {
       width: 100%;
       min-height: 80px;
       margin-top: 0.5rem;
     }
+
     button {
       margin-top: 0.5rem;
       background-color: #007bff;
@@ -45,9 +66,11 @@
       padding: 0.5rem 1rem;
       border-radius: 4px;
     }
+
     .comment-section {
       margin-top: 2rem;
     }
+
     .comment-card {
       background: #f5f5f5;
       padding: 1rem;
@@ -57,6 +80,25 @@
   </style>
 </head>
 <body>
+
+<!-- ✅ Navbar -->
+<div class="navbar">
+  <div>
+    <strong><a href="/" style="color: white; text-decoration: none;">Assignment 15 Forum</a></strong>
+  </div>
+  <div>
+    <span th:if="${#authorization.expression('isAuthenticated()')}">
+      <a href="/profile" th:text="${#authentication.name}">Username</a>
+      <a href="/logout">Logout</a>
+    </span>
+    <span th:if="${#authorization.expression('!isAuthenticated()')}">
+      <a href="/login">Login</a>
+      <a href="/register">Register</a>
+    </span>
+  </div>
+</div>
+
+<!-- ✅ Main Content -->
 <div class="container">
   <h2 th:text="${land.name}">Land Name</h2>
 
@@ -83,6 +125,7 @@
 
   <a href="/land">← Back to Land Listings</a>
 
+  <!-- 💬 Comment Section -->
   <div class="comment-section">
     <h2>Comments</h2>
 

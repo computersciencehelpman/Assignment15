@@ -10,6 +10,20 @@
       padding: 0;
     }
 
+    .navbar {
+      background-color: #222;
+      color: white;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .navbar a {
+      color: white;
+      margin-left: 1rem;
+      text-decoration: none;
+    }
+
     .container {
       max-width: 800px;
       margin: 2rem auto;
@@ -68,6 +82,25 @@
   </style>
 </head>
 <body>
+
+<!-- ✅ Navbar -->
+<div class="navbar">
+  <div>
+    <strong><a href="/" style="color: white; text-decoration: none;">Assignment 15 Forum</a></strong>
+  </div>
+  <div>
+    <span th:if="${#authorization.expression('isAuthenticated()')}">
+      <a href="/profile" th:text="${#authentication.name}">Username</a>
+      <a href="/logout">Logout</a>
+    </span>
+    <span th:if="${#authorization.expression('!isAuthenticated()')}">
+      <a href="/login">Login</a>
+      <a href="/register">Register</a>
+    </span>
+  </div>
+</div>
+
+<!-- ✅ Main Content -->
 <div class="container">
   <h2 th:text="${nft.collectionName + ' (' + nft.contractAddress + ')'}">Collection Name (Contract)</h2>
 
@@ -86,7 +119,6 @@
     <a th:href="${nft.officialLink}" th:text="${nft.officialLink}" target="_blank">official</a>
   </p>
 
-  <!-- ✅ Submitted info -->
   <p class="meta">
     <strong>Submitted by:</strong> <span th:text="${nft.submittedBy}">user@example.com</span><br/>
     <strong>Submitted at:</strong> <span th:text="${#temporals.format(nft.createdAt, 'MMM dd, yyyy hh:mm a')}">Jul 08, 2025</span>
@@ -122,5 +154,6 @@
     </div>
   </div>
 </div>
+
 </body>
 </html>

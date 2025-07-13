@@ -6,12 +6,28 @@
         body {
             font-family: Arial, sans-serif;
             background-color: #f0f2f5;
-            padding: 2rem;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar {
+            background-color: #222;
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .navbar a {
+            color: white;
+            margin-left: 1rem;
+            text-decoration: none;
         }
 
         .container {
             max-width: 1000px;
-            margin: 0 auto;
+            margin: 2rem auto;
+            padding: 0 2rem;
         }
 
         .header {
@@ -51,11 +67,16 @@
     </style>
 </head>
 <body>
+
+<!-- ✅ Navbar -->
 <div class="navbar">
-  <div><strong><a href="/" style="color: white; text-decoration: none;">Assignment 15 Forum</a></strong></div>
+  <div>
+    <strong><a href="/" style="color: white; text-decoration: none;">Assignment 15 Forum</a></strong>
+  </div>
   <div>
     <span th:if="${#authorization.expression('isAuthenticated()')}">
-      <a href="/profile" style="color: white; text-decoration: none;" th:text="${#authentication.name}">Username</a>
+      <a href="/profile" th:text="${#authentication.name}">Username</a>
+      <a href="/logout">Logout</a>
     </span>
     <span th:if="${#authorization.expression('!isAuthenticated()')}">
       <a href="/login">Login</a>
@@ -63,6 +84,8 @@
     </span>
   </div>
 </div>
+
+<!-- ✅ Main Content -->
 <div class="container">
     <div class="header">
         <h2>Bitcoin NFT Recommendations</h2>
@@ -70,7 +93,7 @@
     </div>
 
     <div th:each="nft : ${nftRecommendations}" class="nft-card">
-        <a th:href="@{'/bitcoinnft/' + ${nft.id}}"> <!-- ✅ fixed link -->
+        <a th:href="@{'/bitcoinnft/' + ${nft.id}}">
             <h3 th:text="${nft.collectionName}">Ordinal Collection</h3>
         </a>
         <p><strong>Recommendation:</strong> <span th:text="${nft.recommendation}">BUY</span></p>
@@ -85,5 +108,6 @@
         <p>No Bitcoin NFT recommendations yet. Be the first to add one!</p>
     </div>
 </div>
+
 </body>
 </html>

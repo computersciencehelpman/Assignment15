@@ -1,62 +1,122 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Call Option Detail</title>
-    <link rel="stylesheet" th:href="@{/css/callDetail.css}">
-    <link rel="stylesheet" href="/css/comments.css">
+  <title>Call Option Recommendations</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f2f5;
+      margin: 0;
+      padding: 0;
+    }
+
+    .navbar {
+      background-color: #222;
+      color: white;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .navbar a {
+      color: white;
+      margin-left: 1rem;
+      text-decoration: none;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .add-button {
+      font-size: 1.2rem;
+      padding: 0.3rem 0.6rem;
+      border: none;
+      background-color: #007bff;
+      color: white;
+      border-radius: 4px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .call-card {
+      background: white;
+      padding: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
+      margin-bottom: 1rem;
+    }
+
+    .call-card:hover {
+      background: #f9f9f9;
+    }
+
+    .meta {
+      font-size: 0.9rem;
+      color: #666;
+    }
+
+    h3 {
+      margin: 0;
+    }
+
+    .no-recs {
+      text-align: center;
+      margin-top: 2rem;
+      color: #555;
+    }
+  </style>
 </head>
 <body>
+
+<!-- ✅ Navbar -->
 <div class="navbar">
-    <div><a href="/" style="color:white; text-decoration:none;">Assignment 15 Forum</a></div>
-    <div>
-        <span th:if="${#authorization.expression('isAuthenticated()')}">
-            <a href="/profile" th:text="${#authentication.name}"></a>
-        </span>
-        <span th:if="${#authorization.expression('!isAuthenticated()')}">
-            <a href="/login">Login</a>
-            <a href="/register">Register</a>
-        </span>
-    </div>
+  <div>
+    <a href="/" style="color: white; text-decoration: none; font-weight: bold;">Assignment 15 Forum</a>
+  </div>
+  <div>
+    <span th:if="${#authorization.expression('isAuthenticated()')}">
+      <a href="/profile" th:text="${#authentication.name}" style="color: white; text-decoration: none; margin-right: 1rem;"></a>
+      <a href="/logout" style="color: white; text-decoration: none;">Logout</a>
+    </span>
+    <span th:if="${#authorization.expression('!isAuthenticated()')}">
+      <a href="/login" style="color: white; text-decoration: none; margin-right: 1rem;">Login</a>
+      <a href="/register" style="color: white; text-decoration: none;">Register</a>
+    </span>
+  </div>
 </div>
 
 <div class="container">
-    <div class="recommendation-card">
-        <h1 th:text="|${call.companyName} (${call.ticker})|"></h1>
-        <p><strong>Strike Price:</strong> <span th:text="${call.strikePrice}"></span></p>
-        <p><strong>Expiration Date:</strong> <span th:text="${#temporals.format(call.expirationDate, 'MMM dd, yyyy')}"></span></p>
-        <p><strong>Premium:</strong> $<span th:text="${call.premium}"></span></p>
-        <p><strong>Recommendation:</strong> <span th:text="${call.recommendation}"></span></p>
-        <p><strong>Reason:</strong> <span th:text="${call.reason}"></span></p>
-        <p class="meta">
-            <span th:text="'Posted: ' + ${#temporals.format(call.submittedAt, 'MMM dd, yyyy hh:mm a')}"></span> |
-            <span th:text="'Submitted by: ' + ${call.submittedBy}"></span>
-        </p>
-    </div>
+  <div class="header">
+    <h2>Call Option Recommendations</h2>
+    <a href="/calls/new" class="add-button">+</a>
+  </div>
 
-<div class="comment-section">
-    <h2>Comments</h2>
+  <div th:each="call : ${callRecommendations}" class="call-card">
+    <a th:href="@{'/calls/' + ${call.id}}">
+      <h3 th:text="${call.companyName} + ' (' + ${call.ticker} + ')'">Company (TICKER)</h3>
+    </a>
+    <p><strong>Strike:</strong> <span th:text="${call.strikePrice}">0.00</span></p>
+    <p><strong>Expires:</strong> <span th:text="${#temporals.format(call.expiryDate, 'MMM dd, yyyy')}">Date</span></p>
+    <p class="meta">
+      Submitted by: <span th:text="${call.submittedBy}">user@example.com</span>
+    </p>
+  </div>
 
-    <!-- Existing comments -->
-    <div th:each="comment : ${comments}" class="comment-card">
-        <p th:text="${comment.content}"></p>
-        <p class="meta">
-            <span th:text="${comment.author}"></span> ·
-            <span th:text="${#temporals.format(comment.createdAt, 'MMM dd, yyyy hh:mm a')}"></span>
-        </p>
-    </div>
-
-    <!-- Comment form -->
-    <div th:if="${#authorization.expression('isAuthenticated()')}">
-        <form th:action="@{'/calls/' + ${call.id} + '/comments'}" method="post" th:object="${newComment}">
-            <textarea th:field="*{content}" placeholder="Add a comment..." required></textarea>
-            <button type="submit">Post Comment</button>
-        </form>
-    </div>
-    <div th:unless="${#authorization.expression('isAuthenticated()')}">
-        <p><a href="/login">Login</a> to write a comment.</p>
-    </div>
+  <div th:if="${#lists.isEmpty(callRecommendations)}" class="no-recs">
+    <p>No call recommendations yet. Be the first to add one!</p>
+  </div>
 </div>
-
 
 </body>
 </html>

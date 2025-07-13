@@ -10,6 +10,20 @@
       padding: 0;
     }
 
+    .navbar {
+      background-color: #222;
+      color: white;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .navbar a {
+      color: white;
+      margin-left: 1rem;
+      text-decoration: none;
+    }
+
     .container {
       max-width: 800px;
       margin: 2rem auto;
@@ -39,56 +53,103 @@
       color: #007bff;
       text-decoration: none;
     }
+
+    .comment-section {
+      margin-top: 2rem;
+    }
+
+    .comment-card {
+      background: #f5f5f5;
+      padding: 1rem;
+      border-radius: 6px;
+      margin-top: 1rem;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 80px;
+      margin-top: 0.5rem;
+    }
+
+    button {
+      margin-top: 0.5rem;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+    }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h2 th:text="${nft.collectionName} + ' (' + ${nft.inscriptionId} + ')'">Collection Name (Inscription)</h2>
 
-    <p><strong>Creator:</strong> <span th:text="${nft.creator}">Creator Name</span></p>
-    <p><strong>Floor Price:</strong> <span th:text="${nft.floorPrice} + ' BTC'">0.0 BTC</span></p>
-    <p><strong>Target Price:</strong> <span th:text="${nft.targetPrice} + ' BTC'">0.0 BTC</span></p>
-    <p><strong>Recommendation:</strong> <span th:text="${nft.recommendation}">BUY</span></p>
-
-    <p><strong>Reason:</strong></p>
-    <p th:text="${nft.reason}">Reasoning behind the recommendation...</p>
-
-    <p><strong>Risks:</strong></p>
-    <p th:text="${nft.risks}">Risk analysis here...</p>
-
-    <p class="meta">
-      <strong>Submitted by:</strong> <span th:text="${nft.submittedBy}">user@example.com</span><br/>
-      <strong>Submitted at:</strong> <span th:text="${#temporals.format(nft.createdAt, 'MMM dd, yyyy hh:mm a')}">Jul 07, 2025 05:30 PM</span>
-    </p>
-
-    <a href="/bitcoinnft">← Back to all Bitcoin NFT recommendations</a>
-    <div class="comment-section">
-  <h2>Comments</h2>
-
-  <div th:if="${#lists.isEmpty(comments)}">
-      <p>No comments yet.</p>
+<!-- ✅ Navbar -->
+<div class="navbar">
+  <div>
+    <strong><a href="/" style="color: white; text-decoration: none;">Assignment 15 Forum</a></strong>
   </div>
-
-  <div th:each="comment : ${comments}" class="comment-card">
-      <p th:text="${comment.content}"></p>
-      <p class="meta">
-          <span th:text="${comment.author}"></span> · 
-          <span th:text="${#temporals.format(comment.createdAt, 'MMM dd, yyyy hh:mm a')}"></span>
-      </p>
-  </div>
-
-  <div th:if="${#authorization.expression('isAuthenticated()')}">
-      <form th:action="@{'/bitcoinnft/' + ${nft.id} + '/comments'}" method="post" th:object="${newComment}">
-          <textarea th:field="*{content}" placeholder="Add a comment..." required></textarea>
-          <button type="submit">Post Comment</button>
-      </form>
-  </div>
-
-  <div th:unless="${#authorization.expression('isAuthenticated()')}">
-      <p><a href="/login">Login</a> to write a comment.</p>
+  <div>
+    <span th:if="${#authorization.expression('isAuthenticated()')}">
+      <a href="/profile" th:text="${#authentication.name}" style="color: white; text-decoration: none;"></a>
+      <a href="/logout" style="color: white; text-decoration: none;">Logout</a>
+    </span>
+    <span th:if="${#authorization.expression('!isAuthenticated()')}">
+      <a href="/login">Login</a>
+      <a href="/register">Register</a>
+    </span>
   </div>
 </div>
-    
+
+<!-- ✅ NFT Detail Content -->
+<div class="container">
+  <h2 th:text="${nft.collectionName} + ' (' + ${nft.inscriptionId} + ')'">Collection Name (Inscription)</h2>
+
+  <p><strong>Creator:</strong> <span th:text="${nft.creator}">Creator Name</span></p>
+  <p><strong>Floor Price:</strong> <span th:text="${nft.floorPrice} + ' BTC'">0.0 BTC</span></p>
+  <p><strong>Target Price:</strong> <span th:text="${nft.targetPrice} + ' BTC'">0.0 BTC</span></p>
+  <p><strong>Recommendation:</strong> <span th:text="${nft.recommendation}">BUY</span></p>
+
+  <p><strong>Reason:</strong></p>
+  <p th:text="${nft.reason}">Reasoning behind the recommendation...</p>
+
+  <p><strong>Risks:</strong></p>
+  <p th:text="${nft.risks}">Risk analysis here...</p>
+
+  <p class="meta">
+    <strong>Submitted by:</strong> <span th:text="${nft.submittedBy}">user@example.com</span><br/>
+    <strong>Submitted at:</strong> <span th:text="${#temporals.format(nft.createdAt, 'MMM dd, yyyy hh:mm a')}">Jul 07, 2025 05:30 PM</span>
+  </p>
+
+  <a href="/bitcoinnft">← Back to all Bitcoin NFT recommendations</a>
+
+  <!-- ✅ Comment Section -->
+  <div class="comment-section">
+    <h2>Comments</h2>
+
+    <div th:if="${#lists.isEmpty(comments)}">
+        <p>No comments yet.</p>
+    </div>
+
+    <div th:each="comment : ${comments}" class="comment-card">
+        <p th:text="${comment.content}"></p>
+        <p class="meta">
+            <span th:text="${comment.author}"></span> · 
+            <span th:text="${#temporals.format(comment.createdAt, 'MMM dd, yyyy hh:mm a')}"></span>
+        </p>
+    </div>
+
+    <div th:if="${#authorization.expression('isAuthenticated()')}">
+        <form th:action="@{'/bitcoinnft/' + ${nft.id} + '/comments'}" method="post" th:object="${newComment}">
+            <textarea th:field="*{content}" placeholder="Add a comment..." required></textarea>
+            <button type="submit">Post Comment</button>
+        </form>
+    </div>
+
+    <div th:unless="${#authorization.expression('isAuthenticated()')}">
+        <p><a href="/login">Login</a> to write a comment.</p>
+    </div>
   </div>
+</div>
+
 </body>
 </html>
