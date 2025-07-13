@@ -57,6 +57,17 @@ public class Comment {
     private Long polygonNftRecommendationId;
     
     private Long otherNftBlockchainsRecommendationId;
+    
+    private Long residentialRecommendationId;
+    
+    private Long commercialRecommendationId;
+    
+    private Long reitRecommendationId;
+    
+    private Long landRecommendationId;
+    
+    private Long collectableRecommendationId;
+
 
     
 	public Long getId() {
@@ -210,6 +221,47 @@ public class Comment {
 
 	public void setOtherNftBlockchainsRecommendationId(Long otherNftBlockchainsRecommendationId) {
 		this.otherNftBlockchainsRecommendationId = otherNftBlockchainsRecommendationId;
-	}	
+	}
+
+	public Long getResidentialRecommendationId() {
+		return residentialRecommendationId;
+	}
+
+	public void setResidentialRecommendationId(Long residentialRecommendationId) {
+		this.residentialRecommendationId = residentialRecommendationId;
+	}
+
+	public Long getCommercialRecommendationId() {
+		return commercialRecommendationId;
+	}
+
+	public void setCommercialRecommendationId(Long commercialRecommendationId) {
+		this.commercialRecommendationId = commercialRecommendationId;
+	}
+
+	public Long getReitRecommendationId() {
+		return reitRecommendationId;
+	}
+
+	public void setReitRecommendationId(Long reitRecommendationId) {
+		this.reitRecommendationId = reitRecommendationId;
+	}
+
+	public Long getLandRecommendationId() {
+		return landRecommendationId;
+	}
+
+	public void setLandRecommendationId(Long landRecommendationId) {
+		this.landRecommendationId = landRecommendationId;
+	}
+
+	public Long getCollectableRecommendationId() {
+		return collectableRecommendationId;
+	}
+
+	public void setCollectableRecommendationId(Long collectableRecommendationId) {
+		this.collectableRecommendationId = collectableRecommendationId;
+	}
+	
 	
 }
