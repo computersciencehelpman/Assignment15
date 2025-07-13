@@ -96,11 +96,23 @@
 
     <div class="container">
         <div class="category">
-            <h2 class="heading-flex">
-  				<span>REITs (Real Estate Investment Trusts)</span>
-  				<button class="add-button" onclick="openModal()">+</button>
-			</h2> 
-        </div>
+  <div class="heading-flex">
+    <h2>REITs (Real Estate Investment Trusts)</h2>
+    <a href="/reits/new" class="add-button">+</a>
+  </div>
+
+  <div class="subforums">
+    <div th:each="reit : ${recommendations}" class="subforum">
+      <a th:href="@{/reits/{id}(id=${reit.id})}">
+        <h3 th:text="${reit.reitName}">REIT Name</h3>
+      </a>
+      <p><strong>Ticker:</strong> <span th:text="${reit.ticker}">TICK</span></p>
+      <p><strong>Sector:</strong> <span th:text="${reit.sector}">Sector</span></p>
+      <p><strong>Price:</strong> $<span th:text="${reit.currentPrice}">0.00</span></p>
+    </div>
+  </div>
+</div>
+        
 
     </div>
 </body>

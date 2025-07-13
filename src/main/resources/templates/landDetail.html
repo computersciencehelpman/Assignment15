@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <title>Other Blockchain NFT Detail</title>
+  <title>Land Recommendation Detail</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -9,7 +9,6 @@
       margin: 0;
       padding: 0;
     }
-
     .container {
       max-width: 800px;
       margin: 2rem auto;
@@ -18,34 +17,26 @@
       border-radius: 8px;
       box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
     }
-
     h2 {
       text-align: center;
       margin-bottom: 1rem;
     }
-
     p {
       margin: 0.5rem 0;
     }
-
     .meta {
       font-size: 0.9rem;
       color: #666;
     }
-
     a {
-      display: inline-block;
-      margin-top: 1.5rem;
       color: #007bff;
       text-decoration: none;
     }
-
     textarea {
       width: 100%;
       min-height: 80px;
       margin-top: 0.5rem;
     }
-
     button {
       margin-top: 0.5rem;
       background-color: #007bff;
@@ -54,11 +45,9 @@
       padding: 0.5rem 1rem;
       border-radius: 4px;
     }
-
     .comment-section {
       margin-top: 2rem;
     }
-
     .comment-card {
       background: #f5f5f5;
       padding: 1rem;
@@ -69,34 +58,31 @@
 </head>
 <body>
 <div class="container">
-  <h2 th:text="${nft.collectionName + ' (' + nft.contractAddress + ')'}">Collection Name (Contract)</h2>
+  <h2 th:text="${land.name}">Land Name</h2>
 
-  <p><strong>Blockchain:</strong> <span th:text="${nft.blockchain}">Blockchain Name</span></p>
-  <p><strong>Creator:</strong> <span th:text="${nft.creator}">Creator Name</span></p>
-  <p><strong>Floor Price:</strong> <span th:text="${nft.floorPrice + ' ' + nft.blockchain}">0.0</span></p>
-  <p><strong>Target Price:</strong> <span th:text="${nft.targetPrice + ' ' + nft.blockchain}">0.0</span></p>
- 
- 
-  <p><strong>Recommendation:</strong> <span th:text="${nft.recommendation}">BUY</span></p>
+  <p><strong>Location:</strong> <span th:text="${land.location}">Somewhere</span></p>
+  <p><strong>Size:</strong> <span th:text="${land.size}">0.00</span> acres</p>
+  <p><strong>Current Price:</strong> <span th:text="${land.currentPrice} + ' USD'">$0.00</span></p>
+  <p><strong>Target Price:</strong> <span th:text="${land.targetPrice} + ' USD'">$0.00</span></p>
+  <p><strong>Recommendation:</strong> <span th:text="${land.recommendation}">BUY</span></p>
 
   <p><strong>Reason:</strong></p>
-  <p th:text="${nft.reason}">Reasoning behind the recommendation...</p>
+  <p th:text="${land.reason}">Reasoning goes here</p>
 
   <p><strong>Risks:</strong></p>
-  <p th:text="${nft.risks}">Risk analysis here...</p>
+  <p th:text="${land.risks}">Risk info here</p>
 
-  <p><strong>Official Link:</strong>
-    <a th:href="${nft.officialLink}" th:text="${nft.officialLink}" target="_blank">official</a>
+  <p><strong>Listing URL:</strong>
+    <a th:href="${land.listingLink}" th:text="${land.listingLink}" target="_blank">View Listing</a>
   </p>
 
   <p class="meta">
-    <strong>Submitted by:</strong> <span th:text="${nft.submittedBy}">user@example.com</span><br/>
-    <strong>Submitted at:</strong> <span th:text="${#temporals.format(nft.createdAt, 'MMM dd, yyyy hh:mm a')}">Date</span>
+    <strong>Submitted by:</strong> <span th:text="${land.submittedBy}">user@example.com</span><br/>
+    <strong>Submitted at:</strong> <span th:text="${#temporals.format(land.createdAt, 'MMM dd, yyyy hh:mm a')}">Timestamp</span>
   </p>
 
-  <a href="/othernftblockchains">← Back to all Other NFT Blockchain recommendations</a>
+  <a href="/land">← Back to Land Listings</a>
 
-  <!-- 💬 Comment Section -->
   <div class="comment-section">
     <h2>Comments</h2>
 
@@ -105,22 +91,22 @@
     </div>
 
     <div th:each="comment : ${comments}" class="comment-card">
-      <p th:text="${comment.content}">Comment text</p>
+      <p th:text="${comment.content}">Comment here</p>
       <p class="meta">
-        <span th:text="${comment.author}">user@example.com</span> ·
-        <span th:text="${#temporals.format(comment.createdAt, 'MMM dd, yyyy hh:mm a')}">Timestamp</span>
+        <span th:text="${comment.author}">Author</span> ·
+        <span th:text="${#temporals.format(comment.createdAt, 'MMM dd, yyyy hh:mm a')}">Date</span>
       </p>
     </div>
 
     <div th:if="${#authorization.expression('isAuthenticated()')}">
-      <form th:action="@{'/othernftblockchains/' + ${nft.id} + '/comments'}" method="post" th:object="${newComment}">
+      <form th:action="@{'/land/' + ${land.id} + '/comments'}" method="post" th:object="${newComment}">
         <textarea th:field="*{content}" placeholder="Add a comment..." required></textarea>
         <button type="submit">Post Comment</button>
       </form>
     </div>
 
     <div th:unless="${#authorization.expression('isAuthenticated()')}">
-      <p><a href="/login">Login</a> to write a comment.</p>
+      <p><a href="/login">Login</a> to post a comment.</p>
     </div>
   </div>
 </div>

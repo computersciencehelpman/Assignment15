@@ -1,90 +1,82 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Forum Home</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f2f5;
-            margin: 0;
-            padding: 0;
-        }
+  <title>Land Recommendations</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f2f5;
+      margin: 0;
+      padding: 0;
+    }
 
-        .navbar {
-            background-color: #222;
-            color: white;
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-        }
+    .navbar {
+      background-color: #222;
+      color: white;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+    }
 
-        .navbar a {
-            color: white;
-            margin-left: 1rem;
-            text-decoration: none;
-        }
+    .navbar a {
+      color: white;
+      margin-left: 1rem;
+      text-decoration: none;
+    }
 
-        .container {
-            max-width: 1000px;
-            margin: 2rem auto;
-        }
+    .container {
+      max-width: 1000px;
+      margin: 2rem auto;
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
 
-        .category {
-            background: #fff;
-            border: 1px solid #ccc;
-            margin-bottom: 2rem;
-            border-radius: 5px;
-            padding: 1rem;
-        }
+    .heading-flex {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
 
-        .category h2 {
-            border-bottom: 1px solid #ccc;
-            padding-bottom: 0.5rem;
-        }
-        
-        .heading-flex {
-  			display: flex;
-  			justify-content: space-between;
-  			align-items: center;
-		}
-		
-		.add-button {
-  			font-size: 1.2rem;
-  			padding: 0.2rem 0.5rem;
-  			border: none;
-  			background-color: #007bff;
-  			color: white;
-  			border-radius: 4px;
-  			cursor: pointer;
-		}
+    .add-button {
+      font-size: 1.2rem;
+      padding: 0.2rem 0.5rem;
+      border: none;
+      background-color: #007bff;
+      color: white;
+      border-radius: 4px;
+      cursor: pointer;
+      text-decoration: none;
+    }
 
-        .subforums {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            margin-top: 1rem;
-        }
+    .recommendation {
+      border-bottom: 1px solid #ccc;
+      padding: 1rem 0;
+    }
 
-        .subforum {
-            background: #f7f7f7;
-            border: 1px solid #ddd;
-            flex: 1 1 30%;
-            padding: 1rem;
-            text-align: center;
-            border-radius: 4px;
-        }
+    .recommendation:last-child {
+      border-bottom: none;
+    }
 
-        .subforum:hover {
-            background-color: #eaeaea;
-        }
-    </style>
+    .recommendation a {
+      text-decoration: none;
+      color: #007bff;
+      font-weight: bold;
+    }
+
+    .meta {
+      font-size: 0.9rem;
+      color: #555;
+    }
+  </style>
 </head>
 <body>
-    <div class="navbar">
+<div class="navbar">
   <div><strong><a href="/" style="color: white; text-decoration: none;">Assignment 15 Forum</a></strong></div>
   <div>
     <span th:if="${#authorization.expression('isAuthenticated()')}">
-      <a href="/profile" style="color: white; text-decoration: none;" th:text="${#authentication.name}">Username</a>
+      <a href="/profile" th:text="${#authentication.name}">Username</a>
     </span>
     <span th:if="${#authorization.expression('!isAuthenticated()')}">
       <a href="/login">Login</a>
@@ -92,16 +84,25 @@
     </span>
   </div>
 </div>
-    
 
-    <div class="container">
-        <div class="category">
-            <h2 class="heading-flex">
-  				<span>Land</span>
-  				<button class="add-button" onclick="openModal()">+</button>
-			</h2> 
-        </div>
+<div class="container">
+  <div class="heading-flex">
+    <h2>Land</h2>
+    <a href="/land/new" class="add-button">+</a>
+  </div>
 
-    </div>
+  <div th:if="${#lists.isEmpty(recommendations)}">
+    <p>No land recommendations submitted yet.</p>
+  </div>
+
+  <div th:each="land : ${recommendations}" class="recommendation">
+    <a th:href="@{'/land/' + ${land.id}}" th:text="${land.name}">Land Name</a>
+    <p class="meta">
+      <span th:text="'Location: ' + ${land.location}">Location</span><br/>
+      <span th:text="'Submitted by: ' + ${land.submittedBy}">Submitted by</span><br/>
+      <span th:text="'Submitted at: ' + ${#temporals.format(land.createdAt, 'MMM dd, yyyy hh:mm a')}">Date</span>
+    </p>
+  </div>
+</div>
 </body>
 </html>
