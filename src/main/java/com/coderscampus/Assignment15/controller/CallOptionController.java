@@ -30,7 +30,7 @@ public class CallOptionController {
     public String listCalls(Model model) {
         List<CallOptionRecommendation> calls = callRepo.findAllByOrderBySubmittedAtDesc();
         model.addAttribute("calls", calls);
-        return "callList"; // or whatever your template is named
+        return "calls"; 
     }
     
     @GetMapping("/{id}")
@@ -42,6 +42,7 @@ public class CallOptionController {
         model.addAttribute("newComment", new Comment());
         return "callDetail";
     }
+
     
     @PostMapping("/{id}/comments")
     public String submitComment(@PathVariable Long id,
