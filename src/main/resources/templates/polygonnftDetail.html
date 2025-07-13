@@ -10,6 +10,25 @@
       padding: 0;
     }
 
+    .navbar {
+      background-color: #222;
+      color: white;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .navbar a {
+      color: white;
+      margin-left: 1rem;
+      text-decoration: none;
+    }
+
+    .navbar a:hover {
+      text-decoration: underline;
+      color: #a0c4ff;
+    }
+
     .container {
       max-width: 800px;
       margin: 2rem auto;
@@ -68,8 +87,35 @@
   </style>
 </head>
 <body>
+
+<!-- ✅ Improved Navbar -->
+<div class="navbar">
+  <div>
+    <strong>
+      <a href="/" style="color: white; text-decoration: none;">Assignment 15 Forum</a>
+    </strong>
+  </div>
+  <div>
+    <span th:if="${#authorization.expression('isAuthenticated()')}">
+      <a href="/profile" style="color: white; text-decoration: none;" th:text="${#authentication.name}">Username</a>
+      <a href="/logout" style="color: white; text-decoration: none;">Logout</a>
+    </span>
+    <span th:if="${#authorization.expression('!isAuthenticated()')}">
+      <a href="/login" style="color: white; text-decoration: none;">Login</a>
+      <a href="/register" style="color: white; text-decoration: none;">Register</a>
+    </span>
+  </div>
+</div>
+
+<!-- ✅ Polygon NFT Detail Section -->
 <div class="container">
-  <h2 th:text="${nft.collectionName + ' (' + nft.contractAddress + ')'}">Collection Name (Contract)</h2>
+  <h2 th:if="${nft.collectionName != null and nft.contractAddress != null}"
+      th:text="|${nft.collectionName} (${nft.contractAddress})|">
+    Collection Name (Contract)
+  </h2>
+  <h2 th:unless="${nft.collectionName != null and nft.contractAddress != null}">
+    Polygon NFT Detail
+  </h2>
 
   <p><strong>Creator:</strong> <span th:text="${nft.creator}">Creator Name</span></p>
   <p><strong>Floor Price:</strong> <span th:text="${nft.floorPrice + ' MATIC'}">0.0 MATIC</span></p>
@@ -88,12 +134,14 @@
 
   <p class="meta">
     <strong>Submitted by:</strong> <span th:text="${nft.submittedBy}">user@example.com</span><br/>
-    <strong>Submitted at:</strong> <span th:text="${#temporals.format(nft.createdAt, 'MMM dd, yyyy hh:mm a')}">Date</span>
+    <strong>Submitted at:</strong>
+    <span th:if="${nft.createdAt != null}"
+          th:text="${#temporals.format(nft.createdAt, 'MMM dd, yyyy hh:mm a')}">Date</span>
   </p>
 
   <a href="/polygonnft">← Back to all Polygon NFT recommendations</a>
 
-  <!-- 💬 Comment Section -->
+  <!-- 💬 Comments -->
   <div class="comment-section">
     <h2>Comments</h2>
 
