@@ -1,9 +1,9 @@
 package com.coderscampus.Assignment15.controller;
 
-import com.coderscampus.Assignment15.domain.CollectableRecommendation;
 import com.coderscampus.Assignment15.domain.Comment;
-import com.coderscampus.Assignment15.repository.CollectableRepository;
+import com.coderscampus.Assignment15.domain.ReitRecommendation;
 import com.coderscampus.Assignment15.repository.CommentRepository;
+import com.coderscampus.Assignment15.repository.ReitRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -15,60 +15,60 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Controller
-@RequestMapping("/collectables")
-public class CollectablesController {
+@RequestMapping("/reits")
+public class ReitController {
 
     @Autowired
-    private CollectableRepository collectableRepo;
+    private ReitRepository reitRepo;
 
     @Autowired
     private CommentRepository commentRepo;
 
     @GetMapping
     public String showAll(Model model) {
-        List<CollectableRecommendation> items = collectableRepo.findAllByOrderByCreatedAtDesc();
-        model.addAttribute("recommendations", items);
-        return "collectables";
+        List<ReitRecommendation> listings = reitRepo.findAllByOrderByCreatedAtDesc();
+        model.addAttribute("recommendations", listings);
+        return "reits"; 
     }
 
     @GetMapping("/new")
     public String newForm(Model model) {
-        model.addAttribute("collectable", new CollectableRecommendation());
-        return "collectablesForm";
+        model.addAttribute("reitRecommendation", new ReitRecommendation());
+        return "reitForm"; // You’ll need this form page too
     }
 
     @PostMapping("/submit")
-    public String submit(@ModelAttribute CollectableRecommendation rec,
+    public String submit(@ModelAttribute ReitRecommendation rec,
                          @AuthenticationPrincipal OAuth2User principal) {
         rec.setCreatedAt(LocalDateTime.now());
         if (principal != null) {
             rec.setSubmittedBy(principal.getAttribute("email"));
         }
-        collectableRepo.save(rec);
-        return "redirect:/collectables";
+        reitRepo.save(rec);
+        return "redirect:/reits";
     }
 
     @GetMapping("/{id}")
     public String view(@PathVariable Long id, Model model) {
-        CollectableRecommendation rec = collectableRepo.findById(id).orElse(null);
-        if (rec == null) return "redirect:/collectables";
+        ReitRecommendation rec = reitRepo.findById(id).orElse(null);
+        if (rec == null) return "redirect:/reits";
 
-        model.addAttribute("collectable", rec);
-        model.addAttribute("comments", commentRepo.findByCollectableRecommendationIdOrderByCreatedAtDesc(id));
+        model.addAttribute("reit", rec);
+        model.addAttribute("comments", commentRepo.findByReitRecommendationIdOrderByCreatedAtDesc(id));
         model.addAttribute("newComment", new Comment());
-        return "collectablesDetail";
+        return "reitDetail";
     }
 
     @PostMapping("/{id}/comments")
     public String postComment(@PathVariable Long id,
                               @ModelAttribute Comment comment,
                               @AuthenticationPrincipal OAuth2User principal) {
-        comment.setCollectableRecommendationId(id);
+        comment.setReitRecommendationId(id);
         comment.setCreatedAt(LocalDateTime.now());
         if (principal != null) {
             comment.setAuthor(principal.getAttribute("email"));
         }
         commentRepo.save(comment);
-        return "redirect:/collectables/" + id;
+        return "redirect:/reits/" + id;
     }
 }

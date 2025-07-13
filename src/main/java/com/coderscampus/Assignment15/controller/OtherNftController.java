@@ -63,7 +63,7 @@ public class OtherNftController {
     public String postCommentOnOtherNft(@PathVariable Long id,
                                         @ModelAttribute Comment comment,
                                         @AuthenticationPrincipal OAuth2User principal) {
-        comment.setOtherBlockchainsRecommendationId(id);
+        comment.setOtherNftBlockchainsRecommendationId(id); // ✅ Crucial line
         comment.setCreatedAt(LocalDateTime.now());
 
         if (principal != null) {
@@ -73,4 +73,5 @@ public class OtherNftController {
         commentRepo.save(comment);
         return "redirect:/othernftblockchains/" + id;
     }
+
 }

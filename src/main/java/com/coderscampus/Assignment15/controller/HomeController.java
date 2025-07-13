@@ -11,25 +11,17 @@ public class HomeController {
         return "forum-home"; 
     }
     
-    @GetMapping("/collectables")
-    public String Collectables() {
-        return "collectables"; 
-    }
+//    @GetMapping("/collectables")
+//    public String Collectables() {
+//        return "collectables"; 
+//    }
     
-    @GetMapping("/commodities")
-    public String Commodities() {
-        return "commodities"; 
-    }
     
     @GetMapping("/real-estate")
     public String RealEstate() {
         return "real-estate"; 
     }
     
-    @GetMapping("/bonds")
-    public String Bonds() {
-        return "bonds"; 
-    }
     
     @GetMapping("/nfts")
     public String Nfts() {
