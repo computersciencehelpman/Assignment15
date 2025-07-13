@@ -26,6 +26,10 @@ public class EthereumRecommendation {
     
     private LocalDateTime createdAt;
     
+    private String collectionName;
+    private String contractAddress;
+
+    
 	public Long getId() {
 		return id;
 	}
@@ -91,6 +95,18 @@ public class EthereumRecommendation {
 	}
 	public void setCreatedAt(LocalDateTime createdAt) {
 		this.createdAt = createdAt;
+	}
+	public String getCollectionName() {
+		return collectionName;
+	}
+	public void setCollectionName(String collectionName) {
+		this.collectionName = collectionName;
+	}
+	public String getContractAddress() {
+		return contractAddress;
+	}
+	public void setContractAddress(String contractAddress) {
+		this.contractAddress = contractAddress;
 	}
     
 }
