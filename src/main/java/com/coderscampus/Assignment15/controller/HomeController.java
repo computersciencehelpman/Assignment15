@@ -9,13 +9,7 @@ public class HomeController {
     @GetMapping("/")
     public String redirectToForumHome() {
         return "forum-home"; 
-    }
-    
-//    @GetMapping("/collectables")
-//    public String Collectables() {
-//        return "collectables"; 
-//    }
-    
+    }    
     
     @GetMapping("/real-estate")
     public String RealEstate() {

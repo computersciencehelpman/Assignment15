@@ -69,7 +69,7 @@ public class CallOptionController {
     @GetMapping("/new")
     public String showCallForm(Model model) {
         model.addAttribute("callOption", new CallOptionRecommendation());
-        return "callForm"; // Use the Thymeleaf form I gave earlier
+        return "callForm"; 
     }
 
     @PostMapping("/submit")
