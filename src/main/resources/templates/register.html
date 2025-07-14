@@ -39,12 +39,32 @@
             border: 1px solid #ccc;
             border-radius: 4px;
         }
+        
+        .validation-status {
+  			font-size: 0.85rem;
+  			font-weight: 500;
+  			display: block;
+  			margin-top: 0.2rem;
+		}
 
-        .error-message {
-            color: red;
-            font-size: 0.9rem;
-        }
+		.error-message {
+  			color: red;
+  			font-size: 0.85rem;
+  			margin-top: 0.2rem;
+		}
 
+		.password-rules {
+  			list-style: none;
+  			padding-left: 0;
+  			font-size: 0.85rem;
+  			margin-top: 0.5rem;
+		}
+
+		.password-rules li {
+  			margin: 0.2rem 0;
+  			font-weight: 500;
+		}
+        
         .form-actions {
             text-align: center;
             margin-top: 2rem;
@@ -58,6 +78,15 @@
             border-radius: 4px;
             cursor: pointer;
         }
+
+  		.error-message ul {
+    		margin: 0.25rem 0 0 1rem;
+    		padding: 0;
+  		}
+
+  		.error-message li {
+    		list-style-type: disc;
+  		}
 
         .recaptcha-container {
             display: flex;
@@ -75,39 +104,56 @@
         <div th:if="${captchaError}" class="error-message" th:text="${captchaError}"></div>
 
         <div class="form-row">
-            <label>Username</label>
-            <input type="text" th:field="*{username}" required />
-            <div th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="error-message"></div>
-        </div>
+  			<label>Username</label>
+  			<input type="text" id="username" th:field="*{username}" required />
+  			
+  			<span id="usernameStatus" class="validation-status"></span>
+  
+  			<div th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="error-message" id="usernameError"></div>
+		</div>
+        
+       <div class="form-row">
+  			<label>Email</label>
+  			<input type="email" id="email" th:field="*{email}" required />
+  			<span id="emailStatus" class="validation-status"></span>
+  			<div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="error-message" id="emailError"></div>
+	   </div>
 
-        <div class="form-row">
-            <label>Email</label>
-            <input type="email" th:field="*{email}" required />
-            <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="error-message"></div>
-        </div>
-
-        <div class="form-row">
-            <label>Password</label>
-            <input type="password" th:field="*{password}" required />
-            <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="error-message"></div>
-        </div>
-
-        <div class="form-row">
-            <label>Confirm Password</label>
-            <input type="password" th:field="*{confirmPassword}" required />
-            <div th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}" class="error-message"></div>
-        </div>
-
-        <div class="form-row">
-            <label>Date of Birth</label>
-            <input type="date" th:field="*{dateOfBirth}" required />
-            <div th:if="${#fields.hasErrors('dateOfBirth')}" th:errors="*{dateOfBirth}" class="error-message"></div>
-        </div>
+      <div class="form-row">
+  		<label>Password</label>
+  		<input type="password" id="password" th:field="*{password}" required />
+  		<ul id="passwordRules" class="password-rules">
+    		<li id="rule-lowercase">❌ At least one lowercase letter</li>
+    		<li id="rule-uppercase">❌ At least one uppercase letter</li>
+    		<li id="rule-digit">❌ At least one digit</li>
+    		<li id="rule-special">❌ At least one special character (@$!%*?&)</li>
+    		<li id="rule-length">❌ At least 6 characters long</li>
+  		</ul>
+  		
+	 </div>
+     
+     <div class="form-row">
+  		<label>Confirm Password</label>
+  		<input type="password" id="confirmPassword" th:field="*{confirmPassword}" required />
+  		<ul id="confirmPasswordRules" class="password-rules">
+  			<li id="rule-match">❌ Must match the password above</li>
+		</ul>
+  		<div th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}" class="error-message"></div>
+	 </div>
+     
+     <div class="form-row">
+  		<label>Date of Birth</label>
+  		<input type="date" id="dateOfBirth" th:field="*{dateOfBirth}" required />
+  		<span id="dobStatus" class="validation-status"></span>
+  		<div th:if="${#fields.hasErrors('dateOfBirth')}" th:errors="*{dateOfBirth}" class="error-message"></div>
+	</div>
+     
 
         <div class="form-row">
             <label>Phone Number</label>
-            <input type="tel" th:field="*{phoneNumber}" placeholder="123-456-7890" required />
-            <div th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}" class="error-message"></div>
+            <input type="tel" id="phoneNumber" th:field="*{phoneNumber}" placeholder="(123) 456-7890" required />
+			<span id="phoneStatus" class="validation-status"></span>
+			<div th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}" class="error-message" id="phoneError"></div>          
         </div>
 
         <!-- ✅ Google reCAPTCHA widget -->
@@ -120,5 +166,7 @@
         </div>
     </form>
 </div>
+<script src="/js/registerValidation.js"></script>
+
 </body>
 </html>
