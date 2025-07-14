@@ -29,6 +29,7 @@ public class UserRegistrationDto {
 	@BirthDateConstraint
 	private LocalDate dateOfBirth;
 
+
 	@Pattern(
 		    regexp = "^\\+?1?\\s*\\(?[2-9][0-9]{2}\\)?[-.\\s]?[0-9]{3}[-.\\s]?[0-9]{4}$",
 		    message = "Please enter a valid US phone number"
