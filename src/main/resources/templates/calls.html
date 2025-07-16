@@ -124,7 +124,7 @@
       <h3 th:text="${call.companyName} + ' (' + ${call.ticker} + ')'">Company (TICKER)</h3>
     </a>
     <p><strong>Strike Price:</strong> <span th:text="${call.strikePrice}">0.00</span></p>
-    <p><strong>Expiration:</strong> <span th:text="${#temporals.format(call.expiryDate, 'MMM dd, yyyy')}">Date</span></p>
+    <span th:text="${#temporals.format(call.expirationDate, 'MMM dd, yyyy')}">Date</span>
     <div class="meta">
       Submitted by <span th:text="${call.submittedBy}">user@example.com</span>
     </div>

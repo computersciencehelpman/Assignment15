@@ -133,10 +133,11 @@
 
       <label for="riskLevel">Risk Level</label>
       <select id="riskLevel" th:field="*{riskLevel}">
-        <option>Low</option>
-        <option>Medium</option>
-        <option>High</option>
-      </select>
+  		<option value="Low">Low</option>
+  		<option value="Medium">Medium</option>
+  		<option value="High">High</option>
+	 </select>
+      
 
       <label for="confidenceLevel">Confidence Level (1–5)</label>
       <input type="number" min="1" max="5" id="confidenceLevel" th:field="*{confidenceLevel}" />
