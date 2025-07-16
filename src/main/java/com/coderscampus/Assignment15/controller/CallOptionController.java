@@ -29,7 +29,7 @@ public class CallOptionController {
     @GetMapping
     public String listCalls(Model model) {
         List<CallOptionRecommendation> calls = callRepo.findAllByOrderBySubmittedAtDesc();
-        model.addAttribute("calls", calls);
+        model.addAttribute("callRecommendations", calls);
         return "calls"; 
     }
     
@@ -50,7 +50,6 @@ public class CallOptionController {
                                 @AuthenticationPrincipal Object principal) {
         newComment.setCallOptionId(id);
 
-        // ✅ This ensures it gets set regardless of @CreationTimestamp
         if (newComment.getCreatedAt() == null) {
             newComment.setCreatedAt(LocalDateTime.now());
         }
