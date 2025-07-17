@@ -87,7 +87,6 @@
 </head>
 <body>
 
-<!-- Navbar -->
 <div class="navbar">
   <div><a href="/" style="font-weight: bold;">Assignment 15 Forum</a></div>
   <div>
@@ -106,14 +105,6 @@
 <div class="container">
   <div class="header">
     <h2>Call Option Recommendations</h2>
-    <a href="/calls/new" class="add-button">+</a>
-  </div>
-
-  <div th:if="${#lists.isEmpty(callRecommendations)}" class="no-recs">
-    No call recommendations yet. Be the first to add one!
-  </div>
-
-  <div th:each="call : ${callRecommendations}" class="call-card">
     <span th:if="${#authorization.expression('isAuthenticated()')}">
   <a href="/calls/new" class="add-button">+</a>
 </span>
@@ -121,13 +112,23 @@
   <a href="/login" class="add-button">+</a>
 </span>
     
+  </div>
+
+  <div th:if="${#lists.isEmpty(callRecommendations)}" class="no-recs">
+    No call recommendations yet. Be the first to add one!
+  </div>
+
+  <div th:each="call : ${callRecommendations}">
+    <a th:href="@{'/calls/' + ${call.id}}"
+       class="call-card"
+       style="display: block; text-decoration: none; color: inherit;">
       <h3 th:text="${call.companyName} + ' (' + ${call.ticker} + ')'">Company (TICKER)</h3>
+      <p><strong>Strike Price:</strong> <span th:text="${call.strikePrice}">0.00</span></p>
+      <p th:text="${#temporals.format(call.expirationDate, 'MMM dd, yyyy')}">Date</p>
+      <div class="meta">
+        Submitted by <span th:text="${call.submittedBy}">user@example.com</span>
+      </div>
     </a>
-    <p><strong>Strike Price:</strong> <span th:text="${call.strikePrice}">0.00</span></p>
-    <span th:text="${#temporals.format(call.expirationDate, 'MMM dd, yyyy')}">Date</span>
-    <div class="meta">
-      Submitted by <span th:text="${call.submittedBy}">user@example.com</span>
-    </div>
   </div>
 </div>
 
