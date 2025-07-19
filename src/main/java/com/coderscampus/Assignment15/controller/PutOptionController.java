@@ -29,8 +29,8 @@ public class PutOptionController {
     @GetMapping
     public String listPuts(Model model) {
         List<PutOptionRecommendation> puts = putRepo.findAllByOrderBySubmittedAtDesc();
-        model.addAttribute("puts", puts);
-        return "putList";
+        model.addAttribute("putRecommendations", puts); // match Thymeleaf
+        return "puts";
     }
 
     @GetMapping("/new")
