@@ -1,90 +1,98 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Forum Home</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f2f5;
-            margin: 0;
-            padding: 0;
-        }
+  <title>Put Option Recommendations</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f3f4f6;
+      margin: 0;
+      padding: 0;
+    }
 
-        .navbar {
-            background-color: #222;
-            color: white;
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-        }
+    .navbar {
+      background-color: #1a202c;
+      color: white;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
 
-        .navbar a {
-            color: white;
-            margin-left: 1rem;
-            text-decoration: none;
-        }
+    .navbar a {
+      color: white;
+      text-decoration: none;
+      margin-left: 1rem;
+    }
 
-        .container {
-            max-width: 1000px;
-            margin: 2rem auto;
-        }
+    .container {
+      max-width: 960px;
+      margin: 2rem auto;
+      padding: 1rem;
+    }
 
-        .category {
-            background: #fff;
-            border: 1px solid #ccc;
-            margin-bottom: 2rem;
-            border-radius: 5px;
-            padding: 1rem;
-        }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
 
-        .category h2 {
-            border-bottom: 1px solid #ccc;
-            padding-bottom: 0.5rem;
-        }
-        
-        .heading-flex {
-  			display: flex;
-  			justify-content: space-between;
-  			align-items: center;
-		}
-		
-		.add-button {
-  			font-size: 1.2rem;
-  			padding: 0.2rem 0.5rem;
-  			border: none;
-  			background-color: #007bff;
-  			color: white;
-  			border-radius: 4px;
-  			cursor: pointer;
-		}
+    .add-button {
+      background-color: #2563eb;
+      color: white;
+      padding: 0.4rem 0.75rem;
+      border: none;
+      border-radius: 5px;
+      text-decoration: none;
+      font-size: 1rem;
+    }
 
-        .subforums {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            margin-top: 1rem;
-        }
+    .put-card {
+      background-color: white;
+      padding: 1.25rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      transition: box-shadow 0.2s ease;
+    }
 
-        .subforum {
-            background: #f7f7f7;
-            border: 1px solid #ddd;
-            flex: 1 1 30%;
-            padding: 1rem;
-            text-align: center;
-            border-radius: 4px;
-        }
+    .put-card:hover {
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
 
-        .subforum:hover {
-            background-color: #eaeaea;
-        }
-    </style>
+    .put-card h3 {
+      margin-top: 0;
+      margin-bottom: 0.5rem;
+      font-size: 1.2rem;
+    }
+
+    .put-card p {
+      margin: 0.3rem 0;
+    }
+
+    .meta {
+      font-size: 0.85rem;
+      color: #555;
+      margin-top: 0.5rem;
+    }
+
+    .no-recs {
+      text-align: center;
+      font-style: italic;
+      color: #777;
+      margin-top: 2rem;
+    }
+  </style>
 </head>
 <body>
-    <div class="navbar">
-  <div><strong><a href="/" style="color: white; text-decoration: none;">Assignment 15 Forum</a></strong></div>
+
+<div class="navbar">
+  <div><a href="/" style="font-weight: bold;">Assignment 15 Forum</a></div>
   <div>
     <span th:if="${#authorization.expression('isAuthenticated()')}">
-      <a href="/profile" style="color: white; text-decoration: none;" th:text="${#authentication.name}">Username</a>
+      <a href="/profile" th:text="${#authentication.name}"></a>
+      <a href="/logout">Logout</a>
     </span>
     <span th:if="${#authorization.expression('!isAuthenticated()')}">
       <a href="/login">Login</a>
@@ -92,19 +100,37 @@
     </span>
   </div>
 </div>
+
+<!-- Main Content -->
+<div class="container">
+  <div class="header">
+    <h2>Put Option Recommendations</h2>
+    <span th:if="${#authorization.expression('isAuthenticated()')}">
+  <a href="/puts/new" class="add-button">+</a>
+</span>
+<span th:if="${#authorization.expression('!isAuthenticated()')}">
+  <a href="/login" class="add-button">+</a>
+</span>
     
+  </div>
 
-    <div class="container">
-        <div class="category">
-            <h2 class="heading-flex">
-  				<span>Put Options</span>
-  				<a th:href="${#authorization.expression('isAuthenticated()')} ? '/puts/new' : '/login'" 
-   					class="add-button"
-   					style="text-decoration: none;">+</a>
-  				
-			</h2> 
-        </div>
+  <div th:if="${#lists.isEmpty(putRecommendations)}" class="no-recs">
+    No put recommendations yet. Be the first to add one!
+  </div>
 
-    </div>
+  <div th:each="put : ${putRecommendations}">
+    <a th:href="@{'/puts/' + ${put.id}}"
+       class="put-card"
+       style="display: block; text-decoration: none; color: inherit;">
+      <h3 th:text="${put.companyName} + ' (' + ${put.ticker} + ')'">Company (TICKER)</h3>
+      <p><strong>Strike Price:</strong> <span th:text="${put.strikePrice}">0.00</span></p>
+      <p th:text="${#temporals.format(put.expirationDate, 'MMM dd, yyyy')}">Date</p>
+      <div class="meta">
+        Submitted by <span th:text="${put.submittedBy}">user@example.com</span>
+      </div>
+    </a>
+  </div>
+</div>
+
 </body>
 </html>
