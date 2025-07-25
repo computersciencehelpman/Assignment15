@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+<link rel="stylesheet" th:href="@{/css/comments.css}">
 <head>
   <title>Cardano NFT Detail</title>
   <style>
@@ -68,17 +69,6 @@
       padding: 0.5rem 1rem;
       border-radius: 4px;
     }
-
-    .comment-section {
-      margin-top: 2rem;
-    }
-
-    .comment-card {
-      background: #f5f5f5;
-      padding: 1rem;
-      border-radius: 6px;
-      margin-top: 1rem;
-    }
   </style>
 </head>
 <body>
@@ -128,30 +118,37 @@
 
   <!-- 💬 Comment Section -->
   <div class="comment-section">
-    <h2>Comments</h2>
+  <h2>Comments</h2>
 
-    <div th:if="${#lists.isEmpty(comments)}">
-      <p>No comments yet.</p>
+  <!-- Show if there are no comments -->
+  <div th:if="${#lists.isEmpty(comments)}">
+    <p>No comments yet.</p>
+  </div>
+
+  <!-- Loop through each comment -->
+  <div th:each="comment : ${comments}" class="comment">
+    <div class="comment-author">
+      <span th:text="${comment.author}">User</span>
     </div>
-
-    <div th:each="comment : ${comments}" class="comment-card">
-      <p th:text="${comment.content}">Comment text</p>
-      <p class="meta">
-        <span th:text="${comment.author}">user@example.com</span> ·
+    <div class="comment-body">
+      <div class="comment-header">
         <span th:text="${#temporals.format(comment.createdAt, 'MMM dd, yyyy hh:mm a')}">Date</span>
-      </p>
+      </div>
+      <div class="comment-content" th:text="${comment.content}">Comment content</div>
     </div>
+  </div>
 
-    <div th:if="${#authorization.expression('isAuthenticated()')}">
-      <form th:action="@{'/cardanonft/' + ${nft.id} + '/comments'}" method="post" th:object="${newComment}">
-        <textarea th:field="*{content}" placeholder="Add a comment..." required></textarea>
-        <button type="submit">Post Comment</button>
-      </form>
-    </div>
+  <!-- Show comment form only if user is authenticated -->
+  <div th:if="${#authorization.expression('isAuthenticated()')}">
+    <form th:action="@{'/cardanonft/' + ${nft.id} + '/comments'}" method="post" th:object="${newComment}">
+      <textarea th:field="*{content}" placeholder="Write a comment..." required></textarea>
+      <button type="submit">Post Comment</button>
+    </form>
+  </div>
 
-    <div th:unless="${#authorization.expression('isAuthenticated()')}">
-      <p><a href="/login">Login</a> to write a comment.</p>
-    </div>
+  <!-- Show login prompt if user is NOT authenticated -->
+  <div th:unless="${#authorization.expression('isAuthenticated()')}">
+    <p><a href="/login">Login</a> to leave a comment.</p>
   </div>
 </div>
 </body>

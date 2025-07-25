@@ -44,15 +44,15 @@
     }
 
     .meta {
-      color: #555;
       font-size: 0.9rem;
+      color: #555;
     }
 
     a {
-      display: inline-block;
-      margin-top: 1.5rem;
       color: #007bff;
       text-decoration: none;
+      display: inline-block;
+      margin-top: 1.5rem;
     }
 
     textarea {
@@ -71,15 +71,40 @@
     }
 
     .comment-section {
-      max-width: 800px;
       margin: 2rem auto;
+      max-width: 800px;
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
     }
 
-    .comment-card {
-      background: #f5f5f5;
+    .comment {
+      margin-bottom: 1rem;
       padding: 1rem;
+      border: 1px solid #ddd;
       border-radius: 6px;
-      margin-top: 1rem;
+      background-color: #fafafa;
+    }
+
+    .comment-author {
+      font-weight: bold;
+      margin-bottom: 0.2rem;
+    }
+
+    .comment-header {
+      font-size: 0.85rem;
+      color: #888;
+      margin-bottom: 0.5rem;
+    }
+
+    .comment-content {
+      margin-bottom: 0.5rem;
+    }
+
+    .comment-actions {
+      font-size: 0.85rem;
+      color: #007bff;
     }
   </style>
 </head>
@@ -90,7 +115,8 @@
   <div><strong><a href="/" style="color: white; text-decoration: none;">Assignment 15 Forum</a></strong></div>
   <div>
     <span th:if="${#authorization.expression('isAuthenticated()')}">
-      <a href="/profile" style="color: white; text-decoration: none;" th:text="${#authentication.name}">Username</a>
+      <a href="/profile" style="color: white;" th:text="${#authentication.name}">Username</a>
+      <a href="/logout" style="color: white;">Logout</a>
     </span>
     <span th:if="${#authorization.expression('!isAuthenticated()')}">
       <a href="/login">Login</a>
@@ -99,7 +125,7 @@
   </div>
 </div>
 
-<!-- ✅ Main Content -->
+<!-- ✅ Solana Content -->
 <div class="container">
   <h2 th:text="${solana.tokenName} + ' (' + ${solana.ca} + ')'">Solana Token (CA)</h2>
 
@@ -128,27 +154,29 @@
 <div class="comment-section">
   <h2>Comments</h2>
 
+  <!-- No Comments -->
   <div th:if="${#lists.isEmpty(comments)}">
-      <p>No comments yet.</p>
+    <p>No comments yet.</p>
   </div>
 
-  <div th:each="comment : ${comments}" class="comment-card">
-      <p th:text="${comment.content}"></p>
-      <p class="meta">
-          <span th:text="${comment.author}"></span> · 
-          <span th:text="${#temporals.format(comment.createdAt, 'MMM dd, yyyy hh:mm a')}"></span>
-      </p>
+  <!-- Existing Comments -->
+  <div th:each="comment : ${comments}" class="comment">
+    <div class="comment-author" th:text="${comment.author}">User</div>
+    <div class="comment-header" th:text="${#temporals.format(comment.createdAt, 'MMM dd, yyyy hh:mm a')}">Date</div>
+    <div class="comment-content" th:text="${comment.content}">Comment text...</div>
   </div>
 
+  <!-- Comment Form if Logged In -->
   <div th:if="${#authorization.expression('isAuthenticated()')}">
-      <form th:action="@{'/solana/' + ${solana.id} + '/comments'}" method="post" th:object="${newComment}">
-          <textarea th:field="*{content}" placeholder="Add a comment..." required></textarea>
-          <button type="submit">Post Comment</button>
-      </form>
+    <form th:action="@{'/solana/' + ${solana.id} + '/comments'}" method="post" th:object="${newComment}">
+      <textarea th:field="*{content}" placeholder="Write a comment..." required></textarea>
+      <button type="submit">Post Comment</button>
+    </form>
   </div>
 
+  <!-- Login Prompt -->
   <div th:unless="${#authorization.expression('isAuthenticated()')}">
-      <p><a href="/login">Login</a> to write a comment.</p>
+    <p><a href="/login">Login</a> to leave a comment.</p>
   </div>
 </div>
 

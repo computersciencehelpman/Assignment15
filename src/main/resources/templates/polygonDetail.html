@@ -55,19 +55,6 @@
       text-decoration: none;
     }
 
-    .comment-section {
-      max-width: 800px;
-      margin: 2rem auto;
-      background: #fff;
-      padding: 1rem 2rem;
-      border-radius: 8px;
-    }
-
-    .comment-card {
-      border-bottom: 1px solid #ccc;
-      padding: 0.5rem 0;
-    }
-
     textarea {
       width: 100%;
       min-height: 80px;
@@ -105,7 +92,7 @@
 
 <!-- ✅ Polygon Content -->
 <div class="container">
-  <h2 th:text="${polygon.tokenName} + ' (' + ${polygon.ca} + ')'"></h2>
+  <h2 th:text="${polygon.tokenName} + ' (' + ${polygon.ca} + ')'">Token Name (CA)</h2>
 
   <p><strong>Blockchain:</strong> <span th:text="${polygon.blockchain}"></span></p>
   <p><strong>Recommendation:</strong> <span th:text="${polygon.recommendation}"></span></p>
@@ -131,26 +118,30 @@
   <h2>Comments</h2>
 
   <div th:if="${#lists.isEmpty(comments)}">
-      <p>No comments yet.</p>
+    <p>No comments yet.</p>
   </div>
 
-  <div th:each="comment : ${comments}" class="comment-card">
-      <p th:text="${comment.content}"></p>
-      <p class="meta">
-          <span th:text="${comment.author}"></span> · 
-          <span th:text="${#temporals.format(comment.createdAt, 'MMM dd, yyyy hh:mm a')}"></span>
-      </p>
+  <div th:each="comment : ${comments}" class="comment">
+    <div class="comment-author">
+      <span th:text="${comment.author}">User</span>
+    </div>
+    <div class="comment-body">
+      <div class="comment-header">
+        <span th:text="${#temporals.format(comment.createdAt, 'MMM dd, yyyy hh:mm a')}">Date</span>
+      </div>
+      <div class="comment-content" th:text="${comment.content}">Comment content</div>
+    </div>
   </div>
 
   <div th:if="${#authorization.expression('isAuthenticated()')}">
-      <form th:action="@{'/polygon/' + ${polygon.id} + '/comments'}" method="post" th:object="${newComment}">
-          <textarea th:field="*{content}" placeholder="Add a comment..." required></textarea>
-          <button type="submit">Post Comment</button>
-      </form>
+    <form th:action="@{'/polygon/' + ${polygon.id} + '/comments'}" method="post" th:object="${newComment}">
+      <textarea th:field="*{content}" placeholder="Write a comment..." required></textarea>
+      <button type="submit">Post Comment</button>
+    </form>
   </div>
 
   <div th:unless="${#authorization.expression('isAuthenticated()')}">
-      <p><a href="/login">Login</a> to write a comment.</p>
+    <p><a href="/login">Login</a> to leave a comment.</p>
   </div>
 </div>
 

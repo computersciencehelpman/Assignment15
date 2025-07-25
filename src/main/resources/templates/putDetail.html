@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <title>Put Option Details</title>
+  <link rel="stylesheet" th:href="@{/css/comments.css}">
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -76,15 +77,6 @@
       background-color: #1d4ed8;
     }
 
-    .comment {
-      border-top: 1px solid #ddd;
-      padding-top: 1rem;
-      margin-top: 1rem;
-    }
-
-    .comment small {
-      color: #666;
-    }
   </style>
 </head>
 <body>
@@ -125,7 +117,7 @@
   <div><span class="detail-label">Submitted At:</span> <div class="value" th:text="${put.submittedAt}"></div></div>
 
   <!-- Comment Section -->
-  <div class="comment-section">
+    <div class="comment-section">
     <h3>Comments</h3>
 
     <div th:each="comment : ${comments}" class="comment">
@@ -134,7 +126,7 @@
     </div>
 
     <div th:if="${#authorization.expression('isAuthenticated()')}">
-      <form th:action="@{/puts/{id}/comments(id=${put.id})}" method="post" th:object="${newComment}">
+      <form th:action="@{/calls/{id}/comments(id=${call.id})}" method="post" th:object="${newComment}">
         <label for="comment">Add a comment:</label>
         <textarea id="comment" th:field="*{content}" required></textarea>
         <button type="submit">Submit Comment</button>
@@ -146,6 +138,7 @@
     </div>
   </div>
 </div>
+  
 
 </body>
 </html>

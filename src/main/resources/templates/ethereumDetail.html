@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <title>Ethereum NFT Detail</title>
+  <link rel="stylesheet" th:href="@{/css/comments.css}">
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -68,27 +69,19 @@
       padding: 0.5rem 1rem;
       border-radius: 4px;
     }
-
-    .comment-section {
-      margin-top: 2rem;
-    }
-
-    .comment-card {
-      background: #f5f5f5;
-      padding: 1rem;
-      border-radius: 6px;
-      margin-top: 1rem;
-    }
   </style>
 </head>
 <body>
 
-<!-- ✅ Navbar inserted here -->
+<!-- ✅ Navbar -->
 <div class="navbar">
-  <div><strong><a href="/" style="color: white; text-decoration: none;">Assignment 15 Forum</a></strong></div>
+  <div>
+    <strong><a href="/" style="color: white; text-decoration: none;">Assignment 15 Forum</a></strong>
+  </div>
   <div>
     <span th:if="${#authorization.expression('isAuthenticated()')}">
       <a href="/profile" style="color: white; text-decoration: none;" th:text="${#authentication.name}">Username</a>
+      <a href="/logout" style="color: white; text-decoration: none;">Logout</a>
     </span>
     <span th:if="${#authorization.expression('!isAuthenticated()')}">
       <a href="/login">Login</a>
@@ -97,9 +90,8 @@
   </div>
 </div>
 
+<!-- ✅ Main Content -->
 <div class="container">
-
-  <!-- Title with null-safe fallback -->
   <h2 th:if="${nft.collectionName != null and nft.contractAddress != null}"
       th:text="|${nft.collectionName} (${nft.contractAddress})|">
     Collection Name (Contract)
@@ -109,7 +101,6 @@
     Ethereum Recommendation Detail
   </h2>
 
-  <!-- Core details -->
   <p><strong>Token Name:</strong> <span th:text="${nft.tokenName}">Token</span></p>
   <p><strong>Contract Address:</strong> <span th:text="${nft.ca}">0x...</span></p>
   <p><strong>Blockchain:</strong> <span th:text="${nft.blockchain}">Ethereum</span></p>
@@ -131,35 +122,39 @@
   </p>
 
   <a href="/ethereum">← Back to all Ethereum NFT recommendations</a>
+</div>
 
-  <!-- 💬 Comments -->
-  <div class="comment-section">
-    <h2>Comments</h2>
+<!-- ✅ Comment Section -->
+<div class="comment-section">
+  <h2>Comments</h2>
 
-    <div th:if="${#lists.isEmpty(comments)}">
-      <p>No comments yet.</p>
+  <div th:if="${#lists.isEmpty(comments)}">
+    <p>No comments yet.</p>
+  </div>
+
+  <div th:each="comment : ${comments}" class="comment">
+    <div class="comment-author">
+      <span th:text="${comment.author}">User</span>
     </div>
-
-    <div th:each="comment : ${comments}" class="comment-card">
-      <p th:text="${comment.content}">Comment text</p>
-      <p class="meta">
-        <span th:text="${comment.author}">user@example.com</span> ·
-        <span th:if="${comment.createdAt != null}"
-              th:text="${#temporals.format(comment.createdAt, 'MMM dd, yyyy hh:mm a')}">Jul 08, 2025</span>
-      </p>
-    </div>
-
-    <div th:if="${#authorization.expression('isAuthenticated()')}">
-      <form th:action="@{'/ethereum/' + ${nft.id} + '/comments'}" method="post" th:object="${newComment}">
-        <textarea th:field="*{content}" placeholder="Add a comment..." required></textarea>
-        <button type="submit">Post Comment</button>
-      </form>
-    </div>
-
-    <div th:unless="${#authorization.expression('isAuthenticated()')}">
-      <p><a href="/login">Login</a> to write a comment.</p>
+    <div class="comment-body">
+      <div class="comment-header">
+        <span th:text="${#temporals.format(comment.createdAt, 'MMM dd, yyyy hh:mm a')}">Date</span>
+      </div>
+      <div class="comment-content" th:text="${comment.content}">Comment content</div>
     </div>
   </div>
+
+  <div th:if="${#authorization.expression('isAuthenticated()')}">
+    <form th:action="@{'/ethereum/' + ${nft.id} + '/comments'}" method="post" th:object="${newComment}">
+      <textarea th:field="*{content}" placeholder="Write a comment..." required></textarea>
+      <button type="submit">Post Comment</button>
+    </form>
+  </div>
+
+  <div th:unless="${#authorization.expression('isAuthenticated()')}">
+    <p><a href="/login">Login</a> to leave a comment.</p>
+  </div>
 </div>
+
 </body>
 </html>
