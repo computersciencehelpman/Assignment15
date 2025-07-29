@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<link rel="stylesheet" th:href="@{/css/comments.css}">
 <head>
   <title>Cardano NFT Detail</title>
+  <link rel="stylesheet" th:href="@{/css/comments.css}">
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -69,6 +69,28 @@
       padding: 0.5rem 1rem;
       border-radius: 4px;
     }
+
+    .comment-entry {
+      padding: 1rem 0;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .comment-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    .comment-text {
+      font-size: 1rem;
+      color: #222;
+      margin-top: 0.5rem;
+    }
+
+    .login-prompt {
+      margin-top: 1rem;
+    }
   </style>
 </head>
 <body>
@@ -90,11 +112,14 @@
   </div>
 </div>
 
-<!-- ✅ Main Content -->
+<!-- ✅ NFT Content -->
 <div class="container">
-  <h2 th:text="${nft.collectionName + ' (' + nft.policyId + ')'}">Collection Name (Policy ID)</h2>
+  <h2>
+    <span th:text="${nft.collectionName}">Collection Name</span>
+    (<span th:text="${nft.mintAddress}">Mint Address</span>)
+  </h2>
 
-  <p><strong>Creator:</strong> <span th:text="${nft.creator}">Creator Name</span></p>
+  <p th:if="${nft.creator}"><strong>Creator:</strong> <span th:text="${nft.creator}">Creator Name</span></p>
   <p><strong>Floor Price:</strong> <span th:text="${nft.floorPrice + ' ADA'}">0.0 ADA</span></p>
   <p><strong>Target Price:</strong> <span th:text="${nft.targetPrice + ' ADA'}">0.0 ADA</span></p>
   <p><strong>Recommendation:</strong> <span th:text="${nft.recommendation}">BUY</span></p>
@@ -111,45 +136,39 @@
 
   <p class="meta">
     <strong>Submitted by:</strong> <span th:text="${nft.submittedBy}">user@example.com</span><br/>
-    <strong>Submitted at:</strong> <span th:text="${#temporals.format(nft.createdAt, 'MMM dd, yyyy hh:mm a')}">Jul 08, 2025</span>
+    <strong>Submitted at:</strong>
+    <span th:if="${nft.createdAt != null}" th:text="${#temporals.format(nft.createdAt, 'MMM dd, yyyy hh:mm a')}">Jul 08, 2025</span>
   </p>
 
   <a href="/cardanonft">← Back to all Cardano NFT recommendations</a>
+</div>
 
-  <!-- 💬 Comment Section -->
-  <div class="comment-section">
-  <h2>Comments</h2>
+<!-- ✅ Comments Section -->
+<div class="container">
+  <h3>Comments</h3>
 
-  <!-- Show if there are no comments -->
-  <div th:if="${#lists.isEmpty(comments)}">
-    <p>No comments yet.</p>
+  <!-- Loop through comments -->
+  <div th:each="comment : ${comments}" class="comment-entry">
+    <div class="comment-header">
+      <div class="comment-email" th:text="${comment.author}">user@example.com</div>
+      <div class="comment-date" th:text="${#temporals.format(comment.createdAt, 'MMM dd yyyy, HH:mm')}">Jul 29 2025, 01:33</div>
+    </div>
+    <div class="comment-text" th:text="${comment.content}">Sample comment here.</div>
   </div>
 
-  <!-- Loop through each comment -->
-  <div th:each="comment : ${comments}" class="comment">
-    <div class="comment-author">
-      <span th:text="${comment.author}">User</span>
-    </div>
-    <div class="comment-body">
-      <div class="comment-header">
-        <span th:text="${#temporals.format(comment.createdAt, 'MMM dd, yyyy hh:mm a')}">Date</span>
-      </div>
-      <div class="comment-content" th:text="${comment.content}">Comment content</div>
-    </div>
-  </div>
-
-  <!-- Show comment form only if user is authenticated -->
+  <!-- New Comment Form -->
   <div th:if="${#authorization.expression('isAuthenticated()')}">
     <form th:action="@{'/cardanonft/' + ${nft.id} + '/comments'}" method="post" th:object="${newComment}">
-      <textarea th:field="*{content}" placeholder="Write a comment..." required></textarea>
+      <textarea th:field="*{content}" placeholder="Add your comment..." required></textarea>
       <button type="submit">Post Comment</button>
     </form>
   </div>
 
-  <!-- Show login prompt if user is NOT authenticated -->
-  <div th:unless="${#authorization.expression('isAuthenticated()')}">
+  <!-- Login Prompt -->
+  <div th:unless="${#authorization.expression('isAuthenticated()')}" class="login-prompt">
     <p><a href="/login">Login</a> to leave a comment.</p>
   </div>
 </div>
+
 </body>
 </html>

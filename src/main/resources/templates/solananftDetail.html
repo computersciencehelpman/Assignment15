@@ -70,39 +70,26 @@
       border-radius: 4px;
     }
 
-    .comment-section {
-      max-width: 800px;
-      margin: 2rem auto;
-      background: white;
-      padding: 2rem;
-      border-radius: 8px;
-      box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
-    }
-
-    .comment {
-      margin-bottom: 1rem;
-      padding: 1rem;
-      border: 1px solid #ddd;
-      border-radius: 6px;
-      background-color: #fafafa;
-    }
-
-    .comment-author {
-      font-weight: bold;
+    .comment-entry {
+      padding: 1rem 0;
+      border-bottom: 1px solid #ddd;
     }
 
     .comment-header {
-      font-size: 0.85rem;
-      color: #888;
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.9rem;
+      color: #555;
     }
 
-    .comment-content {
-      margin: 0.5rem 0;
+    .comment-text {
+      font-size: 1rem;
+      color: #222;
+      margin-top: 0.5rem;
     }
 
-    .comment-actions {
-      font-size: 0.85rem;
-      color: #007bff;
+    .login-prompt {
+      margin-top: 1rem;
     }
   </style>
 </head>
@@ -146,38 +133,36 @@
 
   <p class="meta">
     <strong>Submitted by:</strong> <span th:text="${nft.submittedBy}">user@example.com</span><br/>
-    <strong>Submitted at:</strong> <span th:text="${#temporals.format(nft.createdAt, 'MMM dd, yyyy hh:mm a')}">Jul 08, 2025</span>
+    <strong>Submitted at:</strong>
+    <span th:if="${nft.createdAt != null}" th:text="${#temporals.format(nft.createdAt, 'MMM dd, yyyy hh:mm a')}">Jul 08, 2025</span>
   </p>
 
   <a href="/solananft">← Back to all Solana NFT recommendations</a>
 </div>
 
 <!-- ✅ Comments Section -->
-<div class="comment-section">
-  <h2>Comments</h2>
+<div class="container">
+  <h3>Comments</h3>
 
-  <!-- No Comments -->
-  <div th:if="${#lists.isEmpty(comments)}">
-    <p>No comments yet.</p>
+  <!-- Loop through comments -->
+  <div th:each="comment : ${comments}" class="comment-entry">
+    <div class="comment-header">
+      <div class="comment-email" th:text="${comment.author}">user@example.com</div>
+      <div class="comment-date" th:text="${#temporals.format(comment.createdAt, 'MMM dd yyyy, HH:mm')}">Jul 29 2025, 01:25</div>
+    </div>
+    <div class="comment-text" th:text="${comment.content}">Sample comment here.</div>
   </div>
 
-  <!-- Comment List -->
-  <div th:each="comment : ${comments}" class="comment">
-    <div class="comment-author" th:text="${comment.author}">User</div>
-    <div class="comment-header" th:text="${#temporals.format(comment.createdAt, 'MMM dd, yyyy hh:mm a')}">Date</div>
-    <div class="comment-content" th:text="${comment.content}">Comment content</div>
-  </div>
-
-  <!-- Comment Form -->
+  <!-- New Comment Form -->
   <div th:if="${#authorization.expression('isAuthenticated()')}">
     <form th:action="@{'/solananft/' + ${nft.id} + '/comments'}" method="post" th:object="${newComment}">
-      <textarea th:field="*{content}" placeholder="Write a comment..." required></textarea>
+      <textarea th:field="*{content}" placeholder="Add your comment..." required></textarea>
       <button type="submit">Post Comment</button>
     </form>
   </div>
 
   <!-- Login Prompt -->
-  <div th:unless="${#authorization.expression('isAuthenticated()')}">
+  <div th:unless="${#authorization.expression('isAuthenticated()')}" class="login-prompt">
     <p><a href="/login">Login</a> to leave a comment.</p>
   </div>
 </div>

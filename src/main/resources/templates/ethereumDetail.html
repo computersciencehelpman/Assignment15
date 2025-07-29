@@ -25,6 +25,11 @@
       text-decoration: none;
     }
 
+    .navbar a:hover {
+      text-decoration: underline;
+      color: #a0c4ff;
+    }
+
     .container {
       max-width: 800px;
       margin: 2rem auto;
@@ -49,25 +54,63 @@
     }
 
     a {
-      display: inline-block;
-      margin-top: 1.5rem;
       color: #007bff;
       text-decoration: none;
     }
 
-    textarea {
-      width: 100%;
-      min-height: 80px;
-      margin-top: 0.5rem;
+    .comments-section {
+      margin: 2rem auto;
+      max-width: 800px;
+      padding: 1.5rem;
+      background-color: #f5f6f8;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
     }
 
-    button {
+    .comment-entry {
+      border-bottom: 1px solid #ddd;
+      padding: 1rem 0;
+    }
+
+    .comment-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    .comment-text {
+      margin-top: 0.5rem;
+      font-size: 1rem;
+      color: #222;
+    }
+
+    .comment-form textarea {
+      width: 100%;
+      min-height: 80px;
+      padding: 0.5rem;
+      margin-top: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    .comment-form button {
       margin-top: 0.5rem;
       background-color: #007bff;
       color: white;
       border: none;
       padding: 0.5rem 1rem;
       border-radius: 4px;
+    }
+
+    .login-prompt {
+      text-align: center;
+      margin-top: 1rem;
+    }
+
+    .login-prompt a {
+      color: #007bff;
+      text-decoration: none;
     }
   </style>
 </head>
@@ -80,78 +123,65 @@
   </div>
   <div>
     <span th:if="${#authorization.expression('isAuthenticated()')}">
-      <a href="/profile" style="color: white; text-decoration: none;" th:text="${#authentication.name}">Username</a>
-      <a href="/logout" style="color: white; text-decoration: none;">Logout</a>
+      <a href="/profile" style="color: white;" th:text="${#authentication.name}">Username</a>
+      <a href="/logout" style="color: white;">Logout</a>
     </span>
     <span th:if="${#authorization.expression('!isAuthenticated()')}">
-      <a href="/login">Login</a>
-      <a href="/register">Register</a>
+      <a href="/login" style="color: white;">Login</a>
+      <a href="/register" style="color: white;">Register</a>
     </span>
   </div>
 </div>
 
-<!-- ✅ Main Content -->
+<!-- ✅ Ethereum Recommendation Detail -->
 <div class="container">
-  <h2 th:if="${nft.collectionName != null and nft.contractAddress != null}"
-      th:text="|${nft.collectionName} (${nft.contractAddress})|">
-    Collection Name (Contract)
-  </h2>
+  <h2>Ethereum Recommendation Detail</h2>
 
-  <h2 th:unless="${nft.collectionName != null and nft.contractAddress != null}">
-    Ethereum Recommendation Detail
-  </h2>
-
-  <p><strong>Token Name:</strong> <span th:text="${nft.tokenName}">Token</span></p>
-  <p><strong>Contract Address:</strong> <span th:text="${nft.ca}">0x...</span></p>
-  <p><strong>Blockchain:</strong> <span th:text="${nft.blockchain}">Ethereum</span></p>
-  <p><strong>Current Price:</strong> <span th:text="${nft.currentPrice + ' ETH'}">0.0 ETH</span></p>
-  <p><strong>Target Price:</strong> <span th:text="${nft.targetPrice + ' ETH'}">0.0 ETH</span></p>
-  <p><strong>Recommendation:</strong> <span th:text="${nft.recommendation}">BUY</span></p>
-
+  <p><strong>Token Name:</strong> <span th:text="${ethereum.tokenName}">Example Token</span></p>
+  <p><strong>Contract Address:</strong> <span th:text="${ethereum.contractAddress}">0x123...</span></p>
+  <p><strong>Blockchain:</strong> Ethereum</p>
+  <p><strong>Current Price:</strong> <span th:text="${ethereum.currentPrice + ' ETH'}">0.0 ETH</span></p>
+  <p><strong>Target Price:</strong> <span th:text="${ethereum.targetPrice + ' ETH'}">0.0 ETH</span></p>
+  <p><strong>Recommendation:</strong> <span th:text="${ethereum.recommendation}">BUY</span></p>
   <p><strong>Reason:</strong></p>
-  <p th:text="${nft.reason}">Reasoning behind the recommendation...</p>
-
+  <p th:text="${ethereum.reason}">Reasoning goes here.</p>
   <p><strong>Risks:</strong></p>
-  <p th:text="${nft.risks}">Risk analysis here...</p>
+  <p th:text="${ethereum.risks}">Risks go here.</p>
 
   <p class="meta">
-    <strong>Submitted by:</strong> <span th:text="${nft.submittedBy}">user@example.com</span><br/>
-    <strong>Submitted at:</strong>
-    <span th:if="${nft.createdAt != null}"
-          th:text="${#temporals.format(nft.createdAt, 'MMM dd, yyyy hh:mm a')}">Date</span>
+    <strong>Submitted by:</strong> <span th:text="${ethereum.submittedBy}">user@example.com</span><br/>
+    <strong>Submitted at:</strong> <span th:text="${#temporals.format(ethereum.createdAt, 'MMM dd, yyyy hh:mm a')}">Timestamp</span>
   </p>
 
   <a href="/ethereum">← Back to all Ethereum NFT recommendations</a>
 </div>
 
-<!-- ✅ Comment Section -->
-<div class="comment-section">
-  <h2>Comments</h2>
+<!-- ✅ Comments Section -->
+<div class="comments-section">
+  <h3>Comments</h3>
 
   <div th:if="${#lists.isEmpty(comments)}">
     <p>No comments yet.</p>
   </div>
 
-  <div th:each="comment : ${comments}" class="comment">
-    <div class="comment-author">
-      <span th:text="${comment.author}">User</span>
+  <div th:each="comment : ${comments}" class="comment-entry">
+    <div class="comment-header">
+      <div class="comment-email" th:text="${comment.author}">user@example.com</div>
+      <div class="comment-date" th:text="${#temporals.format(comment.createdAt, 'MMM dd yyyy, HH:mm')}">Jul 28 2025, 23:28</div>
     </div>
-    <div class="comment-body">
-      <div class="comment-header">
-        <span th:text="${#temporals.format(comment.createdAt, 'MMM dd, yyyy hh:mm a')}">Date</span>
-      </div>
-      <div class="comment-content" th:text="${comment.content}">Comment content</div>
-    </div>
+    <div class="comment-text" th:text="${comment.content}">Sample comment here.</div>
   </div>
 
+  <!-- ✅ Logged-in users can comment -->
   <div th:if="${#authorization.expression('isAuthenticated()')}">
-    <form th:action="@{'/ethereum/' + ${nft.id} + '/comments'}" method="post" th:object="${newComment}">
-      <textarea th:field="*{content}" placeholder="Write a comment..." required></textarea>
+    <form th:action="@{'/ethereum/' + ${ethereum.id} + '/comments'}" method="post" class="comment-form" th:object="${newComment}">
+      <textarea th:field="*{content}" placeholder="Add your comment..." required></textarea>
       <button type="submit">Post Comment</button>
     </form>
   </div>
 
-  <div th:unless="${#authorization.expression('isAuthenticated()')}">
+  <!-- 🔒 Login Prompt -->
+  <div th:unless="${#authorization.expression('isAuthenticated()')}" class="login-prompt">
     <p><a href="/login">Login</a> to leave a comment.</p>
   </div>
 </div>

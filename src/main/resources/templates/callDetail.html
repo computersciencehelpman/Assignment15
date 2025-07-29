@@ -50,15 +50,46 @@
       margin-bottom: 1rem;
     }
 
-    textarea {
+    .comments-section {
+      background: white;
+      margin-top: 2rem;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .comment-entry {
+      border-bottom: 1px solid #ddd;
+      padding: 1rem 0;
+    }
+
+    .comment-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    .comment-text {
+      margin-top: 0.5rem;
+      font-size: 1rem;
+    }
+
+    .comment-form {
+      margin-top: 1.5rem;
+    }
+
+    .comment-form textarea {
       width: 100%;
+      min-height: 80px;
+      margin-bottom: 0.5rem;
       padding: 0.5rem;
       border: 1px solid #ccc;
       border-radius: 4px;
       resize: vertical;
     }
 
-    button {
+    .comment-form button {
       background-color: #2563eb;
       color: white;
       border: none;
@@ -66,13 +97,21 @@
       border-radius: 4px;
       font-size: 1rem;
       cursor: pointer;
-      margin-top: 1rem;
     }
 
-    button:hover {
+    .comment-form button:hover {
       background-color: #1d4ed8;
     }
 
+    .login-prompt {
+      text-align: center;
+      margin-top: 1rem;
+    }
+
+    .login-prompt a {
+      color: #2563eb;
+      text-decoration: none;
+    }
   </style>
 </head>
 <body>
@@ -112,25 +151,30 @@
   <div><span class="detail-label">Tags:</span> <div class="value" th:text="${call.tags}"></div></div>
   <div><span class="detail-label">Submitted At:</span> <div class="value" th:text="${call.submittedAt}"></div></div>
 
-  <!-- Comment Section -->
-  <div class="comment-section">
+  <!-- Comments Section -->
+  <div class="comments-section">
     <h3>Comments</h3>
 
-    <div th:each="comment : ${comments}" class="comment">
-      <p th:text="${comment.content}"></p>
-      <small th:text="'Posted by ' + ${comment.author} + ' on ' + ${comment.createdAt}"></small>
+    <!-- Display Comments -->
+    <div th:each="comment : ${comments}" class="comment-entry">
+      <div class="comment-header">
+        <div class="comment-email" th:text="${comment.author}">user@example.com</div>
+        <div class="comment-date" th:text="${#temporals.format(comment.createdAt, 'MMM dd yyyy, HH:mm')}">Jul 28 2025, 15:30</div>
+      </div>
+      <div class="comment-text" th:text="${comment.content}">Sample comment here.</div>
     </div>
 
+    <!-- Form for Logged-In Users -->
     <div th:if="${#authorization.expression('isAuthenticated()')}">
-      <form th:action="@{/calls/{id}/comments(id=${call.id})}" method="post" th:object="${newComment}">
-        <label for="comment">Add a comment:</label>
-        <textarea id="comment" th:field="*{content}" required></textarea>
-        <button type="submit">Submit Comment</button>
+      <form th:action="@{/calls/{id}/comments(id=${call.id})}" method="post" class="comment-form" th:object="${newComment}">
+        <textarea th:field="*{content}" placeholder="Add your comment..." required></textarea>
+        <button type="submit">Post Comment</button>
       </form>
     </div>
 
-    <div th:if="${#authorization.expression('!isAuthenticated()')}">
-      <p><a href="/login">Log in</a> to post a comment.</p>
+    <!-- Login Prompt for Guests -->
+    <div th:unless="${#authorization.expression('isAuthenticated()')}" class="login-prompt">
+      <p><a href="/login">Login</a> to leave a comment.</p>
     </div>
   </div>
 </div>

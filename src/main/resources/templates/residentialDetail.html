@@ -55,13 +55,43 @@
       text-decoration: none;
     }
 
-    textarea {
-      width: 100%;
-      min-height: 80px;
-      margin-top: 0.5rem;
+    /* Comments Section Styling */
+    .comments-section {
+      margin-top: 2rem;
+      padding: 1.5rem;
+      background-color: #f5f6f8;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
     }
 
-    button {
+    .comment-entry {
+      border-bottom: 1px solid #ddd;
+      padding: 1rem 0;
+    }
+
+    .comment-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    .comment-text {
+      margin-top: 0.5rem;
+      font-size: 1rem;
+      color: #222;
+    }
+
+    .comment-form textarea {
+      width: 100%;
+      min-height: 80px;
+      padding: 0.5rem;
+      margin-top: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    .comment-form button {
       margin-top: 0.5rem;
       background-color: #007bff;
       color: white;
@@ -69,6 +99,17 @@
       padding: 0.5rem 1rem;
       border-radius: 4px;
     }
+
+    .login-prompt {
+      text-align: center;
+      margin-top: 1rem;
+    }
+
+    .login-prompt a {
+      color: #007bff;
+      text-decoration: none;
+    }
+
   </style>
 </head>
 <body>
@@ -119,37 +160,34 @@
 
   <a href="/residential">← Back to all Residential Listings</a>
 
-  <!-- 💬 Comment Section -->
-  <div class="comment-section">
-    <h2>Comments</h2>
+  <!-- 💬 Comments Section -->
+  <div class="comments-section">
+    <h3>Comments</h3>
 
     <!-- Show if there are no comments -->
     <div th:if="${#lists.isEmpty(comments)}">
       <p>No comments yet.</p>
     </div>
 
-    <!-- Loop through each comment -->
-    <div th:each="comment : ${comments}" class="comment">
-      <div class="comment-author">
-        <span th:text="${comment.author}">User</span>
+    <!-- Loop through comments -->
+    <div th:each="comment : ${comments}" class="comment-entry">
+      <div class="comment-header">
+        <div class="comment-email" th:text="${comment.author}">user@example.com</div>
+        <div class="comment-date" th:text="${#temporals.format(comment.createdAt, 'MMM dd yyyy, HH:mm')}">Jul 28 2025, 15:30</div>
       </div>
-      <div class="comment-body">
-        <div class="comment-header">
-          <span th:text="${#temporals.format(comment.createdAt, 'MMM dd, yyyy hh:mm a')}">Date</span>
-        </div>
-        <div class="comment-content" th:text="${comment.content}">Comment content</div>
-      </div>
+      <div class="comment-text" th:text="${comment.content}">Comment here...</div>
     </div>
 
-    <!-- Comment Form -->
+    <!-- Add Comment -->
     <div th:if="${#authorization.expression('isAuthenticated()')}">
-      <form th:action="@{'/residential/' + ${realEstate.id} + '/comments'}" method="post" th:object="${newComment}">
-        <textarea th:field="*{content}" placeholder="Write a comment..." required></textarea>
+      <form th:action="@{'/residential/' + ${realEstate.id} + '/comments'}" method="post" class="comment-form" th:object="${newComment}">
+        <textarea th:field="*{content}" placeholder="Add your comment..." required></textarea>
         <button type="submit">Post Comment</button>
       </form>
     </div>
 
-    <div th:unless="${#authorization.expression('isAuthenticated()')}">
+    <!-- Prompt to login -->
+    <div th:unless="${#authorization.expression('isAuthenticated()')}" class="login-prompt">
       <p><a href="/login">Login</a> to leave a comment.</p>
     </div>
   </div>
