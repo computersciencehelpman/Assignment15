@@ -41,13 +41,14 @@ public class BitcoinNftController {
     @GetMapping("/{id}")
     public String viewNftDetail(@PathVariable Long id, Model model) {
         BitcoinNftRecommendation nft = bitcoinNftRepo.findById(id).orElse(null);
-        if (nft == null) return "redirect:/bitcoin-nfts";
+        if (nft == null) return "redirect:/bitcoinnft"; // ✅ FIXED
 
         model.addAttribute("nft", nft);
         model.addAttribute("comments", commentRepo.findByBitcoinNftRecommendationIdOrderByCreatedAtDesc(id));
-        model.addAttribute("newComment", new Comment()); // for the form
+        model.addAttribute("newComment", new Comment());
         return "bitcoinnftDetail";
     }
+
     
     @PostMapping("/{id}/comments")
     public String postCommentOnBitcoinNft(@PathVariable Long id,
@@ -64,8 +65,6 @@ public class BitcoinNftController {
         return "redirect:/bitcoinnft/" + id; 
     }
 
-
-
     @PostMapping("/submit")
     public String submitNft(@ModelAttribute BitcoinNftRecommendation nft,
                             @AuthenticationPrincipal OAuth2User principal) {
@@ -74,7 +73,8 @@ public class BitcoinNftController {
         }
         nft.setCreatedAt(LocalDateTime.now());
         bitcoinNftRepo.save(nft);
-        return "redirect:/bitcoin-nfts";
+        return "redirect:/bitcoinnft"; // ✅ fixed
     }
+
 }
 

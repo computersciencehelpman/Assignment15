@@ -43,14 +43,12 @@ public class EthereumController {
         EthereumRecommendation ethereum = ethereumRepo.findById(id).orElse(null);
         if (ethereum == null) return "redirect:/ethereum";
 
-        model.addAttribute("nft", ethereum); 
+        model.addAttribute("ethereum", ethereum); // ✅ FIXED this line
         model.addAttribute("comments", commentRepo.findByEthereumRecommendationIdOrderByCreatedAtDesc(id));
         model.addAttribute("newComment", new Comment());
 
         return "ethereumDetail";
     }
-
-
 
     @PostMapping("/{id}/comments")
     public String postCommentOnEthereum(@PathVariable Long id,
