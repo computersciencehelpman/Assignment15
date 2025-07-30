@@ -1,7 +1,6 @@
 package com.coderscampus.Assignment15.service;
 
 import com.coderscampus.Assignment15.repository.UserRepository;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,22 +24,21 @@ public class SecurityConfig {
 
     private final CustomUserDetailsService userDetailsService;
     private final UserRepository userRepository;
-
     private final CustomOAuth2UserService customOAuth2UserService;
 
     public SecurityConfig(CustomUserDetailsService userDetailsService,
-            UserRepository userRepository,
-            CustomOAuth2UserService customOAuth2UserService) {
-    		this.userDetailsService = userDetailsService;
-    		this.userRepository = userRepository;
-    		this.customOAuth2UserService = customOAuth2UserService;
+                          UserRepository userRepository,
+                          CustomOAuth2UserService customOAuth2UserService) {
+        this.userDetailsService = userDetailsService;
+        this.userRepository = userRepository;
+        this.customOAuth2UserService = customOAuth2UserService;
     }
 
     @Bean
     public RequestCache requestCache() {
         return new HttpSessionRequestCache();
     }
-    
+
     @Bean
     public OAuth2UserService<OAuth2UserRequest, OAuth2User> oAuth2UserService() {
         return customOAuth2UserService;
@@ -49,19 +47,26 @@ public class SecurityConfig {
     @Bean
     public org.springframework.security.web.authentication.AuthenticationFailureHandler oauth2FailureHandler() {
         return (request, response, exception) -> {
-            exception.printStackTrace(); // Log the actual cause
+            exception.printStackTrace();
             response.sendRedirect("/login?error");
         };
     }
 
-    
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-    	System.out.println("CustomOAuth2UserService wired into filter chain");
         http
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/login", "/register", "/css/**", "/js/**", "/images/**").permitAll()
-                .anyRequest().authenticated()
+                .requestMatchers(
+                    "/login", "/register", "/css/**", "/js/**", "/images/**",
+                    "/", "/forum-home",
+                    "/stocks/**", "/calls/**", "/puts/**",
+                    "/bitcoinnft/**", "/solananft/**", "/ethereumnft/**", "/cardanonft/**",
+                    "/polygonnft/**", "/othernft/**", "/cryptos/**", "/reits/**", "/collectables/**"
+                ).permitAll()
+
+                .requestMatchers("/**/submit", "/**/comments").authenticated()
+
+                .anyRequest().permitAll()
             )
             .formLogin(form -> form
                 .loginPage("/login")
@@ -70,16 +75,19 @@ public class SecurityConfig {
                 .permitAll()
             )
             .oauth2Login(oauth -> oauth
-            	    .loginPage("/login")
-            	    .defaultSuccessUrl("/profile", true)
-            	    .userInfoEndpoint(userInfo ->
-            	        userInfo.userService(oAuth2UserService())
-            	    )
-            	    .failureHandler(oauth2FailureHandler()) // <---- ADD THIS LINE
-            	)
-
+                .loginPage("/login")
+                .defaultSuccessUrl("/profile", true)
+                .userInfoEndpoint(userInfo ->
+                    userInfo.userService(oAuth2UserService())
+                )
+                .failureHandler(oauth2FailureHandler())
+            )
             .logout(logout -> logout
-                .logoutSuccessUrl("/login?logout")
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/")
+                .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID")
+                .permitAll()
             );
 
         return http.build();
