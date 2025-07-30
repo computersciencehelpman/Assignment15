@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 2rem;
+            background-color: #f4f4f4;
+        }
+        .login-container {
+            max-width: 400px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        label {
+            display: block;
+            margin-top: 1rem;
+            font-weight: bold;
+        }
+        input {
+            width: 100%;
+            padding: 0.5rem;
+            margin-top: 0.3rem;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+        button {
+            margin-top: 1.5rem;
+            padding: 0.7rem 2rem;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        a {
+            display: inline-block;
+            margin-top: 1rem;
+            color: #007bff;
+        }
+    </style>
+</head>
+<body>
+
+<!-- ✅ Navbar -->
+<div class="navbar">
+  <div>
+    <strong><a href="/" style="color: white; text-decoration: none;">Assignment 15 Forum</a></strong>
+  </div>
+  <div>
+    <span th:if="${#authorization.expression('isAuthenticated()')}">
+      <a href="/profile" th:text="${#authentication.name}">Username</a>
+      <a th:href="@{/logout}" onclick="event.preventDefault(); document.getElementById('logoutForm').submit();">Logout</a>
+	  <form id="logoutForm" th:action="@{/logout}" method="post" style="display:none;"></form>
+    </span>
+    <span th:if="${#authorization.expression('!isAuthenticated()')}">
+      <a href="/login">Login</a>
+      <a href="/register">Register</a>
+    </span>
+  </div>
+</div>
+
+    <div class="login-container">
+        <h1>Login</h1>
+        <a href="/oauth2/authorization/google">Login with Google</a>
+        <form th:action="@{/doLogin}" th:object="${loginDto}" method="post">
+    		<label>Email:</label>
+    		<input type="text" th:field="*{email}" />
+    		<div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="error-message"></div>
+
+    		<label>Password:</label>
+    		<input type="password" th:field="*{password}" />
+    		<div th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="error-message"></div>
+
+    		<button type="submit">Login</button>
+		</form>
+        
+        <form method="get" action="/register">
+            <button type="submit" style="background-color: #28a745;">Sign Up</button>
+        </form>
+    </div>
+</body>
+</html>

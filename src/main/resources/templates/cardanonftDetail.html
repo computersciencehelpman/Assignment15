@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Cardano NFT Detail</title>
+  <link rel="stylesheet" th:href="@{/css/comments.css}">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+      margin: 0;
+      padding: 0;
+    }
+
+    .navbar {
+      background-color: #222;
+      color: white;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .navbar a {
+      color: white;
+      margin-left: 1rem;
+      text-decoration: none;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 2rem auto;
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+
+    p {
+      margin: 0.5rem 0;
+    }
+
+    .meta {
+      font-size: 0.9rem;
+      color: #666;
+    }
+
+    a {
+      display: inline-block;
+      margin-top: 1.5rem;
+      color: #007bff;
+      text-decoration: none;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 80px;
+      margin-top: 0.5rem;
+    }
+
+    button {
+      margin-top: 0.5rem;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+    }
+
+    .comment-entry {
+      padding: 1rem 0;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .comment-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    .comment-text {
+      font-size: 1rem;
+      color: #222;
+      margin-top: 0.5rem;
+    }
+
+    .login-prompt {
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ✅ Navbar -->
+<div class="navbar">
+  <div>
+    <strong><a href="/" style="color: white; text-decoration: none;">Assignment 15 Forum</a></strong>
+  </div>
+  <div>
+    <span th:if="${#authorization.expression('isAuthenticated()')}">
+      <a href="/profile" th:text="${#authentication.name}">Username</a>
+      <a href="#" onclick="event.preventDefault(); document.getElementById('logoutForm').submit();">Logout</a>
+	  <form id="logoutForm" th:action="@{/logout}" method="post" style="display: none;"></form>
+    </span>
+    <span th:if="${#authorization.expression('!isAuthenticated()')}">
+      <a href="/login">Login</a>
+      <a href="/register">Register</a>
+    </span>
+  </div>
+</div>
+
+<!-- ✅ NFT Content -->
+<div class="container">
+  <h2>
+    <span th:text="${nft.collectionName}">Collection Name</span>
+    (<span th:text="${nft.policyId}">Mint Address</span>)
+  </h2>
+
+  <p th:if="${nft.creator}"><strong>Creator:</strong> <span th:text="${nft.creator}">Creator Name</span></p>
+  <p><strong>Floor Price:</strong> <span th:text="${nft.floorPrice + ' ADA'}">0.0 ADA</span></p>
+  <p><strong>Target Price:</strong> <span th:text="${nft.targetPrice + ' ADA'}">0.0 ADA</span></p>
+  <p><strong>Recommendation:</strong> <span th:text="${nft.recommendation}">BUY</span></p>
+
+  <p><strong>Reason:</strong></p>
+  <p th:text="${nft.reason}">Reasoning behind the recommendation...</p>
+
+  <p><strong>Risks:</strong></p>
+  <p th:text="${nft.risks}">Risk analysis here...</p>
+
+  <p><strong>Official Link:</strong>
+    <a th:href="${nft.officialLink}" th:text="${nft.officialLink}" target="_blank">official</a>
+  </p>
+
+  <p class="meta">
+    <strong>Submitted by:</strong> <span th:text="${nft.submittedBy}">user@example.com</span><br/>
+    <strong>Submitted at:</strong>
+    <span th:if="${nft.createdAt != null}" th:text="${#temporals.format(nft.createdAt, 'MMM dd, yyyy hh:mm a')}">Jul 08, 2025</span>
+  </p>
+
+  <a href="/cardanonft">← Back to all Cardano NFT recommendations</a>
+</div>
+
+<!-- ✅ Comments Section -->
+<div class="container">
+  <h3>Comments</h3>
+
+  <!-- Loop through comments -->
+  <div th:each="comment : ${comments}" class="comment-entry">
+    <div class="comment-header">
+      <div class="comment-email" th:text="${comment.author}">user@example.com</div>
+      <div class="comment-date" th:text="${#temporals.format(comment.createdAt, 'MMM dd yyyy, HH:mm')}">Jul 29 2025, 01:33</div>
+    </div>
+    <div class="comment-text" th:text="${comment.content}">Sample comment here.</div>
+  </div>
+
+  <!-- New Comment Form -->
+  <div th:if="${#authorization.expression('isAuthenticated()')}">
+    <form th:action="@{'/cardanonft/' + ${nft.id} + '/comments'}" method="post" th:object="${newComment}">
+      <textarea th:field="*{content}" placeholder="Add your comment..." required></textarea>
+      <button type="submit">Post Comment</button>
+    </form>
+  </div>
+
+  <!-- Login Prompt -->
+  <div th:unless="${#authorization.expression('isAuthenticated()')}" class="login-prompt">
+    <p><a href="/login">Login</a> to leave a comment.</p>
+  </div>
+</div>
+
+</body>
+</html>

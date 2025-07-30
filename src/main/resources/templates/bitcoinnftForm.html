@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Submit Bitcoin NFT Recommendation</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f2f5;
+      padding: 2rem;
+    }
+
+    .form-container {
+      background: white;
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    label {
+      font-weight: bold;
+      display: block;
+      margin-top: 1rem;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 0.5rem;
+      margin-top: 0.3rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    button {
+      margin-top: 1.5rem;
+      background-color: #007bff;
+      color: white;
+      padding: 0.7rem 1.2rem;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ✅ Navbar -->
+<div class="navbar">
+  <div><strong><a href="/" style="color: white; text-decoration: none;">Assignment 15 Forum</a></strong></div>
+  <div>
+    <span th:if="${#authorization.expression('isAuthenticated()')}">
+      <a href="/profile" style="color: white; text-decoration: none;" th:text="${#authentication.name}">Username</a>
+      <a href="#" onclick="event.preventDefault(); document.getElementById('logoutForm').submit();">Logout</a>
+	  <form id="logoutForm" th:action="@{/logout}" method="post" style="display: none;"></form>
+    </span>
+    <span th:if="${#authorization.expression('!isAuthenticated()')}">
+      <a href="/login">Login</a>
+      <a href="/register">Register</a>
+    </span>
+  </div>
+</div>
+
+  <div class="form-container">
+    <h2>Submit a Bitcoin NFT Recommendation</h2>
+    <form th:action="@{/bitcoinnft/submit}" method="post" th:object="${bitcoinNftRecommendation}">
+      <label>Name of NFT Collection:</label>
+      <input type="text" th:field="*{collectionName}" required />
+
+      <label>Ordinals Inscription ID:</label>
+      <input type="text" th:field="*{inscriptionId}" required />
+
+      <label>Creator/Team:</label>
+      <input type="text" th:field="*{creator}" />
+
+      <label>Current Floor Price (in BTC):</label>
+      <input type="number" step="0.0001" th:field="*{floorPrice}" required />
+
+      <label>Target Price (in BTC):</label>
+      <input type="number" step="0.0001" th:field="*{targetPrice}" />
+
+      <label>Recommendation:</label>
+      <select th:field="*{recommendation}">
+        <option value="BUY">Buy</option>
+        <option value="HOLD">Hold</option>
+        <option value="SELL">Sell</option>
+      </select>
+
+      <label>Reason for Recommendation:</label>
+      <textarea th:field="*{reason}" rows="4"></textarea>
+
+      <label>Risks:</label>
+      <textarea th:field="*{risks}" rows="3"></textarea>
+
+      <label>Official Link (optional):</label>
+      <input type="url" th:field="*{officialLink}" />
+
+      <button type="submit">Submit</button>
+    </form>
+  </div>
+</body>
+</html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Forum Home</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar {
+            background-color: #222;
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .navbar a {
+            color: white;
+            margin-left: 1rem;
+            text-decoration: none;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 2rem auto;
+        }
+
+        .category {
+            background: #fff;
+            border: 1px solid #ccc;
+            margin-bottom: 2rem;
+            border-radius: 5px;
+            padding: 1rem;
+        }
+
+        .category h2 {
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 0.5rem;
+        }
+
+        .subforums {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .subforum {
+            background: #f7f7f7;
+            border: 1px solid #ddd;
+            flex: 1 1 30%;
+            padding: 1rem;
+            text-align: center;
+            border-radius: 4px;
+        }
+
+        .subforum:hover {
+            background-color: #eaeaea;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+  <div><strong><a href="/" style="color: white; text-decoration: none;">Assignment 15 Forum</a></strong></div>
+  <div>
+    <span th:if="${#authorization.expression('isAuthenticated()')}">
+      <a href="/profile" style="color: white; text-decoration: none;" th:text="${#authentication.name}">Username</a>
+      <a th:href="@{/logout}" onclick="event.preventDefault(); document.getElementById('logoutForm').submit();">Logout</a>
+	  <form id="logoutForm" th:action="@{/logout}" method="post" style="display:none;"></form>
+    </span>
+    <span th:if="${#authorization.expression('!isAuthenticated()')}">
+      <a href="/login">Login</a>
+      <a href="/register">Register</a>
+    </span>
+  </div>
+</div>
+    
+
+    <div class="container">
+        <div class="category">
+            <h2>Investments</h2>
+            <div class="subforums">
+            	<a href="/stocks" style="text-decoration: none; color: inherit;">
+                	<div class="subforum">Stocks</div>
+                </a>
+                <a href="/options" style="text-decoration: none; color: inherit;">
+                	<div class="subforum">Options</div>
+                </a>
+                <a href="/cryptos" style="text-decoration: none; color: inherit;">
+                	<div class="subforum">Cryptos</div>
+                </a>
+                <a href="/nfts" style="text-decoration: none; color: inherit;">
+                	<div class="subforum">NFTs</div>
+                </a>
+                <a href="/real-estate" style="text-decoration: none; color: inherit;">
+                	<div class="subforum">Real Estate</div>
+                </a>
+        
+                <a href="/collectables" style="text-decoration: none; color: inherit;">
+                	<div class="subforum">Collectables</div>
+                </a>
+            </div>
+        </div>
+		
+    </div>
+</body>
+</html>

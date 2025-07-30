@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><title>Crypto Recommendation</title></head>
+<body>
+
+<!-- ✅ Navbar -->
+<div class="navbar">
+  <div><strong><a href="/" style="color: white; text-decoration: none;">Assignment 15 Forum</a></strong></div>
+  <div>
+    <span th:if="${#authorization.expression('isAuthenticated()')}">
+      <a href="/profile" style="color: white;" th:text="${#authentication.name}">Username</a>
+      <a th:href="@{/logout}" onclick="event.preventDefault(); document.getElementById('logoutForm').submit();">Logout</a>
+	  <form id="logoutForm" th:action="@{/logout}" method="post" style="display:none;"></form>
+    </span>
+    <span th:if="${#authorization.expression('!isAuthenticated()')}">
+      <a href="/login">Login</a>
+      <a href="/register">Register</a>
+    </span>
+  </div>
+</div>
+
+<h2>Submit a Solana Crypto Recommendation</h2>
+<form th:action="@{/solana/submit}" method="post" th:object="${cryptoRecommendation}">
+    <label>Token Name: <input type="text" th:field="*{tokenName}" required /></label><br/>
+    <label>Contact Address (CA): <input type="text" th:field="*{ca}" required /></label><br/>
+    <label>Blockchain: <input type="text" th:field="*{blockchain}" value="Solana" readonly /></label><br/>
+    <label>Recommendation:
+        <select th:field="*{recommendation}">
+            <option value="BUY">Buy</option>
+            <option value="HOLD">Hold</option>
+            <option value="SELL">Sell</option>
+        </select>
+    </label><br/>
+    <label>Current Price: <input type="number" step="0.01" th:field="*{currentPrice}" /></label><br/>
+    <label>Target Price: <input type="number" step="0.01" th:field="*{targetPrice}" /></label><br/>
+    <label>Reason:<br/><textarea th:field="*{reason}" required></textarea></label><br/>
+    <label>Risks:<br/><textarea th:field="*{risks}"></textarea></label><br/>
+    <button type="submit">Submit</button>
+</form>
+</body>
+</html>
