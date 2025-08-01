@@ -62,7 +62,7 @@
     <div class="centered">
         <div class="profile-card">
             <h1>Welcome, <span th:text="${name} ?: 'Guest'">Name</span>!</h1>
-            <p>Your email is: <span th:text="${email}">email@example.com ?: 'unknown@example.com'</span></p>
+			<p>Your email is: <span th:text="${email} ?: 'unknown@example.com'">email@example.com</span></p>
         </div>
     </div>
 </body>
