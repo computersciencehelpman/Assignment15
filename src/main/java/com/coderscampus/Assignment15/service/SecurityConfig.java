@@ -64,7 +64,14 @@ public class SecurityConfig {
                     "/polygonnft/**", "/othernft/**", "/cryptos/**", "/reits/**", "/collectables/**"
                 ).permitAll()
 
-                .requestMatchers("/**/submit", "/**/comments").authenticated()
+                .requestMatchers(
+                    "/stocks/submit", "/calls/submit", "/puts/submit",
+                    "/bitcoinnft/submit", "/solananft/submit", "/ethereumnft/submit", "/cardanonft/submit",
+                    "/polygonnft/submit", "/othernft/submit", "/cryptos/submit", "/reits/submit", "/collectables/submit",
+                    "/stocks/comments", "/calls/comments", "/puts/comments",
+                    "/bitcoinnft/comments", "/solananft/comments", "/ethereumnft/comments", "/cardanonft/comments",
+                    "/polygonnft/comments", "/othernft/comments", "/cryptos/comments", "/reits/comments", "/collectables/comments"
+                ).authenticated()
 
                 .anyRequest().permitAll()
             )
