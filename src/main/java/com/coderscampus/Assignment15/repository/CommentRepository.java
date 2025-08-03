@@ -9,7 +9,7 @@ import com.coderscampus.Assignment15.domain.Comment;
 
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Long> {
-	List<Comment> findByCallOptionIdOrderByCreatedAtDesc(Long id);
+	List<Comment> findByCallOptionIdOrderByCreatedAtDesc(Long callOptionId);
 	List<Comment> findByPutOptionIdOrderByCreatedAtDesc(Long id);
 	List<Comment> findByRecommendationIdOrderByCreatedAtDesc(Long id);
 	List<Comment> findByBitcoinRecommendationIdOrderByCreatedAtDesc(Long id);
