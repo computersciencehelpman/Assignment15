@@ -50,39 +50,10 @@
       margin-bottom: 1rem;
     }
 
-    .comments-section {
-      background: white;
-      margin-top: 2rem;
-      padding: 1.5rem;
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }
-
-    .comment-entry {
-      border-bottom: 1px solid #ddd;
-      padding: 1rem 0;
-    }
-
-    .comment-header {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.9rem;
-      color: #555;
-    }
-
-    .comment-text {
-      margin-top: 0.5rem;
-      font-size: 1rem;
-    }
-
-    .comment-form {
-      margin-top: 1.5rem;
-    }
-
     .comment-form textarea {
       width: 100%;
       min-height: 80px;
-      margin-bottom: 0.5rem;
+      margin-top: 1rem;
       padding: 0.5rem;
       border: 1px solid #ccc;
       border-radius: 4px;
@@ -112,6 +83,27 @@
       color: #2563eb;
       text-decoration: none;
     }
+
+    .comment {
+      padding: 1rem;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .comment-header {
+      font-size: 0.9rem;
+      color: #666;
+      margin-bottom: 0.5rem;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .comment-author {
+      font-weight: bold;
+    }
+
+    .comment-content {
+      margin-top: 0.3rem;
+    }
   </style>
 </head>
 <body>
@@ -122,7 +114,7 @@
     <span th:if="${#authorization.expression('isAuthenticated()')}">
       <a href="/profile" th:text="${#authentication.name}"></a>
       <a href="#" onclick="event.preventDefault(); document.getElementById('logoutForm').submit();">Logout</a>
-	  <form id="logoutForm" th:action="@{/logout}" method="post" style="display: none;"></form>
+      <form id="logoutForm" th:action="@{/logout}" method="post" style="display: none;"></form>
     </span>
     <span th:if="${#authorization.expression('!isAuthenticated()')}">
       <a href="/login">Login</a>
@@ -153,16 +145,18 @@
   <div><span class="detail-label">Submitted At:</span> <div class="value" th:text="${call.submittedAt}"></div></div>
 
   <!-- Comments Section -->
-  <div class="comments-section">
+  <div class="comment-section">
     <h3>Comments</h3>
 
     <!-- Display Comments -->
-    <div th:each="comment : ${comments}" class="comment-entry">
-      <div class="comment-header">
-        <div class="comment-email" th:text="${comment.author}">user@example.com</div>
-        <div class="comment-date" th:text="${#temporals.format(comment.createdAt, 'MMM dd yyyy, HH:mm')}">Jul 28 2025, 15:30</div>
+    <div class="all-comments">
+      <div th:each="comment : ${comments}" class="comment">
+        <div class="comment-header">
+          <span class="comment-author" th:text="${comment.author}">user@example.com</span>
+          <span th:text="${#temporals.format(comment.createdAt, 'MMM dd yyyy, HH:mm')}">Jul 28 2025, 15:30</span>
+        </div>
+        <div class="comment-content" th:text="${comment.content}">Sample comment here.</div>
       </div>
-      <div class="comment-text" th:text="${comment.content}">Sample comment here.</div>
     </div>
 
     <!-- Form for Logged-In Users -->
