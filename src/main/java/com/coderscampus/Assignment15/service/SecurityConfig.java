@@ -1,6 +1,8 @@
 package com.coderscampus.Assignment15.service;
 
 import com.coderscampus.Assignment15.repository.UserRepository;
+import com.coderscampus.Assignment15.security.CustomAuthorizationRequestResolver;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -9,6 +11,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -53,7 +56,26 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http,
+                                           ClientRegistrationRepository clientRegistrationRepository) throws Exception {
+
+        // 👇 Force Google account chooser
+        CustomAuthorizationRequestResolver customResolver =
+            new CustomAuthorizationRequestResolver(clientRegistrationRepository);
+
+        http
+            .oauth2Login(oauth -> oauth
+                .loginPage("/login")
+                .authorizationEndpoint(auth -> auth
+                    .authorizationRequestResolver(customResolver) // 👈 this was undefined before
+                )
+                .defaultSuccessUrl("/profile", true)
+                .userInfoEndpoint(userInfo ->
+                    userInfo.userService(oAuth2UserService())
+                )
+                .failureHandler(oauth2FailureHandler())
+            );
+
         http
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(
@@ -80,14 +102,6 @@ public class SecurityConfig {
                 .loginProcessingUrl("/doLogin")
                 .defaultSuccessUrl("/profile", true)
                 .permitAll()
-            )
-            .oauth2Login(oauth -> oauth
-                .loginPage("/login")
-                .defaultSuccessUrl("/profile", true)
-                .userInfoEndpoint(userInfo ->
-                    userInfo.userService(oAuth2UserService())
-                )
-                .failureHandler(oauth2FailureHandler())
             )
             .logout(logout -> logout
                 .logoutUrl("/logout")
