@@ -8,13 +8,13 @@ document.addEventListener("DOMContentLoaded", function () {
   const dateOfBirth = document.getElementById("dateOfBirth");
   const phoneInput = document.getElementById("phoneNumber");
 
-  // Format phone number as user types
+
   phoneInput.addEventListener("input", function () {
     phoneInput.value = formatPhoneNumber(phoneInput.value);
     validatePhoneNumber();
   });
 
-  // Prevent non-numeric or invalid characters
+
   phoneInput.addEventListener("keypress", function (e) {
     const allowedChars = /[\d\s()+-]/;
     if (!allowedChars.test(e.key)) {
@@ -181,7 +181,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  // Attach real-time or on-blur validation
   username.addEventListener("blur", checkUsernameExists);
   email.addEventListener("blur", checkEmailExists);
   password.addEventListener("input", validatePasswordStrength);
@@ -190,7 +189,6 @@ document.addEventListener("DOMContentLoaded", function () {
   phoneInput.addEventListener("input", validatePhoneNumber);
   phoneInput.addEventListener("blur", validatePhoneNumber);
 
-  // Final validation before form submission
   form.addEventListener("submit", async function (e) {
     validatePasswordStrength();
     validateConfirmPassword();
