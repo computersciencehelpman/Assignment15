@@ -2,27 +2,13 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <title>Put Option Recommendations</title>
+  <link rel="stylesheet" th:href="@{/css/nav.css}">
   <style>
     body {
       font-family: Arial, sans-serif;
       background-color: #f3f4f6;
       margin: 0;
       padding: 0;
-    }
-
-    .navbar {
-      background-color: #1a202c;
-      color: white;
-      padding: 1rem 2rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .navbar a {
-      color: white;
-      text-decoration: none;
-      margin-left: 1rem;
     }
 
     .container {
@@ -87,11 +73,11 @@
 </head>
 <body>
 
-<div class="navbar">
-  <div><a href="/" style="font-weight: bold;">Assignment 15 Forum</a></div>
+    <div class="navbar">
+  <div><strong><a href="/" style="color: white; text-decoration: none;">Assignment 15 Forum</a></strong></div>
   <div>
     <span th:if="${#authorization.expression('isAuthenticated()')}">
-      <a href="/profile" th:text="${#authentication.name}"></a>
+      <a href="/profile" style="color: white; text-decoration: none;" th:text="${#authentication.name}">Username</a>
       <a th:href="@{/logout}" onclick="event.preventDefault(); document.getElementById('logoutForm').submit();">Logout</a>
 	  <form id="logoutForm" th:action="@{/logout}" method="post" style="display:none;"></form>
     </span>
@@ -101,8 +87,6 @@
     </span>
   </div>
 </div>
-
-<!-- Main Content -->
 <div class="container">
   <div class="header">
     <h2>Put Option Recommendations</h2>

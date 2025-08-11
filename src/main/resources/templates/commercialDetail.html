@@ -3,117 +3,29 @@
 <head>
   <title>Commercial Real Estate Detail</title>
   <link rel="stylesheet" th:href="@{/css/comments.css}">
+  <link rel="stylesheet" th:href="@{/css/nav.css}">
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #f9f9f9;
+      background-color: #f0f2f5;
       margin: 0;
-      padding: 0;
     }
-
-    .navbar {
-      background-color: #222;
-      color: white;
-      padding: 1rem 2rem;
-      display: flex;
-      justify-content: space-between;
-    }
-
-    .navbar a {
-      color: white;
-      margin-left: 1rem;
-      text-decoration: none;
-    }
-
     .container {
       max-width: 800px;
       margin: 2rem auto;
-      background: white;
+      background: #fff;
       padding: 2rem;
       border-radius: 8px;
       box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
     }
-
-    h2 {
-      text-align: center;
-      margin-bottom: 1rem;
-    }
-
-    p {
-      margin: 0.5rem 0;
-    }
-
-    .meta {
-      font-size: 0.9rem;
-      color: #666;
-    }
-
-    a {
-      display: inline-block;
-      margin-top: 1.5rem;
-      color: #007bff;
-      text-decoration: none;
-    }
-
-    .comments-section {
-      margin: 2rem auto;
-      max-width: 800px;
-      padding: 1.5rem;
-      background-color: #f5f6f8;
-      border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-    }
-
-    .comment-entry {
-      border-bottom: 1px solid #ddd;
-      padding: 1rem 0;
-    }
-
-    .comment-header {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.9rem;
-      color: #555;
-    }
-
-    .comment-text {
-      margin-top: 0.5rem;
-      font-size: 1rem;
-      color: #222;
-    }
-
-    .comment-form textarea {
-      width: 100%;
-      min-height: 80px;
-      padding: 0.5rem;
-      margin-top: 0.5rem;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-    }
-
-    .comment-form button {
-      margin-top: 0.5rem;
-      background-color: #007bff;
-      color: white;
-      border: none;
-      padding: 0.5rem 1rem;
-      border-radius: 4px;
-    }
-
-    .login-prompt {
-      text-align: center;
-      margin-top: 1rem;
-    }
-
-    .login-prompt a {
-      color: #007bff;
-      text-decoration: none;
-    }
+    h2 { text-align: center; margin-bottom: 1rem; }
+    p { margin: 0.5rem 0; }
+    .meta { color: #555; font-size: 0.9rem; }
+    .back-link { display: inline-block; margin-top: 1.5rem; text-decoration: none; }
   </style>
 </head>
 <body>
 
-<!-- ✅ Navbar -->
 <div class="navbar">
   <div>
     <strong><a href="/" style="color: white; text-decoration: none;">Assignment 15 Forum</a></strong>
@@ -131,7 +43,6 @@
   </div>
 </div>
 
-<!-- ✅ Commercial Listing -->
 <div class="container">
   <h2 th:text="${commercial.propertyName}">Commercial Property Name</h2>
 
@@ -162,37 +73,33 @@
   <a href="/commercial">← Back to Commercial Listings</a>
 </div>
 
-<!-- ✅ Comment Section -->
-<div class="comments-section">
-  <h3>Comments</h3>
+<div class="comments-wrapper">
+  <div class="comment-section">
+    <h3>Comments</h3>
 
-  <!-- If no comments -->
-  <div th:if="${#lists.isEmpty(comments)}">
-    <p>No comments yet.</p>
-  </div>
-
-  <!-- List of Comments -->
-  <div th:each="comment : ${comments}" class="comment-entry">
-    <div class="comment-header">
-      <div class="comment-email" th:text="${comment.author}">user@example.com</div>
-      <div class="comment-date" th:text="${#temporals.format(comment.createdAt, 'MMM dd yyyy, HH:mm')}">Jul 28 2025, 15:30</div>
+    <div th:each="comment : ${comments}" class="comment-entry">
+      <div class="comment-header">
+        <div class="comment-email" th:text="${comment.author}">user@example.com</div>
+        <div class="comment-date" th:text="${#temporals.format(comment.createdAt, 'MMM dd yyyy, HH:mm')}">
+          Jul 28 2025, 15:30
+        </div>
+      </div>
+      <div class="comment-text" th:text="${comment.content}">Sample comment here.</div>
     </div>
-    <div class="comment-text" th:text="${comment.content}">Sample comment</div>
-  </div>
 
-  <!-- Show comment form if authenticated -->
-  <div th:if="${#authorization.expression('isAuthenticated()')}">
-    <form th:action="@{'/commercial/' + ${commercial.id} + '/comments'}" method="post" class="comment-form" th:object="${newComment}">
-      <textarea th:field="*{content}" placeholder="Write a comment..." required></textarea>
-      <button type="submit">Post Comment</button>
-    </form>
-  </div>
+    <div th:if="${#authorization.expression('isAuthenticated()')}">
+      <form th:action="@{'/commercial/' + ${commercial.id} + '/comments'}" method="post" class="comment-form" th:object="${newComment}">
+        <textarea th:field="*{content}" placeholder="Add your comment..." required></textarea>
+        <button type="submit">Post Comment</button>
+      </form>
+    </div>
 
-  <!-- Prompt login if not authenticated -->
-  <div th:unless="${#authorization.expression('isAuthenticated()')}" class="login-prompt">
-    <p><a href="/login">Login</a> to leave a comment.</p>
+    <div th:unless="${#authorization.expression('isAuthenticated()')}" class="login-prompt">
+      <p><a href="/login">Login</a> to leave a comment.</p>
+    </div>
   </div>
 </div>
+
 
 </body>
 </html>

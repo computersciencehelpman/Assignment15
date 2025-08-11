@@ -2,26 +2,13 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Solana NFT Recommendations</title>
+    <link rel="stylesheet" th:href="@{/css/nav.css}">
     <style>
         body {
             font-family: Arial, sans-serif;
             background-color: #f0f2f5;
             margin: 0;
             padding: 0;
-        }
-
-        .navbar {
-            background-color: #222;
-            color: white;
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .navbar a {
-            color: white;
-            margin-left: 1rem;
-            text-decoration: none;
         }
 
         .container {
@@ -101,7 +88,7 @@
     <div class="category">
         <h2 class="heading-flex">
             <span>Solana NFTs</span>
-            <a href="/solananft/new" class="add-button">+ Add</a>
+            <a href="/solananft/new" class="add-button">+</a>
         </h2>
 
         <div th:if="${#lists.isEmpty(nftRecommendations)}">

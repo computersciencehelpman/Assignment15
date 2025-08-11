@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+<link rel="stylesheet" th:href="@{/css/nav.css}">
 <head>
     <title>Forum Home</title>
     <style>
@@ -8,20 +9,6 @@
             background-color: #f0f2f5;
             margin: 0;
             padding: 0;
-        }
-
-        .navbar {
-            background-color: #222;
-            color: white;
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .navbar a {
-            color: white;
-            margin-left: 1rem;
-            text-decoration: none;
         }
 
         .container {
@@ -107,7 +94,6 @@
             <a href="/polygonnft/new" class="add-button">+</a>
         </h2>
 
-        <!-- ✅ NFT Listing -->
         <div class="subforums">
             <div th:each="nft : ${nftRecommendations}" class="subforum">
                 <a th:href="@{'/polygonnft/' + ${nft.id}}">

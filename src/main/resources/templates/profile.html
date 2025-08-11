@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Profile</title>
+    <link rel="stylesheet" th:href="@{/css/nav.css}">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -9,19 +10,7 @@
             margin: 0;
             padding: 0;
         }
-        .navbar {
-            background-color: #222;
-            color: white;
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .navbar a {
-            color: white;
-            margin-left: 1rem;
-            text-decoration: none;
-        }
+
         .profile-card {
             background-color: white;
             display: inline-block;
