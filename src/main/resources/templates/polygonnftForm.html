@@ -57,7 +57,7 @@
 </head>
 <body>
 
-<!-- ✅ Navbar -->
+
 <div class="navbar">
   <div>
     <strong><a href="/" style="color: white; text-decoration: none;">Assignment 15 Forum</a></strong>
@@ -69,8 +69,8 @@
 	  <form id="logoutForm" th:action="@{/logout}" method="post" style="display:none;"></form>
     </span>
     <span th:if="${#authorization.expression('!isAuthenticated()')}">
-      <a href="/login" style="color: white; text-decoration: none;">Login</a>
-      <a href="/register" style="color: white; text-decoration: none;">Register</a>
+      <strong><a href="/login" style="color: white; text-decoration: none;">Login</a></strong>
+      <strong><a href="/register" style="color: white; text-decoration: none;">Register</a></strong>
     </span>
   </div>
 </div>

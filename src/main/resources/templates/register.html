@@ -5,12 +5,14 @@
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <link rel="stylesheet" th:href="@{/css/nav.css}">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f3f3f3;
-            padding: 2rem;
-        }
-
+        
+		body {
+  			font-family: Arial, sans-serif;
+  			background-color: #f4f4f4;   
+  			margin: 0;                   
+  			padding: 0;                  
+		}
+        
         .form-container {
             max-width: 700px;
             margin: 0 auto;
@@ -19,6 +21,15 @@
             border: 1px solid #ccc;
             border-radius: 5px;
         }
+        
+        .form-container {
+  			max-width: 700px;
+  			margin: 2rem auto;          
+  			background-color: white;
+  			padding: 2rem;
+  			border: 1px solid #ccc;
+  			border-radius: 5px;
+		}       
 
         .form-container h1 {
             text-align: center;
@@ -99,19 +110,20 @@
 <body>
 
 <div class="navbar">
-  <div><a href="/" style="font-weight: bold;">Assignment 15 Forum</a></div>
+  <div><strong><a href="/" style="color: white; text-decoration: none;">Assignment 15 Forum</a></strong></div>
   <div>
     <span th:if="${#authorization.expression('isAuthenticated()')}">
-      <a href="/profile" th:text="${#authentication.name}"></a>
+      <a href="/profile" style="color: white; text-decoration: none;" th:text="${#authentication.name}">Username</a>
       <a th:href="@{/logout}" onclick="event.preventDefault(); document.getElementById('logoutForm').submit();">Logout</a>
 	  <form id="logoutForm" th:action="@{/logout}" method="post" style="display:none;"></form>
     </span>
     <span th:if="${#authorization.expression('!isAuthenticated()')}">
-      <a href="/login">Login</a>
-      <a href="/register">Register</a>
+      <strong><a href="/login" style="color: white; text-decoration: none;">Login</a></strong>
+      <strong><a href="/register" style="color: white; text-decoration: none;">Register</a></strong>
     </span>
   </div>
 </div>
+
 
 <div class="form-container">
     <h1>Register</h1>

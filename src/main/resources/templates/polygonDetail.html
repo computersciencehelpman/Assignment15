@@ -3,6 +3,7 @@
 <head>
   <title>Polygon Detail</title>
   <link rel="stylesheet" href="/css/comments.css">
+  <link rel="stylesheet" href="/css/nav.css">
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -26,21 +27,20 @@
 <body>
 
 <div class="navbar">
-  <div>
-    <strong><a href="/" style="color: white; text-decoration: none;">Assignment 15 Forum</a></strong>
-  </div>
+  <div><strong><a href="/" style="color: white; text-decoration: none;">Assignment 15 Forum</a></strong></div>
   <div>
     <span th:if="${#authorization.expression('isAuthenticated()')}">
-      <a href="/profile" th:text="${#authentication.name}" style="color: white; text-decoration: none;"></a>
+      <a href="/profile" style="color: white; text-decoration: none;" th:text="${#authentication.name}">Username</a>
       <a th:href="@{/logout}" onclick="event.preventDefault(); document.getElementById('logoutForm').submit();">Logout</a>
 	  <form id="logoutForm" th:action="@{/logout}" method="post" style="display:none;"></form>
     </span>
     <span th:if="${#authorization.expression('!isAuthenticated()')}">
-      <a href="/login">Login</a>
-      <a href="/register">Register</a>
+      <strong><a href="/login" style="color: white; text-decoration: none;">Login</a></strong>
+      <strong><a href="/register" style="color: white; text-decoration: none;">Register</a></strong>
     </span>
   </div>
 </div>
+
 
 <div class="container">
   <h2 th:text="${polygon.tokenName} + ' (' + ${polygon.ca} + ')'">Token Name (CA)</h2>
