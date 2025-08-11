@@ -1,6 +1,6 @@
 .comments-wrapper {
-  max-width: 800px;   /* match Ethereum’s container width */
-  margin: 2rem auto;  /* center horizontally */
+  max-width: 800px;   
+  margin: 2rem auto;  
 }
 
 .comment-section {

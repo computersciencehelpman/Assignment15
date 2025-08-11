@@ -1,6 +1,5 @@
-/* ===== Navbar (matches your screenshot) ===== */
 .navbar {
-  position: sticky;            /* stays at top when scrolling */
+  position: sticky;           
   top: 0;
   z-index: 1000;
   display: flex;
@@ -11,12 +10,11 @@
   height: 48px;
   padding: 0 16px;
 
-  background: #1a1f25;         /* dark bar */
+  background: #1a1f25;        
   color: #fff;
   border-bottom: 1px solid #0f1318;
 }
 
-/* Brand / site title */
 .nav-brand {
   display: inline-flex;
   align-items: center;
@@ -31,17 +29,15 @@
   text-decoration: none;
 }
 
-/* Right side container */
 .nav-right {
   display: inline-flex;
   align-items: center;
   gap: 10px;
 }
 
-/* Username “pill” */
 .nav-user {
   display: inline-block;
-  max-width: 280px;            /* avoid super long overflow */
+  max-width: 280px;          
   padding: 4px 8px;
   font-size: 12px;
   line-height: 1;
@@ -54,7 +50,6 @@
   text-overflow: ellipsis;
 }
 
-/* Logout button */
 .nav-btn {
   display: inline-flex;
   align-items: center;
@@ -77,7 +72,6 @@
   border-color: #4a5562;
 }
 
-/* Auth links when logged out */
 .nav-link {
   color: #e7eaf0;
   text-decoration: none;
@@ -85,20 +79,22 @@
   padding: 4px 6px;
 }
 
-.nav-link:hover { text-decoration: underline; }
+.nav-link:hover { 
+   text-decoration: underline; 
+}
 
-/* Optional: thin shadow like in browser UI */
-.navbar-shadow { box-shadow: 0 1px 2px rgba(0,0,0,.25); }
+.navbar-shadow {
+ box-shadow: 0 1px 2px rgba(0,0,0,.25); 
+}
 
-/* ===== Floating “+” action button (right edge) ===== */
 .fab {
   position: fixed;
   right: 18px;
-  top: 64px;                   /* just below the navbar */
+  top: 64px;                   
   width: 36px;
   height: 36px;
   border-radius: 6px;
-  background: #1976d2;         /* blue square with + */
+  background: #1976d2;         
   color: #fff;
   font-size: 20px;
   line-height: 36px;
@@ -114,7 +110,6 @@
   transform: translateY(-1px);
 }
 
-/* Small screens */
 @media (max-width: 520px) {
   .nav-user { max-width: 160px; }
   .fab { right: 12px; top: 60px; }
