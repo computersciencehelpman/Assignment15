@@ -187,7 +187,15 @@
 
         <!-- ✅ Google reCAPTCHA widget -->
         <div class="recaptcha-container">
-            <div class="g-recaptcha" data-sitekey="6LdOS2ErAAAAAJhDywBqWdVgns0jZPKxg_veLppb"></div>
+            <!-- v2 widget script (keep this) -->
+            <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
+            <!-- ...inside your form, where the widget goes... -->
+            <div class="recaptcha-container">
+                <div class="g-recaptcha"
+                     th:attr="data-sitekey=${@environment.getProperty('recaptcha.site')}"></div>
+            </div>
+
         </div>
 
         <div class="form-actions">
