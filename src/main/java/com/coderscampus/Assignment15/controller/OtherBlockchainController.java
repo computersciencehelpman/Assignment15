@@ -59,13 +59,9 @@ public class OtherBlockchainController {
         newComment.setId(null);
         newComment.setCreatedAt(LocalDateTime.now());
 
-        // If Comment has a relation field, prefer setting the entity:
-        //   private OtherBlockchainsRecommendation otherBlockchainsRecommendation;
+
         newComment.setOtherBlockchainsRecommendation(rec);
 
-        // If instead your Comment truly stores a raw FK column, use this line
-        // and remove the one above:
-        // newComment.setOtherBlockchainsRecommendationId(id);
 
         if (principal instanceof OAuth2User ou) {
             newComment.setAuthor(ou.getAttribute("email"));
