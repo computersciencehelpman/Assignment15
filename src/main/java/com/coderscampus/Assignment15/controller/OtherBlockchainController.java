@@ -5,11 +5,14 @@ import com.coderscampus.Assignment15.domain.OtherBlockchainsRecommendation;
 import com.coderscampus.Assignment15.repository.CommentRepository;
 import com.coderscampus.Assignment15.repository.OtherBlockchainsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -18,68 +21,76 @@ import java.util.List;
 @RequestMapping("/other-chains")
 public class OtherBlockchainController {
 
-    @Autowired
-    private OtherBlockchainsRepository otherBlockchainRepo;
-
-    @Autowired
-    private CommentRepository commentRepo;
+    @Autowired private OtherBlockchainsRepository otherBlockchainRepo;
+    @Autowired private CommentRepository commentRepo;
 
     @GetMapping
     public String showCryptoRecommendations(Model model) {
-        List<OtherBlockchainsRecommendation> cryptos = otherBlockchainRepo.findAllByOrderByCreatedAtDesc();
+        List<OtherBlockchainsRecommendation> cryptos =
+                otherBlockchainRepo.findAllByOrderByCreatedAtDesc();
         model.addAttribute("recommendations", cryptos);
-        return "otherblockchains"; 
+        return "otherblockchains";
     }
 
-   
     @GetMapping("/new")
     public String newCryptoForm(Model model) {
         model.addAttribute("cryptoRecommendation", new OtherBlockchainsRecommendation());
-        return "otherBlockchainForm"; 
+        return "otherBlockchainForm";
     }
 
     @GetMapping("/{id}")
     public String viewOtherBlockchain(@PathVariable Long id, Model model) {
-        OtherBlockchainsRecommendation otherBlockchain = otherBlockchainRepo.findById(id).orElse(null);
-        if (otherBlockchain == null) return "redirect:/other-chains";
-
+        OtherBlockchainsRecommendation otherBlockchain = otherBlockchainRepo.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         model.addAttribute("otherBlockchain", otherBlockchain);
-        model.addAttribute("comments", commentRepo.findByOtherBlockchainsRecommendationIdOrderByCreatedAtDesc(id));
-        Comment freshComment = new Comment();
-        freshComment.setId(null); 
-        model.addAttribute("newComment", freshComment);
-
-
-
-        return "otherBlockchainDetail"; 
+        model.addAttribute("comments",
+                commentRepo.findByOtherBlockchainsRecommendationIdOrderByCreatedAtDesc(id));
+        model.addAttribute("newComment", new Comment());  // name matches the form
+        return "otherBlockchainDetail";
     }
 
-    
     @PostMapping("/{id}/comments")
     public String postCommentOnOtherBlockchain(@PathVariable Long id,
-                                               @ModelAttribute Comment newComment,
-                                               @AuthenticationPrincipal OAuth2User principal) {
-    	newComment.setId(null); 
-    	newComment.setOtherBlockchainsRecommendationId(id);
-    	newComment.setCreatedAt(LocalDateTime.now());
+                                               @ModelAttribute("newComment") Comment newComment,
+                                               @AuthenticationPrincipal Object principal) {
+        // Ensure the parent entity is set (works with @ManyToOne mapping)
+        OtherBlockchainsRecommendation rec = otherBlockchainRepo.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-        if (principal != null) {
-        	newComment.setAuthor(principal.getAttribute("email"));
+        newComment.setId(null);
+        newComment.setCreatedAt(LocalDateTime.now());
+
+        // If your Comment has a relation field:
+        //     private OtherBlockchainsRecommendation otherBlockchainsRecommendation;
+        // use this:
+        newComment.setOtherBlockchainsRecommendation(rec);
+
+        // If instead you truly store a raw FK column:
+        // newComment.setOtherBlockchainsRecommendationId(id);
+
+        // Set author for BOTH login types
+        if (principal instanceof OAuth2User ou) {
+            newComment.setAuthor(ou.getAttribute("email"));
+        } else if (principal instanceof UserDetails ud) {
+            newComment.setAuthor(ud.getUsername());
+        } else {
+            // not logged in – the form shouldn't be shown, but just in case
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
 
-        newComment.setId(null); 
         commentRepo.save(newComment);
         return "redirect:/other-chains/" + id;
     }
 
-
     @PostMapping("/submit")
     public String submitCrypto(@ModelAttribute OtherBlockchainsRecommendation otherBlockchain,
-                               @AuthenticationPrincipal OAuth2User principal) {
-        if (principal != null) {
-            otherBlockchain.setSubmittedBy(principal.getAttribute("email"));
+                               @AuthenticationPrincipal Object principal) {
+        if (principal instanceof OAuth2User ou) {
+            otherBlockchain.setSubmittedBy(ou.getAttribute("email"));
+        } else if (principal instanceof UserDetails ud) {
+            otherBlockchain.setSubmittedBy(ud.getUsername());
         }
         otherBlockchainRepo.save(otherBlockchain);
-        return "redirect:/other-chains"; 
+        return "redirect:/other-chains";
     }
 }
