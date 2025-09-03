@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Call Option Details</title>
+  <link rel="stylesheet" th:href="@{/css/comments.css}">
+  <link rel="stylesheet" th:href="@{/css/nav.css}">
+   <style>
+    
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f2f5;
+      margin: 0;
+    }
+    .container {
+      max-width: 800px;
+      margin: 2rem auto;
+      background: #fff;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+    }
+    h2 { text-align: center; margin-bottom: 1rem; }
+    p { margin: 0.5rem 0; }
+    .meta { color: #555; font-size: 0.9rem; }
+    .back-link { display: inline-block; margin-top: 1.5rem; text-decoration: none; }
+  </style>
+</head>
+<body>
+
+<div class="navbar">
+  <div><strong><a href="/" style="color: white; text-decoration: none;">Assignment 15 Forum</a></strong></div>
+  <div>
+    <span th:if="${#authorization.expression('isAuthenticated()')}">
+      <a href="/profile" style="color: white; text-decoration: none;" th:text="${#authentication.name}">Username</a>
+      <a th:href="@{/logout}" onclick="event.preventDefault(); document.getElementById('logoutForm').submit();">Logout</a>
+	  <form id="logoutForm" th:action="@{/logout}" method="post" style="display:none;"></form>
+    </span>
+    <span th:if="${#authorization.expression('!isAuthenticated()')}">
+      <strong><a href="/login" style="color: white; text-decoration: none;">Login</a></strong>
+      <strong><a href="/register" style="color: white; text-decoration: none;">Register</a></strong>
+    </span>
+  </div>
+</div>
+
+
+<div class="container">
+  <h2 th:text="'Call Recommendation for ' + ${call.ticker}"></h2>
+
+  <div><span class="detail-label">Company Name:</span> <div class="value" th:text="${call.companyName}"></div></div>
+  <div><span class="detail-label">Strike Price:</span> <div class="value" th:text="${call.strikePrice}"></div></div>
+  <div><span class="detail-label">Expiration Date:</span> <div class="value" th:text="${call.expirationDate}"></div></div>
+  <div><span class="detail-label">Premium:</span> <div class="value" th:text="${call.premium}"></div></div>
+  <div><span class="detail-label">Contract Count:</span> <div class="value" th:text="${call.contractCount}"></div></div>
+  <div><span class="detail-label">Current Price:</span> <div class="value" th:text="${call.currentPrice}"></div></div>
+  <div><span class="detail-label">Target Price:</span> <div class="value" th:text="${call.targetPrice}"></div></div>
+  <div><span class="detail-label">Recommendation:</span> <div class="value" th:text="${call.recommendation}"></div></div>
+  <div><span class="detail-label">Risk Level:</span> <div class="value" th:text="${call.riskLevel}"></div></div>
+  <div><span class="detail-label">Confidence Level:</span> <div class="value" th:text="${call.confidenceLevel}"></div></div>
+  <div><span class="detail-label">Reason:</span> <div class="value" th:text="${call.reason}"></div></div>
+  <div><span class="detail-label">Catalysts:</span> <div class="value" th:text="${call.catalysts}"></div></div>
+  <div><span class="detail-label">Risks:</span> <div class="value" th:text="${call.risks}"></div></div>
+  <div><span class="detail-label">Exit Strategy:</span> <div class="value" th:text="${call.exitStrategy}"></div></div>
+  <div><span class="detail-label">Supporting Link:</span> <div class="value"><a th:href="${call.supportingLink}" th:text="${call.supportingLink}"></a></div></div>
+  <div><span class="detail-label">Tags:</span> <div class="value" th:text="${call.tags}"></div></div>
+  <div><span class="detail-label">Submitted At:</span> <div class="value" th:text="${call.submittedAt}"></div></div>
+
+  <div class="comments-wrapper">
+  <div class="comment-section">
+    <h3>Comments</h3>
+
+    <div th:each="comment : ${comments}" class="comment-entry">
+      <div class="comment-header">
+        <div class="comment-email" th:text="${comment.author}">user@example.com</div>
+        <div class="comment-date" th:text="${#temporals.format(comment.createdAt, 'MMM dd yyyy, HH:mm')}">
+          Jul 28 2025, 15:30
+        </div>
+      </div>
+      <div class="comment-text" th:text="${comment.content}">Sample comment here.</div>
+    </div>
+
+    <div th:if="${#authorization.expression('isAuthenticated()')}">
+      <form th:action="@{/calls/{id}/comments(id=${call.id})}" method="post" class="comment-form" th:object="${newComment}"> 
+        <textarea th:field="*{content}" placeholder="Add your comment..." required></textarea>
+        <button type="submit">Post Comment</button>
+      </form>
+    </div>
+
+    <div th:unless="${#authorization.expression('isAuthenticated()')}" class="login-prompt">
+      <p><a href="/login">Login</a> to leave a comment.</p>
+    </div>
+  </div>
+</div>
+</body>
+</html>

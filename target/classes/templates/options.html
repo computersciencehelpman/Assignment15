@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Forum Home</title>
+    <link rel="stylesheet" th:href="@{/css/nav.css}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 2rem auto;
+        }
+
+        .category {
+            background: #fff;
+            border: 1px solid #ccc;
+            margin-bottom: 2rem;
+            border-radius: 5px;
+            padding: 1rem;
+        }
+
+        .category h2 {
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 0.5rem;
+        }
+
+        .subforums {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .subforum {
+            background: #f7f7f7;
+            border: 1px solid #ddd;
+            flex: 1 1 30%;
+            padding: 1rem;
+            text-align: center;
+            border-radius: 4px;
+        }
+
+        .subforum:hover {
+            background-color: #eaeaea;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+  <div><strong><a href="/" style="color: white; text-decoration: none;">Assignment 15 Forum</a></strong></div>
+  <div>
+    <span th:if="${#authorization.expression('isAuthenticated()')}">
+      <a href="/profile" style="color: white; text-decoration: none;" th:text="${#authentication.name}">Username</a>
+      <a th:href="@{/logout}" onclick="event.preventDefault(); document.getElementById('logoutForm').submit();">Logout</a>
+	  <form id="logoutForm" th:action="@{/logout}" method="post" style="display:none;"></form>
+    </span>
+    <span th:if="${#authorization.expression('!isAuthenticated()')}">
+      <strong><a href="/login" style="color: white; text-decoration: none;">Login</a></strong>
+      <strong><a href="/register" style="color: white; text-decoration: none;">Register</a></strong>
+    </span>
+  </div>
+</div>
+    
+
+    <div class="container">
+        <div class="category">
+            <h2>Options</h2>
+            <div class="subforums">
+            	<a href="/calls" style="text-decoration: none; color: inherit;">
+                	<div class="subforum">Calls</div>
+                </a>
+                <a href="/puts" style="text-decoration: none; color: inherit;">
+                	<div class="subforum">Puts</div>
+                </a>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>

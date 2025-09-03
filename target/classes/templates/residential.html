@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Residential Recommendations</title>
+  <link rel="stylesheet" th:href="@{/css/nav.css}">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f2f5;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 2rem auto;
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .heading-flex {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .add-button {
+      font-size: 1.5rem;
+      padding: 0.2rem 0.7rem;
+      background-color: #007bff;
+      color: white;
+      border-radius: 4px;
+      text-decoration: none;
+    }
+
+    .recommendation {
+      border: 1px solid #ddd;
+      background: #f9f9f9;
+      border-radius: 5px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .recommendation:hover {
+      background-color: #f1f1f1;
+    }
+
+    .recommendation a {
+      text-decoration: none;
+      font-weight: bold;
+      color: #007bff;
+    }
+
+    .recommendation p {
+      margin: 0.2rem 0;
+    }
+  </style>
+</head>
+<body>
+<div class="navbar">
+  <div><strong><a href="/" style="color: white; text-decoration: none;">Assignment 15 Forum</a></strong></div>
+  <div>
+    <span th:if="${#authorization.expression('isAuthenticated()')}">
+      <a href="/profile" th:text="${#authentication.name}">Username</a>
+      <a th:href="@{/logout}" onclick="event.preventDefault(); document.getElementById('logoutForm').submit();">Logout</a>
+	  <form id="logoutForm" th:action="@{/logout}" method="post" style="display:none;"></form>
+    </span>
+    <span th:unless="${#authorization.expression('isAuthenticated()')}">
+      <strong><a href="/login" style="color: white; text-decoration: none;">Login</a></strong>
+      <strong><a href="/register" style="color: white; text-decoration: none;">Register</a></strong>
+    </span>
+  </div>
+</div>
+
+<div class="container">
+  <div class="heading-flex">
+    <h2>Residential Real Estate Recommendations</h2>
+    <a href="/residential/new" class="add-button">+</a>
+  </div>
+
+  <div th:if="${#lists.isEmpty(recommendations)}">
+    <p>No recommendations submitted yet.</p>
+  </div>
+
+  <div th:each="rec : ${recommendations}" class="recommendation">
+    <a th:href="@{'/residential/' + ${rec.id}}"
+       th:text="${rec.address + ', ' + rec.city + ', ' + rec.state + ' ' + rec.zip}">Property Address</a>
+    <p><strong>Recommendation:</strong> <span th:text="${rec.recommendation}"></span></p>
+    <p th:text="${#strings.abbreviate(rec.reason, 120)}">Shortened reason...</p>
+    <p><strong>Submitted:</strong>
+      <span th:text="${#temporals.format(rec.createdAt, 'MMM dd, yyyy hh:mm a')}"></span> by
+      <span th:text="${rec.submittedBy}"></span>
+    </p>
+  </div>
+</div>
+</body>
+</html>

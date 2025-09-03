@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Call Option Recommendations</title>
+  <link rel="stylesheet" th:href="@{/css/nav.css}">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f3f4f6;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 2rem auto;
+      padding: 1rem;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+
+    .add-button {
+      background-color: #2563eb;
+      color: white;
+      padding: 0.4rem 0.75rem;
+      border: none;
+      border-radius: 5px;
+      text-decoration: none;
+      font-size: 1rem;
+    }
+
+    .call-card {
+      background-color: white;
+      padding: 1.25rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      transition: box-shadow 0.2s ease;
+    }
+
+    .call-card:hover {
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    .call-card h3 {
+      margin-top: 0;
+      margin-bottom: 0.5rem;
+      font-size: 1.2rem;
+    }
+
+    .call-card p {
+      margin: 0.3rem 0;
+    }
+
+    .meta {
+      font-size: 0.85rem;
+      color: #555;
+      margin-top: 0.5rem;
+    }
+
+    .no-recs {
+      text-align: center;
+      font-style: italic;
+      color: #777;
+      margin-top: 2rem;
+    }
+  </style>
+</head>
+<body>
+
+<div class="navbar">
+  <div><strong><a href="/" style="color: white; text-decoration: none;">Assignment 15 Forum</a></strong></div>
+  <div>
+    <span th:if="${#authorization.expression('isAuthenticated()')}">
+      <a href="/profile" style="color: white; text-decoration: none;" th:text="${#authentication.name}">Username</a>
+      <a th:href="@{/logout}" onclick="event.preventDefault(); document.getElementById('logoutForm').submit();">Logout</a>
+	  <form id="logoutForm" th:action="@{/logout}" method="post" style="display:none;"></form>
+    </span>
+    <span th:if="${#authorization.expression('!isAuthenticated()')}">
+      <strong><a href="/login" style="color: white; text-decoration: none;">Login</a></strong>
+      <strong><a href="/register" style="color: white; text-decoration: none;">Register</a></strong>
+    </span>
+  </div>
+</div>
+
+
+<div class="container">
+  <div class="header">
+    <h2>Call Option Recommendations</h2>
+    <span th:if="${#authorization.expression('isAuthenticated()')}">
+  <a href="/calls/new" class="add-button">+</a>
+</span>
+<span th:if="${#authorization.expression('!isAuthenticated()')}">
+  <a href="/login" class="add-button">+</a>
+</span>
+    
+  </div>
+
+  <div th:if="${#lists.isEmpty(callRecommendations)}" class="no-recs">
+    No call recommendations yet. Be the first to add one!
+  </div>
+
+  <div th:each="call : ${callRecommendations}">
+    <a th:href="@{'/calls/' + ${call.id}}"
+       class="call-card"
+       style="display: block; text-decoration: none; color: inherit;">
+      <h3 th:text="${call.companyName} + ' (' + ${call.ticker} + ')'">Company (TICKER)</h3>
+      <p><strong>Strike Price:</strong> <span th:text="${call.strikePrice}">0.00</span></p>
+      <p th:text="${#temporals.format(call.expirationDate, 'MMM dd, yyyy')}">Date</p>
+      <div class="meta">
+        Submitted by <span th:text="${call.submittedBy}">user@example.com</span>
+      </div>
+    </a>
+  </div>
+</div>
+
+</body>
+</html>

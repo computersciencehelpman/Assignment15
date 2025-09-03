@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Other Chains Detail</title>
+  <link rel="stylesheet" href="/css/comments.css">
+  <link rel="stylesheet" th:href="@{/css/nav.css}">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f2f5;
+      margin: 0;
+    }
+    .container {
+      max-width: 800px;
+      margin: 2rem auto;
+      background: #fff;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+    }
+    h2 { text-align: center; margin-bottom: 1rem; }
+    p { margin: 0.5rem 0; }
+    .meta { color: #555; font-size: 0.9rem; }
+    .back-link { display: inline-block; margin-top: 1.5rem; text-decoration: none; }
+  </style>
+  
+</head>
+<body>
+
+<div class="navbar">
+  <div>
+    <strong><a href="/" style="color: white; text-decoration: none;">Assignment 15 Forum</a></strong>
+  </div>
+  <div>
+    <span th:if="${#authorization.expression('isAuthenticated()')}">
+      <a href="/profile" th:text="${#authentication.name}" style="color: white; text-decoration: none;"></a>
+      <a th:href="@{/logout}" onclick="event.preventDefault(); document.getElementById('logoutForm').submit();">Logout</a>
+	  <form id="logoutForm" th:action="@{/logout}" method="post" style="display:none;"></form>
+    </span>
+    <span th:if="${#authorization.expression('!isAuthenticated()')}">
+      <strong><a href="/login" style="color: white; text-decoration: none;">Login</a></strong>
+      <strong><a href="/register" style="color: white; text-decoration: none;">Register</a></strong>
+    </span>
+  </div>
+</div>
+
+<div class="container">
+  <h2 th:text="${otherBlockchain.tokenName + ' (' + otherBlockchain.ca + ')'}">Token Name (CA)</h2>
+
+  <p><strong>Blockchain:</strong> <span th:text="${otherBlockchain.blockchain}">Blockchain</span></p>
+  <p><strong>Recommendation:</strong> <span th:text="${otherBlockchain.recommendation}">BUY</span></p>
+  <p><strong>Current Price:</strong> $<span th:text="${otherBlockchain.currentPrice}">0.00</span></p>
+  <p><strong>Target Price:</strong> $<span th:text="${otherBlockchain.targetPrice}">0.00</span></p>
+
+  <p><strong>Reason:</strong></p>
+  <p th:text="${otherBlockchain.reason}">Reasoning...</p>
+
+  <p><strong>Risks:</strong></p>
+  <p th:text="${otherBlockchain.risks}">Risk info...</p>
+
+  <p class="meta">
+    <strong>Submitted by:</strong> <span th:text="${otherBlockchain.submittedBy}">user@example.com</span><br/>
+    <strong>Submitted at:</strong>
+    <span th:if="${otherBlockchain.createdAt != null}"
+          th:text="${#temporals.format(otherBlockchain.createdAt, 'MMM dd, yyyy hh:mm a')}">Timestamp</span>
+  </p>
+
+  <a href="/other-chains">← Back to all other blockchain recommendations</a>
+</div>
+
+<div class="comments-wrapper">
+  <div class="comment-section">
+    <h3>Comments</h3>
+
+    <div th:each="comment : ${comments}" class="comment-entry">
+      <div class="comment-header">
+        <div class="comment-email" th:text="${comment.author}">user@example.com</div>
+        <div class="comment-date" th:text="${#temporals.format(comment.createdAt, 'MMM dd yyyy, HH:mm')}">
+          Jul 28 2025, 15:30
+        </div>
+      </div>
+      <div class="comment-text" th:text="${comment.content}">Sample comment here.</div>
+    </div>
+
+    <div th:if="${#authorization.expression('isAuthenticated()')}">
+     <form th:action="@{'/other-chains/' + ${otherBlockchain.id} + '/comments'}" method="post" th:object="${newComment}">
+        <textarea th:field="*{content}" placeholder="Add your comment..." required></textarea>
+        <button type="submit">Post Comment</button>
+      </form>
+    </div>
+
+    <div th:unless="${#authorization.expression('isAuthenticated()')}" class="login-prompt">
+      <p><a href="/login">Login</a> to leave a comment.</p>
+    </div>
+  </div>
+</div>
+
+
+</body>
+</html>

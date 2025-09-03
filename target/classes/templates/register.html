@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Register</title>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <link rel="stylesheet" th:href="@{/css/nav.css}">
+    <style>
+        
+		body {
+  			font-family: Arial, sans-serif;
+  			background-color: #f4f4f4;   
+  			margin: 0;                   
+  			padding: 0;                  
+		}
+        
+        .form-container {
+            max-width: 700px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 2rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        
+        .form-container {
+  			max-width: 700px;
+  			margin: 2rem auto;          
+  			background-color: white;
+  			padding: 2rem;
+  			border: 1px solid #ccc;
+  			border-radius: 5px;
+		}       
+
+        .form-container h1 {
+            text-align: center;
+        }
+
+        .form-row {
+            margin-bottom: 1rem;
+        }
+
+        .form-row label {
+            display: block;
+            font-weight: bold;
+        }
+
+        .form-row input {
+            width: 100%;
+            padding: 0.5rem;
+            margin-top: 0.3rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        
+        .validation-status {
+  			font-size: 0.85rem;
+  			font-weight: 500;
+  			display: block;
+  			margin-top: 0.2rem;
+		}
+
+		.error-message {
+  			color: red;
+  			font-size: 0.85rem;
+  			margin-top: 0.2rem;
+		}
+
+		.password-rules {
+  			list-style: none;
+  			padding-left: 0;
+  			font-size: 0.85rem;
+  			margin-top: 0.5rem;
+		}
+
+		.password-rules li {
+  			margin: 0.2rem 0;
+  			font-weight: 500;
+		}
+        
+        .form-actions {
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .form-actions button {
+            padding: 0.7rem 2rem;
+            background-color: #c40000;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+  		.error-message ul {
+    		margin: 0.25rem 0 0 1rem;
+    		padding: 0;
+  		}
+
+  		.error-message li {
+    		list-style-type: disc;
+  		}
+
+        .recaptcha-container {
+            display: flex;
+            justify-content: center;
+            margin: 1.5rem 0;
+        }
+    </style>
+</head>
+<body>
+
+<div class="navbar">
+  <div><strong><a href="/" style="color: white; text-decoration: none;">Assignment 15 Forum</a></strong></div>
+  <div>
+    <span th:if="${#authorization.expression('isAuthenticated()')}">
+      <a href="/profile" style="color: white; text-decoration: none;" th:text="${#authentication.name}">Username</a>
+      <a th:href="@{/logout}" onclick="event.preventDefault(); document.getElementById('logoutForm').submit();">Logout</a>
+	  <form id="logoutForm" th:action="@{/logout}" method="post" style="display:none;"></form>
+    </span>
+    <span th:if="${#authorization.expression('!isAuthenticated()')}">
+      <strong><a href="/login" style="color: white; text-decoration: none;">Login</a></strong>
+      <strong><a href="/register" style="color: white; text-decoration: none;">Register</a></strong>
+    </span>
+  </div>
+</div>
+
+
+<div class="form-container">
+    <h1>Register</h1>
+    <form th:action="@{/register}" th:object="${userDto}" method="post" autocomplete="off">
+        <!-- Global validation errors -->
+        <div th:if="${#fields.hasGlobalErrors()}" th:each="err : ${#fields.globalErrors()}" class="error-message" th:text="${err}"></div>
+        <div th:if="${captchaError}" class="error-message" th:text="${captchaError}"></div>
+
+        <div class="form-row">
+  			<label>Username</label>
+  			<input type="text" id="username" th:field="*{username}" required />
+  			
+  			<span id="usernameStatus" class="validation-status"></span>
+  
+  			<div th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="error-message" id="usernameError"></div>
+		</div>
+        
+       <div class="form-row">
+  			<label>Email</label>
+  			<input type="email" id="email" th:field="*{email}" required />
+  			<span id="emailStatus" class="validation-status"></span>
+  			<div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="error-message" id="emailError"></div>
+	   </div>
+
+      <div class="form-row">
+  		<label>Password</label>
+  		<input type="password" id="password" th:field="*{password}" required />
+  		<ul id="passwordRules" class="password-rules">
+    		<li id="rule-lowercase">❌ At least one lowercase letter</li>
+    		<li id="rule-uppercase">❌ At least one uppercase letter</li>
+    		<li id="rule-digit">❌ At least one digit</li>
+    		<li id="rule-special">❌ At least one special character (@$!%*?&)</li>
+    		<li id="rule-length">❌ At least 6 characters long</li>
+  		</ul>
+  		
+	 </div>
+     
+     <div class="form-row">
+  		<label>Confirm Password</label>
+  		<input type="password" id="confirmPassword" th:field="*{confirmPassword}" required />
+  		<ul id="confirmPasswordRules" class="password-rules">
+  			<li id="rule-match">❌ Must match the password above</li>
+		</ul>
+  		<div th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}" class="error-message"></div>
+	 </div>
+     
+     <div class="form-row">
+  		<label>Date of Birth</label>
+  		<input type="date" id="dateOfBirth" th:field="*{dateOfBirth}" required />
+  		<span id="dobStatus" class="validation-status"></span>
+  		<div th:if="${#fields.hasErrors('dateOfBirth')}" th:errors="*{dateOfBirth}" class="error-message"></div>
+	</div>
+     
+
+        <div class="form-row">
+            <label>Phone Number</label>
+            <input type="tel" id="phoneNumber" th:field="*{phoneNumber}" placeholder="(123) 456-7890" required />
+			<span id="phoneStatus" class="validation-status"></span>
+			<div th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}" class="error-message" id="phoneError"></div>          
+        </div>
+
+        <!-- ✅ Google reCAPTCHA widget -->
+        <div class="recaptcha-container">
+            <!-- v2 widget script (keep this) -->
+            <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
+            <!-- ...inside your form, where the widget goes... -->
+            <div class="recaptcha-container">
+                <div class="g-recaptcha"
+                     th:attr="data-sitekey=${@environment.getProperty('recaptcha.site')}"></div>
+            </div>
+
+        </div>
+
+        <div class="form-actions">
+            <button type="submit">Register</button>
+        </div>
+    </form>
+</div>
+<script src="/js/registerValidation.js"></script>
+
+</body>
+</html>

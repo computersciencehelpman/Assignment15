@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Recommendation: [[${recommendation.companyName}]]</title>
+  <link rel="stylesheet" href="/css/comments.css">
+  <link rel="stylesheet" th:href="@{/css/nav.css}">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f2f5;
+      margin: 0;
+      padding: 0;
+    }
+
+    .card {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      padding: 2rem;
+      max-width: 700px;
+      margin: 2rem auto;
+    }
+
+    .card h2 {
+      margin-bottom: 1rem;
+    }
+
+    .card p {
+      margin: 0.5rem 0;
+    }
+
+    .back-link {
+      display: block;
+      margin-top: 1.5rem;
+      text-align: center;
+    }
+
+    .comments-section {
+      background: white;
+      max-width: 700px;
+      margin: 2rem auto;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .comment-box {
+      border-bottom: 1px solid #ddd;
+      padding: 1rem 0;
+    }
+
+    .comment-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    .comment-content {
+      margin-top: 0.5rem;
+      font-size: 1rem;
+    }
+
+    .comment-form {
+      margin-top: 1.5rem;
+    }
+
+    .comment-form textarea {
+      width: 100%;
+      min-height: 80px;
+      margin-bottom: 0.5rem;
+    }
+
+    .comment-form button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+    }
+
+    .login-prompt {
+      text-align: center;
+      margin-top: 1rem;
+    }
+
+    .login-prompt a {
+      color: #007bff;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+
+<div class="navbar">
+  <div>
+    <strong><a href="/" style="color: white; text-decoration: none;">Assignment 15 Forum</a></strong>
+  </div>
+  <div>
+    <span th:if="${#authorization.expression('isAuthenticated()')}">
+      <a href="/profile" th:text="${#authentication.name}" style="color: white; text-decoration: none;"></a>
+      <a th:href="@{/logout}" onclick="event.preventDefault(); document.getElementById('logoutForm').submit();">Logout</a>
+	  <form id="logoutForm" th:action="@{/logout}" method="post" style="display:none;"></form>
+    </span>
+    <span th:if="${#authorization.expression('!isAuthenticated()')}">
+      <strong><a href="/login" style="color: white; text-decoration: none;">Login</a></strong>
+      <strong><a href="/register" style="color: white; text-decoration: none;">Register</a></strong>
+    </span>
+  </div>
+</div>
+
+<div class="card">
+  <h2 th:text="${recommendation.companyName} + ' (' + ${recommendation.ticker} + ')'">Company Name (Ticker)</h2>
+
+  <p><strong>Recommendation:</strong> <span th:text="${recommendation.recommendation}"></span></p>
+  <p><strong>Target Price:</strong> <span th:text="${recommendation.targetPrice}"></span></p>
+  <p><strong>Time Horizon:</strong> <span th:text="${recommendation.timeHorizon}"></span></p>
+  <p><strong>Exchange:</strong> <span th:text="${recommendation.exchange}"></span></p>
+  <p><strong>Sector:</strong> <span th:text="${recommendation.sector}"></span></p>
+  <p><strong>Industry:</strong> <span th:text="${recommendation.industry}"></span></p>
+  <p><strong>Current Price:</strong> <span th:text="${recommendation.currentPrice}"></span></p>
+  <p><strong>Date of Recommendation:</strong> <span th:text="${recommendation.dateOfRecommendation}"></span></p>
+
+  <hr/>
+
+  <p><strong>P/E Ratio:</strong> <span th:text="${recommendation.peRatio}"></span></p>
+  <p><strong>PEG Ratio:</strong> <span th:text="${recommendation.pegRatio}"></span></p>
+  <p><strong>P/B Ratio:</strong> <span th:text="${recommendation.pbRatio}"></span></p>
+  <p><strong>EV/EBITDA:</strong> <span th:text="${recommendation.evEbitda}"></span></p>
+  <p><strong>Dividend Yield (%):</strong> <span th:text="${recommendation.dividendYield}"></span></p>
+  <p><strong>Market Cap (billions):</strong> <span th:text="${recommendation.marketCap}"></span></p>
+
+  <hr/>
+
+  <p><strong>Revenue Growth (%):</strong> <span th:text="${recommendation.revenueGrowth}"></span></p>
+  <p><strong>EPS Growth (%):</strong> <span th:text="${recommendation.epsGrowth}"></span></p>
+  <p><strong>Debt-to-Equity:</strong> <span th:text="${recommendation.debtToEquity}"></span></p>
+  <p><strong>ROE:</strong> <span th:text="${recommendation.roe}"></span></p>
+  <p><strong>Free Cash Flow:</strong> <span th:text="${recommendation.freeCashFlow}"></span></p>
+
+  <hr/>
+
+  <p><strong>Investment Thesis:</strong><br/><span th:text="${recommendation.reason}"></span></p>
+  <p><strong>Catalysts:</strong><br/><span th:text="${recommendation.catalysts}"></span></p>
+  <p><strong>Risks:</strong><br/><span th:text="${recommendation.risks}"></span></p>
+
+  <hr/>
+
+  <p><strong>Insider Activity:</strong><br/><span th:text="${recommendation.insiderActivity}"></span></p>
+  <p><strong>Institutional Ownership (%):</strong> <span th:text="${recommendation.institutionalOwnership}"></span></p>
+  <p><strong>Retail Sentiment:</strong><br/><span th:text="${recommendation.retailSentiment}"></span></p>
+  <p><strong>Technical Indicators:</strong><br/><span th:text="${recommendation.technicalIndicators}"></span></p>
+  <p><strong>Comparable Companies:</strong><br/><span th:text="${recommendation.peers}"></span></p>
+  <p><strong>Links to Sources:</strong><br/><span th:text="${recommendation.sources}"></span></p>
+
+  <hr/>
+  <p><strong>Submitted At:</strong> <span th:text="${#temporals.format(recommendation.createdAt, 'MMM dd yyyy HH:mm')}"></span></p>
+
+  <a href="/stocks" class="back-link">&larr; Back to all stocks</a>
+</div>
+
+<div class="comments-section">
+  <h3>Comments</h3>
+
+  <div th:each="comment : ${comments}" class="comment-entry">
+    <div class="comment-header">
+      <div class="comment-email" th:text="${comment.author}">user@example.com</div>
+      <div class="comment-date" th:text="${#temporals.format(comment.createdAt, 'MMM dd yyyy, HH:mm')}">Jul 28 2025, 15:30</div>
+    </div>
+    <div class="comment-text" th:text="${comment.content}">Sample comment here.</div>
+  </div>
+
+  <div th:if="${#authorization.expression('isAuthenticated()')}">
+    <form th:action="@{'/stocks/' + ${recommendation.id} + '/comments'}" method="post" class="comment-form" th:object="${newComment}">
+      <textarea th:field="*{content}" placeholder="Add your comment..." required></textarea>
+      <button type="submit">Post Comment</button>
+    </form>
+  </div>
+
+  <div th:unless="${#authorization.expression('isAuthenticated()')}" class="login-prompt">
+    <p><a href="/login">Login</a> to leave a comment.</p>
+  </div>
+</div>
+
+
+</body>
+</html>

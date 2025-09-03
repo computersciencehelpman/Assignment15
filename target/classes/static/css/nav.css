@@ -1,0 +1,116 @@
+.navbar {
+  position: sticky;           
+  top: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+
+  height: 48px;
+  padding: 0 16px;
+
+  background: #1a1f25;        
+  color: #fff;
+  border-bottom: 1px solid #0f1318;
+}
+
+.nav-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 1;
+}
+
+.nav-brand a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.nav-right {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.nav-user {
+  display: inline-block;
+  max-width: 280px;          
+  padding: 4px 8px;
+  font-size: 12px;
+  line-height: 1;
+  color: #e7eaf0;
+  background: #2a313a;
+  border: 1px solid #3a424d;
+  border-radius: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.nav-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 28px;
+  padding: 0 10px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #e7eaf0;
+  background: #2a313a;
+  border: 1px solid #3a424d;
+  border-radius: 4px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background .15s ease, border-color .15s ease;
+}
+
+.nav-btn:hover {
+  background: #323a44;
+  border-color: #4a5562;
+}
+
+.nav-link {
+  color: #e7eaf0;
+  text-decoration: none;
+  font-size: 12px;
+  padding: 4px 6px;
+}
+
+.nav-link:hover { 
+   text-decoration: underline; 
+}
+
+.navbar-shadow {
+ box-shadow: 0 1px 2px rgba(0,0,0,.25); 
+}
+
+.fab {
+  position: fixed;
+  right: 18px;
+  top: 64px;                   
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  background: #1976d2;         
+  color: #fff;
+  font-size: 20px;
+  line-height: 36px;
+  text-align: center;
+  text-decoration: none;
+  box-shadow: 0 4px 12px rgba(0,0,0,.25);
+  transition: transform .08s ease, box-shadow .15s ease, background .15s ease;
+}
+
+.fab:hover {
+  background: #1e88e5;
+  box-shadow: 0 6px 16px rgba(0,0,0,.35);
+  transform: translateY(-1px);
+}
+
+@media (max-width: 520px) {
+  .nav-user { max-width: 160px; }
+  .fab { right: 12px; top: 60px; }
+}

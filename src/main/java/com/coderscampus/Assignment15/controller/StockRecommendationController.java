@@ -36,5 +36,10 @@ public class StockRecommendationController {
         StockRecommendation savedRecommendation = repository.save(stockRecommendation);
         return "redirect:/stocks/" + savedRecommendation.getId(); // Auto-redirect
     }
+
+    @PostMapping("/stocks/new")
+    public String submitFormAlias(@ModelAttribute("stockRecommendation") StockRecommendation stockRecommendation) {
+        return submitForm(stockRecommendation);
+    }
     
 }

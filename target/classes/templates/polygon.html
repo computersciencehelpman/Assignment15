@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Polygon Recommendations</title>
+  <link rel="stylesheet" th:href="@{/css/nav.css}">
+  <link rel="stylesheet" th:href="@{/css/nav.css}">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f2f5;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 2rem auto;
+      background: white;
+      padding: 1rem 2rem;
+      border-radius: 8px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.1);
+    }
+
+    .heading-flex {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .add-button {
+      display: inline-block;
+      width: 40px;
+      height: 40px;
+      background-color: #007bff;
+      color: white;
+      font-size: 1.5rem;
+      text-align: center;
+      line-height: 40px;
+      border-radius: 4px;
+      text-decoration: none;
+    }
+
+    .recommendation {
+      padding: 1rem;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      margin-bottom: 1rem;
+      background: #f9f9f9;
+    }
+
+    .recommendation:hover {
+      background-color: #f1f1f1;
+    }
+
+    .recommendation a {
+      text-decoration: none;
+      color: #007bff;
+      font-weight: bold;
+    }
+
+    .recommendation p {
+      margin: 0.2rem 0;
+    }
+  </style>
+</head>
+<body>
+<div class="navbar">
+  <div><strong><a href="/" style="color: white; text-decoration: none;">Assignment 15 Forum</a></strong></div>
+  <div>
+    <span th:if="${#authorization.expression('isAuthenticated()')}">
+      <a href="/profile" style="color: white; text-decoration: none;" th:text="${#authentication.name}">Username</a>
+      <a th:href="@{/logout}" onclick="event.preventDefault(); document.getElementById('logoutForm').submit();">Logout</a>
+	  <form id="logoutForm" th:action="@{/logout}" method="post" style="display:none;"></form>
+    </span>
+    <span th:if="${#authorization.expression('!isAuthenticated()')}">
+      <strong><a href="/login" style="color: white; text-decoration: none;">Login</a></strong>
+      <strong><a href="/register" style="color: white; text-decoration: none;">Register</a></strong>
+    </span>
+  </div>
+</div>
+
+<div class="container">
+  <div class="heading-flex">
+    <h2>Polygon Recommendations</h2>
+    <a th:href="${#authorization.expression('isAuthenticated()')} ? '/polygon/new' : '/login'" 
+       class="add-button" style="text-decoration: none;">+</a>
+  </div>
+
+  <div th:if="${#lists.isEmpty(recommendations)}">
+    <p>No Polygon recommendations yet. Be the first to submit!</p>
+  </div>
+
+  <div th:each="rec : ${recommendations}" class="recommendation">
+    <a th:href="@{'/polygon/' + ${rec.id}}" th:text="${rec.tokenName} + ' (' + ${rec.ca} + ')'"></a>
+    <p><strong>Recommendation:</strong> <span th:text="${rec.recommendation}"></span></p>
+    <p th:text="${#strings.abbreviate(rec.reason, 120)}"></p>
+    <p><strong>Posted:</strong> 
+      <span th:text="${#temporals.format(rec.createdAt, 'MMM dd, yyyy hh:mm a')}"></span>
+    </p>
+    <p><strong>Submitted by:</strong> <span th:text="${rec.submittedBy}"></span></p>
+  </div>
+</div>
+</body>
+</html>
