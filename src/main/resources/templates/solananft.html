@@ -86,10 +86,11 @@
 
 <div class="container">
     <div class="category">
-        <h2 class="heading-flex">
-            <span>Solana NFTs</span>
-            <a href="/solananft/new" class="add-button">+</a>
-        </h2>
+        <div class="header">
+            <h2>Solana NFT Recommendations</h2>
+            <a th:href="${#authorization.expression('isAuthenticated()')} ? @{/solananft/new} : @{/login}"
+               class="add-button" style="text-decoration: none;">+</a>
+        </div>
 
         <div th:if="${#lists.isEmpty(nftRecommendations)}">
             <p>No Solana NFT recommendations yet. Be the first to add one!</p>
