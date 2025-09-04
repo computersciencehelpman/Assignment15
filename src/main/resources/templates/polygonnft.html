@@ -89,11 +89,11 @@
 
 <div class="container">
     <div class="category">
-        <h2 class="heading-flex">
-            <span>Polygon NFTs</span>
-            <a href="/polygonnft/new" class="add-button">+</a>
-        </h2>
-
+        <div class="header-flex">
+            <h2>Cardano NFT Recommendations</h2>
+            <a th:href="${#authorization.expression('isAuthenticated()')} ? @{/polygonnft/new} : @{/login}"
+               class="add-button" style="text-decoration: none;">+</a>
+        </div>
         <div class="subforums">
             <div th:each="nft : ${nftRecommendations}" class="subforum">
                 <a th:href="@{'/polygonnft/' + ${nft.id}}">
