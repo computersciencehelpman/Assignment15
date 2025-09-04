@@ -4,18 +4,19 @@
 FROM maven:3.9.9-eclipse-temurin-17 AS build
 WORKDIR /app
 
-# Copy only pom.xml first to cache dependencies
+# Copy only pom.xml first to cache deps
 COPY pom.xml .
-RUN --mount=type=cache,target=/root/.m2 mvn -B -DskipTests dependency:go-offline
+RUN --mount=type=cache,id=m2cache,target=/root/.m2 \
+    mvn -B -DskipTests dependency:go-offline
 
-# Now copy sources and build the jar
+# Copy sources and build
 COPY src ./src
-RUN --mount=type=cache,target=/root/.m2 mvn -B -DskipTests clean package
+RUN --mount=type=cache,id=m2cache,target=/root/.m2 \
+    mvn -B -DskipTests clean package
 
 ########## Runtime stage ##########
 FROM eclipse-temurin:17-jre
 WORKDIR /app
 COPY --from=build /app/target/*.jar app.jar
-
 EXPOSE 8080
 ENTRYPOINT ["java","-jar","/app/app.jar"]
