@@ -2,25 +2,30 @@
 
 ########## Build stage ##########
 FROM maven:3.9.9-eclipse-temurin-17 AS build
-SHELL ["/bin/bash", "-lc"]         # lets us use pipefail and tee
+SHELL ["/bin/bash", "-lc"]   # needed for PIPESTATUS
 WORKDIR /app
 
-# Leverage dependency layer cache
+# Cache deps by layering pom.xml first
 COPY pom.xml .
 RUN mvn -B -DskipTests dependency:go-offline
 
-# Copy sources and build
+# Copy sources
 COPY src ./src
-# Write a full log, and if mvn fails, print the last 200 lines
+
+# Run build, ALWAYS print last 200 lines if it fails
 RUN set -euo pipefail; \
     mvn -version; \
-    mvn -B -Dmaven.test.skip=true -DskipTests clean package 2>&1 | tee /tmp/mvn.log || { \
-      code=$?; echo "---- Maven build failed. Last 200 lines ----"; tail -n 200 /tmp/mvn.log; exit $code; }
+    ( mvn -B -Dmaven.test.skip=true -DskipTests clean package |& tee /tmp/mvn.log ); \
+    code=${PIPESTATUS[0]}; \
+    if [[ $code -ne 0 ]]; then \
+      echo "---- Maven build failed. Last 200 lines ----"; \
+      tail -n 200 /tmp/mvn.log; \
+      exit $code; \
+    fi
 
 ########## Runtime stage ##########
 FROM eclipse-temurin:17-jre
 WORKDIR /app
 COPY --from=build /app/target/*.jar app.jar
-
 EXPOSE 8080
 ENTRYPOINT ["java","-jar","/app/app.jar"]
