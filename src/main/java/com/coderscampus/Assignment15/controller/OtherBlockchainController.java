@@ -58,10 +58,8 @@ public class OtherBlockchainController {
 
         newComment.setId(null);
         newComment.setCreatedAt(LocalDateTime.now());
-
-
+        
         newComment.setOtherBlockchainsRecommendationId(rec.getId());
-
 
         if (principal instanceof OAuth2User ou) {
             newComment.setAuthor(ou.getAttribute("email"));
