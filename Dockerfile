@@ -1,18 +1,22 @@
 # syntax=docker/dockerfile:1.7
 
 ########## Build stage ##########
-FROM maven:3.9.9-eclipse-temurin-17 AS build
-SHELL ["/bin/bash", "-lc"]   # needed for PIPESTATUS
+FROM eclipse-temurin:17-jdk AS build
+SHELL ["/bin/bash", "-lc"]
 WORKDIR /app
 
-# Cache deps by layering pom.xml first
+# Install Maven from apt (avoids pulling maven:* from Docker Hub)
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends maven \
+ && rm -rf /var/lib/apt/lists/*
+
+# Cache deps
 COPY pom.xml .
 RUN mvn -B -DskipTests dependency:go-offline
 
-# Copy sources
+# Copy sources and build
 COPY src ./src
-
-# Run build, ALWAYS print last 200 lines if it fails
+# Print the last 200 lines if the build fails so Railway logs show the cause
 RUN set -euo pipefail; \
     mvn -version; \
     ( mvn -B -Dmaven.test.skip=true -DskipTests clean package |& tee /tmp/mvn.log ); \
@@ -27,5 +31,6 @@ RUN set -euo pipefail; \
 FROM eclipse-temurin:17-jre
 WORKDIR /app
 COPY --from=build /app/target/*.jar app.jar
+
 EXPOSE 8080
 ENTRYPOINT ["java","-jar","/app/app.jar"]
