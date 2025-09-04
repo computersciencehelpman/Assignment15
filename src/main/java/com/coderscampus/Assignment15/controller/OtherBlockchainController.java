@@ -60,7 +60,7 @@ public class OtherBlockchainController {
         newComment.setCreatedAt(LocalDateTime.now());
 
 
-        newComment.setOtherBlockchainsRecommendation(rec);
+        newComment.setOtherBlockchainsRecommendationId(rec.getId());
 
 
         if (principal instanceof OAuth2User ou) {
