@@ -79,10 +79,11 @@
 <div class="container">
   <div class="header">
     <h2>Ethereum NFT Recommendations</h2>
-    <a href="/ethereumnft/new" class="add-button">+</a>
+      <a th:href="${#authorization.expression('isAuthenticated()')} ? @{/ethereumnft/new} : @{/login}"
+         class="add-button" style="text-decoration: none;">+</a>
   </div>
 
-  <div th:each="nft : ${nftRecommendations}" class="nft-card">
+    <div th:each="nft : ${nftRecommendations}" class="nft-card">
     <a th:href="@{'/ethereumnft/' + ${nft.id}}">
       <h3 th:text="${nft.collectionName}">NFT Collection</h3>
     </a>
