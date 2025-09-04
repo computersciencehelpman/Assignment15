@@ -2,27 +2,24 @@
 
 ########## Build stage ##########
 FROM maven:3.9.9-eclipse-temurin-17 AS build
+SHELL ["/bin/bash", "-lc"]         # lets us use pipefail and tee
 WORKDIR /app
 
-# Copy pom first to leverage layer caching for dependencies
+# Leverage dependency layer cache
 COPY pom.xml .
 RUN mvn -B -DskipTests dependency:go-offline
 
-# Copy sources
+# Copy sources and build
 COPY src ./src
-
-# Verbose build so Railway logs show the real cause if anything fails
-RUN set -eux; \
-    echo "== PWD =="; pwd; \
-    echo "== LS =="; ls -la; \
+# Write a full log, and if mvn fails, print the last 200 lines
+RUN set -euo pipefail; \
     mvn -version; \
-    mvn -B -e -X -Dmaven.test.skip=true -DskipTests clean package
+    mvn -B -Dmaven.test.skip=true -DskipTests clean package 2>&1 | tee /tmp/mvn.log || { \
+      code=$?; echo "---- Maven build failed. Last 200 lines ----"; tail -n 200 /tmp/mvn.log; exit $code; }
 
 ########## Runtime stage ##########
 FROM eclipse-temurin:17-jre
 WORKDIR /app
-
-# Copy the built JAR (handles any jar name)
 COPY --from=build /app/target/*.jar app.jar
 
 EXPOSE 8080
