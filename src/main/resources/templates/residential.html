@@ -79,8 +79,9 @@
 
 <div class="container">
   <div class="heading-flex">
-    <h2>Residential Real Estate Recommendations</h2>
-    <a href="/residential/new" class="add-button">+</a>
+    <h2>Residential Real Estate Recommendation</h2>
+      <a th:href="${#authorization.expression('isAuthenticated()')} ? @{/residential/new} : @{/login}"
+         class="add-button" style="text-decoration: none;">+</a>
   </div>
 
   <div th:if="${#lists.isEmpty(recommendations)}">

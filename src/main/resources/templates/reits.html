@@ -87,7 +87,8 @@
         <div class="category">
   <div class="heading-flex">
     <h2>REITs (Real Estate Investment Trusts)</h2>
-    <a href="/reits/new" class="add-button">+</a>
+      <a th:href="${#authorization.expression('isAuthenticated()')} ? @{/reits/new} : @{/login}"
+         class="add-button" style="text-decoration: none;">+</a>
   </div>
 
   <div class="subforums">
