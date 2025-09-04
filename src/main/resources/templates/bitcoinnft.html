@@ -73,12 +73,12 @@
 </div>
 
 <div class="container">
-    <div class="heading-flex">
+    <div class="header">
         <h2>Bitcoin NFT Recommendations</h2>
-        <a th:href="${#authorization.expression('isAuthenticated()')} ? '//bitcoinnft/new' : '/login'"
-           class="add-button"
-           style="text-decoration: none;">+</a>
+        <a th:href="${#authorization.expression('isAuthenticated()')} ? @{/bitcoinnft/new} : @{/login}"
+           class="add-button" style="text-decoration: none;">+</a>
     </div>
+
 
     <div th:each="nft : ${nftRecommendations}" class="nft-card">
         <a th:href="@{'/bitcoinnft/' + ${nft.id}}">
