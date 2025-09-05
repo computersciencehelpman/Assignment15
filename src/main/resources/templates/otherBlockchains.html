@@ -112,9 +112,12 @@
                         <p><strong>Recommendation:</strong> <span th:text="${rec.recommendation}">Buy</span></p>
                         <p><strong>Current Price:</strong> $<span th:text="${rec.currentPrice}">0.00</span></p>
                         <p class="meta">
-                            Submitted by <span th:text="${rec.submittedBy}">User</span> · 
-                            <span th:text="${#temporals.format(rec.createdAt, 'MMM dd, yyyy hh:mm a')}">Date</span>
+                            Submitted by <span th:text="${rec.submittedBy}">User</span> ·
+                            <span th:if="${rec.createdAt != null}"
+                                  th:text="${#temporals.format(rec.createdAt, 'MMM dd, yyyy hh:mm a')}">Date</span>
+                            <span th:unless="${rec.createdAt != null}">—</span>
                         </p>
+
                     </a>
                 </div>
 
