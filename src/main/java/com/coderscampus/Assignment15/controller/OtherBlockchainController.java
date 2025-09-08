@@ -29,7 +29,7 @@ public class OtherBlockchainController {
         List<OtherBlockchainsRecommendation> cryptos =
                 otherBlockchainRepo.findAllByOrderByCreatedAtDesc();
         model.addAttribute("recommendations", cryptos);
-        return "otherblockchains";
+        return "otherblockchains"; // must match template file name below
     }
 
     @GetMapping("/new")
@@ -46,7 +46,6 @@ public class OtherBlockchainController {
         } else if (principal instanceof UserDetails ud) {
             otherBlockchain.setSubmittedBy(ud.getUsername());
         }
-        // Optional: stamp createdAt in case DB timestamp doesn’t fire locally
         if (otherBlockchain.getCreatedAt() == null) {
             otherBlockchain.setCreatedAt(LocalDateTime.now());
         }
@@ -69,13 +68,11 @@ public class OtherBlockchainController {
     public String postCommentOnOtherBlockchain(@PathVariable Long id,
                                                @ModelAttribute("newComment") Comment newComment,
                                                @AuthenticationPrincipal Object principal) {
-        // Ensure parent exists
         OtherBlockchainsRecommendation rec = otherBlockchainRepo.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         newComment.setId(null);
         newComment.setCreatedAt(LocalDateTime.now());
-        // Your Comment entity uses a raw FK id
         newComment.setOtherBlockchainsRecommendationId(rec.getId());
 
         if (principal instanceof OAuth2User ou) {

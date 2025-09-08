@@ -14,7 +14,6 @@
         .subforum { background: #f7f7f7; border: 1px solid #ddd; flex: 1 1 45%; padding: 1rem; text-align: left; border-radius: 4px; }
         .subforum:hover { background-color: #eaeaea; }
         .subforum a { text-decoration: none; color: inherit; display: block; }
-        .subforum h3 { margin-top: 0; }
         .meta { font-size: 0.85rem; color: #666; }
     </style>
 </head>
@@ -43,23 +42,27 @@
 
         <div class="subforums">
             <div th:each="rec : ${recommendations}" class="subforum">
-                <!-- Guard href if id is null -->
-                <a th:href="${rec.id} != null ? @{/other-chains/{id}(id=${rec.id})} : @{/other-chains}">
-                    <h3 th:text="${rec.tokenName} ?: 'Untitled Token'">Token Name</h3>
-
-                    <p><strong>Recommendation:</strong>
-                        <span th:text="${rec.recommendation} ?: '—'">Buy</span>
-                    </p>
-
-                    <p><strong>Current Price:</strong>
-                        $<span th:text="${rec.currentPrice} != null ? rec.currentPrice : '—'">0.00</span>
-                    </p>
-
+                <!-- If id exists, make it a link; otherwise just show a non-clickable block -->
+                <a th:if="${rec.id != null}" th:href="@{/other-chains/{id}(id=${rec.id})}">
+                    <h3 th:text="${rec.tokenName != null ? rec.tokenName : 'Untitled Token'}">Token Name</h3>
+                    <p><strong>Recommendation:</strong> <span th:text="${rec.recommendation != null ? rec.recommendation : '—'}">—</span></p>
+                    <p><strong>Current Price:</strong> $<span th:text="${rec.currentPrice != null ? rec.currentPrice : '—'}">—</span></p>
                     <p class="meta">
-                        Submitted by <span th:text="${rec.submittedBy} ?: 'Anonymous'">User</span> ·
-                        <span th:text="${rec.createdAt} != null ? #temporals.format(rec.createdAt, 'MMM dd, yyyy hh:mm a') : '—'">Date</span>
+                        Submitted by <span th:text="${rec.submittedBy != null ? rec.submittedBy : 'Anonymous'}">Anonymous</span> ·
+                        <span th:if="${rec.createdAt != null}" th:text="${#temporals.format(rec.createdAt, 'MMM dd, yyyy hh:mm a')}">Date</span>
+                        <span th:unless="${rec.createdAt != null}">—</span>
                     </p>
                 </a>
+                <div th:unless="${rec.id != null}">
+                    <h3 th:text="${rec.tokenName != null ? rec.tokenName : 'Untitled Token'}">Token Name</h3>
+                    <p><strong>Recommendation:</strong> <span th:text="${rec.recommendation != null ? rec.recommendation : '—'}">—</span></p>
+                    <p><strong>Current Price:</strong> $<span th:text="${rec.currentPrice != null ? rec.currentPrice : '—'}">—</span></p>
+                    <p class="meta">
+                        Submitted by <span th:text="${rec.submittedBy != null ? rec.submittedBy : 'Anonymous'}">Anonymous</span> ·
+                        <span th:if="${rec.createdAt != null}" th:text="${#temporals.format(rec.createdAt, 'MMM dd, yyyy hh:mm a')}">Date</span>
+                        <span th:unless="${rec.createdAt != null}">—</span>
+                    </p>
+                </div>
             </div>
 
             <div th:if="${#lists.isEmpty(recommendations)}">
