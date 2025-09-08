@@ -1,43 +1,69 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head><title>Crypto Recommendation</title></head>
-<link rel="stylesheet" th:href="@{/css/nav.css}">
+<head>
+    <title>Crypto Recommendation</title>
+    <link rel="stylesheet" th:href="@{/css/nav.css}">
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f6f9; padding: 20px; margin: 0; }
+        form { max-width: 800px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        label { font-weight: bold; display: block; margin: 12px 0 6px; }
+        input, select, textarea { width: 100%; padding: 8px; border-radius: 5px; border: 1px solid #ccc; }
+        textarea { resize: vertical; }
+        button { margin-top: 16px; padding: 10px 20px; background-color: #0066cc; color: white; border: none; border-radius: 5px; font-size: 16px; cursor: pointer; }
+        button:hover { background-color: #0052a3; }
+    </style>
+</head>
 <body>
 
 <div class="navbar">
-  <div>
-    <strong><a href="/" style="color: white; text-decoration: none;">Assignment 15 Forum</a></strong>
-  </div>
-  <div>
+    <div><strong><a href="/" style="color: white; text-decoration: none;">Assignment 15 Forum</a></strong></div>
+    <div>
     <span th:if="${#authorization.expression('isAuthenticated()')}">
       <a href="/profile" th:text="${#authentication.name}" style="color: white; text-decoration: none;"></a>
       <a th:href="@{/logout}" onclick="event.preventDefault(); document.getElementById('logoutForm').submit();">Logout</a>
-	  <form id="logoutForm" th:action="@{/logout}" method="post" style="display:none;"></form>
+      <form id="logoutForm" th:action="@{/logout}" method="post" style="display:none;"></form>
     </span>
-    <span th:if="${#authorization.expression('!isAuthenticated()')}">
+        <span th:if="${#authorization.expression('!isAuthenticated()')}">
       <strong><a href="/login" style="color: white; text-decoration: none;">Login</a></strong>
       <strong><a href="/register" style="color: white; text-decoration: none;">Register</a></strong>
     </span>
-  </div>
+    </div>
 </div>
 
-<h2>Submit a different Blockchain Crypto Recommendation</h2>
+<h2 style="text-align:center">Submit a Different Blockchain Crypto Recommendation</h2>
+
 <form th:action="@{/other-chains/submit}" method="post" th:object="${cryptoRecommendation}">
-    <label>Token Name: <input type="text" th:field="*{tokenName}" required /></label><br/>
-    <label>Contact Address (CA): <input type="text" th:field="*{ca}" required /></label><br/>
-    <label>Blockchain: <input type="text" th:field="*{blockchain}" value="Other Blockchain" readonly /></label><br/>
-    <label>Recommendation:
-        <select th:field="*{recommendation}">
-            <option value="BUY">Buy</option>
-            <option value="HOLD">Hold</option>
-            <option value="SELL">Sell</option>
-        </select>
-    </label><br/>
-    <label>Current Price: <input type="number" step="0.01" th:field="*{currentPrice}" /></label><br/>
-    <label>Target Price: <input type="number" step="0.01" th:field="*{targetPrice}" /></label><br/>
-    <label>Reason:<br/><textarea th:field="*{reason}" required></textarea></label><br/>
-    <label>Risks:<br/><textarea th:field="*{risks}"></textarea></label><br/>
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+    <label>Token Name</label>
+    <input type="text" th:field="*{tokenName}" required />
+
+    <label>Contract Address (CA)</label>
+    <input type="text" th:field="*{ca}" required />
+
+    <label>Blockchain</label>
+    <input type="text" th:field="*{blockchain}" value="Other Blockchain" />
+
+    <label>Recommendation</label>
+    <select th:field="*{recommendation}">
+        <option value="BUY">Buy</option>
+        <option value="HOLD">Hold</option>
+        <option value="SELL">Sell</option>
+    </select>
+
+    <label>Current Price</label>
+    <input type="number" step="0.01" th:field="*{currentPrice}" />
+
+    <label>Target Price</label>
+    <input type="number" step="0.01" th:field="*{targetPrice}" />
+
+    <label>Reason</label>
+    <textarea th:field="*{reason}" required></textarea>
+
+    <label>Risks</label>
+    <textarea th:field="*{risks}"></textarea>
+
     <button type="submit">Submit</button>
 </form>
+
 </body>
 </html>

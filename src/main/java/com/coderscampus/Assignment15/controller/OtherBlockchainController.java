@@ -38,6 +38,22 @@ public class OtherBlockchainController {
         return "otherBlockchainForm";
     }
 
+    @PostMapping("/submit")
+    public String submitCrypto(@ModelAttribute OtherBlockchainsRecommendation otherBlockchain,
+                               @AuthenticationPrincipal Object principal) {
+        if (principal instanceof OAuth2User ou) {
+            otherBlockchain.setSubmittedBy(ou.getAttribute("email"));
+        } else if (principal instanceof UserDetails ud) {
+            otherBlockchain.setSubmittedBy(ud.getUsername());
+        }
+        // Optional: stamp createdAt in case DB timestamp doesn’t fire locally
+        if (otherBlockchain.getCreatedAt() == null) {
+            otherBlockchain.setCreatedAt(LocalDateTime.now());
+        }
+        otherBlockchainRepo.save(otherBlockchain);
+        return "redirect:/other-chains";
+    }
+
     @GetMapping("/{id}")
     public String viewOtherBlockchain(@PathVariable Long id, Model model) {
         OtherBlockchainsRecommendation otherBlockchain = otherBlockchainRepo.findById(id)
@@ -45,7 +61,7 @@ public class OtherBlockchainController {
         model.addAttribute("otherBlockchain", otherBlockchain);
         model.addAttribute("comments",
                 commentRepo.findByOtherBlockchainsRecommendationIdOrderByCreatedAtDesc(id));
-        model.addAttribute("newComment", new Comment()); // matches form
+        model.addAttribute("newComment", new Comment());
         return "otherBlockchainDetail";
     }
 
@@ -53,12 +69,13 @@ public class OtherBlockchainController {
     public String postCommentOnOtherBlockchain(@PathVariable Long id,
                                                @ModelAttribute("newComment") Comment newComment,
                                                @AuthenticationPrincipal Object principal) {
+        // Ensure parent exists
         OtherBlockchainsRecommendation rec = otherBlockchainRepo.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         newComment.setId(null);
         newComment.setCreatedAt(LocalDateTime.now());
-
+        // Your Comment entity uses a raw FK id
         newComment.setOtherBlockchainsRecommendationId(rec.getId());
 
         if (principal instanceof OAuth2User ou) {
@@ -71,17 +88,5 @@ public class OtherBlockchainController {
 
         commentRepo.save(newComment);
         return "redirect:/other-chains/" + id;
-    }
-
-    @PostMapping("/submit")
-    public String submitCrypto(@ModelAttribute OtherBlockchainsRecommendation otherBlockchain,
-                               @AuthenticationPrincipal Object principal) {
-        if (principal instanceof OAuth2User ou) {
-            otherBlockchain.setSubmittedBy(ou.getAttribute("email"));
-        } else if (principal instanceof UserDetails ud) {
-            otherBlockchain.setSubmittedBy(ud.getUsername());
-        }
-        otherBlockchainRepo.save(otherBlockchain);
-        return "redirect:/other-chains";
     }
 }

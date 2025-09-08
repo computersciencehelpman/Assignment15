@@ -43,7 +43,7 @@
 
         <div class="subforums">
             <div th:each="rec : ${recommendations}" class="subforum">
-                <!-- Guard the href in case id is null -->
+                <!-- Guard href if id is null -->
                 <a th:href="${rec.id} != null ? @{/other-chains/{id}(id=${rec.id})} : @{/other-chains}">
                     <h3 th:text="${rec.tokenName} ?: 'Untitled Token'">Token Name</h3>
 
@@ -52,12 +52,12 @@
                     </p>
 
                     <p><strong>Current Price:</strong>
-                        $<span th:text="${rec.currentPrice} != null ? ${rec.currentPrice} : '—'">0.00</span>
+                        $<span th:text="${rec.currentPrice} != null ? rec.currentPrice : '—'">0.00</span>
                     </p>
 
                     <p class="meta">
                         Submitted by <span th:text="${rec.submittedBy} ?: 'Anonymous'">User</span> ·
-                        <span th:text="${rec.createdAt} != null ? ${#temporals.format(rec.createdAt, 'MMM dd, yyyy hh:mm a')} : '—'">Date</span>
+                        <span th:text="${rec.createdAt} != null ? #temporals.format(rec.createdAt, 'MMM dd, yyyy hh:mm a') : '—'">Date</span>
                     </p>
                 </a>
             </div>
