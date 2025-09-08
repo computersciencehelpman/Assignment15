@@ -13,18 +13,24 @@ import jakarta.persistence.Id;
 @Entity
 public class OtherBlockchainsRecommendation {
 
-	@Id
+    @PrePersist
+    public void prePersist() {
+        if (createdAt == null) createdAt = java.time.LocalDateTime.now();
+    }
+
+
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String tokenName;
 
-    private String ca; 
-    
-    private String blockchain; 
+    private String ca;
 
-    private String recommendation; 
-    
+    private String blockchain;
+
+    private String recommendation;
+
     private Double currentPrice;
 
     private Double targetPrice;
