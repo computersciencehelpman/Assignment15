@@ -33,12 +33,16 @@
     </div>
 </div>
 
+
+
+
 <div class="container">
     <div class="category">
-        <h2 class="heading-flex">
-            <span>Other Blockchains</span>
-            <a href="/other-chains/new" class="add-button">+</a>
-        </h2>
+        <div class="heading-flex">
+            <h2>Other Blockchains</h2>
+            <a th:href="${#authorization.expression('isAuthenticated()')} ? @{/other-chains/new} : @{/login}"
+               class="add-button" style="text-decoration: none;">+</a>
+        </div>
 
         <div class="subforums">
             <div th:each="rec : ${recommendations}" class="subforum">
