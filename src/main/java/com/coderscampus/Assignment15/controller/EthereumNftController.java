@@ -35,7 +35,7 @@ public class EthereumNftController {
     @GetMapping("/new")
     public String newNftForm(Model model) {
         model.addAttribute("ethereumNftRecommendation", new EthereumNftRecommendation());
-        return "ethereumnftForm";
+        return "ethereumForm";
     }
 
     @PostMapping("/submit")
